@@ -9,6 +9,7 @@ import Board from './screens/Board';
 import End from './screens/End';
 import Glossary from './screens/Glossary';
 import About from './screens/About';
+import ExemptQuiz from './screens/ExemptQuiz';
 
 const SAVE_KEY = 'bakasha-leheter:v1';
 
@@ -31,7 +32,7 @@ function save(state: GameState | null) {
   }
 }
 
-type Screen = 'home' | 'setup' | 'game' | 'glossary' | 'about';
+type Screen = 'home' | 'setup' | 'game' | 'glossary' | 'about' | 'exempt';
 
 export default function App() {
   const reducer = useMemo(() => createReducer(content), []);
@@ -67,6 +68,9 @@ export default function App() {
           <button className="btn ghost" onClick={() => setScreen('home')}>
             פתיחה
           </button>
+          <button className="btn ghost" onClick={() => open('exempt')}>
+            צריך היתר?
+          </button>
           <button className="btn ghost" onClick={() => open('glossary')}>
             מילון מונחים
           </button>
@@ -81,6 +85,7 @@ export default function App() {
           <Home
             canContinue={!!(game && game.phase.name !== 'ended') || !!saved}
             onNew={() => setScreen('setup')}
+            onQuiz={() => open('exempt')}
             onContinue={() => {
               if (!game && saved) act({ type: 'LOAD', state: saved });
               setSaved(null);
@@ -107,6 +112,7 @@ export default function App() {
           <Board game={game} act={act} />
         )}
         {screen === 'glossary' && <Glossary onBack={() => setScreen(back === 'glossary' ? 'home' : back)} />}
+        {screen === 'exempt' && <ExemptQuiz onBack={() => setScreen(back === 'exempt' ? 'home' : back)} />}
         {screen === 'about' && <About onBack={() => setScreen(back === 'about' ? 'home' : back)} />}
       </main>
     </div>

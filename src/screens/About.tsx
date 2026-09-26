@@ -13,6 +13,7 @@ export default function About({ onBack }: { onBack: () => void }) {
     ...content.stations.map((s) => ({ kind: 'תחנה', title: s.title, meta: s.meta })),
     ...content.paths.map((p) => ({ kind: 'דרך', title: p.title, meta: p.meta })),
     ...content.cards.map((c) => ({ kind: 'כרטיס', title: c.title, meta: c.meta })),
+    ...content.exemptions.map((e) => ({ kind: 'צריך היתר?', title: e.work, meta: e.meta })),
   ];
   const count = (s: ContentStatus) => rows.filter((r) => r.meta.status === s).length;
 
@@ -26,6 +27,10 @@ export default function About({ onBack }: { onBack: () => void }) {
         כל פריט במשחק מסומן לפי רמת האמינות שלו. זו גרסת MVP: פריטים שממתינים לאימות יש לבדוק מול מחלקת הרישוי
         בעיריית אשדוד לפני שימוש ציבורי. אין לראות במשחק ייעוץ משפטי או תחליף לתיק המידע.
       </p>
+      <div className="note">
+        רוב הדרישות העיצוביות מבוססות על ההנחיות המרחביות לעיר אשדוד, מהדורה 18 (12/2024), שפורסמה להשגות הציבור,
+        ועל נספחים א' ו-ב' של אדריכלית העיר (07/2024). יש לוודא שהמהדורה אושרה ולעדכן מספרי סעיפים לפי הנוסח המאושר.
+      </div>
       <div className="row">
         {(['verified', 'pending', 'illustrative'] as ContentStatus[]).map((s) => (
           <span key={s} className={`chip ${s}`}>

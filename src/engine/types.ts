@@ -3,7 +3,7 @@
 // כל התוכן (תחנות, כרטיסים, מגרשים) נטען מקובצי JSON שב-src/content
 // ============================================================
 
-export type TrackId = 'extension' | 'house' | 'building';
+export type TrackId = 'extension' | 'house' | 'building' | 'mamad';
 export type PathId = 'conforming' | 'flexibility' | 'relief' | 'oldBuilding' | 'murshe';
 
 /** סטטוס אמינות לכל פריט תוכן */
@@ -58,7 +58,7 @@ export interface Station {
   meta: Meta;
 }
 
-export type CardDeck = 'event' | 'knowledge' | 'neighborhood' | 'responsibility';
+export type CardDeck = 'event' | 'knowledge' | 'neighborhood' | 'responsibility' | 'cityArchitect';
 
 export interface Card {
   id: string;
@@ -122,7 +122,19 @@ export interface GlossaryEntry {
   meta: Meta;
 }
 
+/** "צריך היתר?" — שאלון עבודות פטורות מהיתר */
+export type ExemptAnswer = 'exempt' | 'exemptReport' | 'permit';
+
+export interface ExemptionItem {
+  id: string;
+  work: string;
+  answer: ExemptAnswer;
+  explanation: string;
+  meta: Meta;
+}
+
 export interface Content {
+  exemptions: ExemptionItem[];
   tracks: TrackDef[];
   paths: PathDef[];
   stations: Station[];
@@ -135,7 +147,7 @@ export interface Content {
 // מצב המשחק
 // ------------------------------------------------------------
 
-export type SquareType = 'station' | 'event' | 'knowledge' | 'neighborhood' | 'responsibility';
+export type SquareType = 'station' | CardDeck;
 
 export interface Square {
   type: SquareType;

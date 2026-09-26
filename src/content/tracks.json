@@ -3,21 +3,87 @@
     "id": "extension",
     "title": "תוספת בנייה",
     "summary": "חדר נוסף, סגירת מרפסת או הרחבה בבית קיים. מסלול קצר שמלמד את הבסיס: תב\"ע, תיק מידע ותוקף מסמכים.",
-    "stations": ["zoning-check", "info-file", "architect", "survey-tabu", "@designPlan", "@pathPre", "submission", "@pathPost", "@agencies", "committee", "design-control", "fees", "permit"],
+    "stations": [
+      "zoning-check",
+      "info-file",
+      "architect",
+      "survey-tabu",
+      "@designPlan",
+      "@pathPre",
+      "submission",
+      "@pathPost",
+      "@agencies",
+      "committee",
+      "design-control",
+      "fees",
+      "permit"
+    ],
     "committeeMonths": 1
   },
   {
     "id": "house",
     "title": "בית פרטי",
     "summary": "בית צמוד קרקע על מגרש. מסלול בינוני, עם צומת החלטה בין מה שהתוכנית מתירה לבין מה שרוצים.",
-    "stations": ["zoning-check", "info-file", "architect", "survey-tabu", "@designPlan", "@pathPre", "submission", "@pathPost", "@agencies", "committee", "design-control", "fees", "permit"],
+    "stations": [
+      "zoning-check",
+      "info-file",
+      "architect",
+      "survey-tabu",
+      "@designPlan",
+      "@pathPre",
+      "submission",
+      "@pathPost",
+      "@agencies",
+      "committee",
+      "design-control",
+      "fees",
+      "permit"
+    ],
     "committeeMonths": 2
   },
   {
     "id": "building",
     "title": "בניין",
     "summary": "בניין מגורים. מסלול ארוך שכולל תוכנית עיצוב ובינוי מול אדריכלית העיר, כשהתב\"ע דורשת זאת, ותיאום עם גורמים רבים.",
-    "stations": ["zoning-check", "info-file", "architect", "survey-tabu", "@designPlan", "@pathPre", "submission", "@pathPost", "@agencies", "committee", "design-control", "fees", "permit"],
+    "stations": [
+      "zoning-check",
+      "info-file",
+      "architect",
+      "survey-tabu",
+      "@designPlan",
+      "@pathPre",
+      "submission",
+      "@pathPost",
+      "@agencies",
+      "committee",
+      "design-control",
+      "fees",
+      "permit"
+    ],
     "committeeMonths": 3
+  },
+  {
+    "id": "mamad",
+    "title": "תוספת ממ\"ד",
+    "summary": "מרחב מוגן לדירה שאין בה ממ\"ד. מסלול שמלמד את הוראת השעה, את תיקון 163 ואת החשיבות של חזית אחידה.",
+    "stations": [
+      "zoning-check",
+      "mamad-exempt",
+      "info-file",
+      "architect",
+      "survey-tabu",
+      "@designPlan",
+      "@pathPre",
+      "mamad-lobby",
+      "mamad-163",
+      "submission",
+      "@pathPost",
+      "@agencies",
+      "committee",
+      "design-control",
+      "fees",
+      "permit"
+    ],
+    "committeeMonths": 1
   }
 ]

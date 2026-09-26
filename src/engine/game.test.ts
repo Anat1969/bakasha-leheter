@@ -5,7 +5,7 @@ import type { GameState } from './types';
 const reducer = createReducer(content);
 const plot = (id: string) => content.plots.find((p) => p.id === id)!;
 
-function start(track: 'extension' | 'house' | 'building', names = ['ענת'], seed = 42) {
+function start(track: 'extension' | 'house' | 'building' | 'mamad', names = ['ענת'], seed = 42) {
   return reducer(null, { type: 'START', track, names, seed }) as GameState;
 }
 
@@ -59,6 +59,14 @@ describe('בניית מסלול', () => {
     const seq = stationSequence(content, plot('p-newhouse'), 'relief');
     expect(seq.indexOf('publication')).toBeGreaterThan(seq.indexOf('submission'));
   });
+  it('אחרי תוכנית עיצוב ובינוי באות הערות אדריכלית העיר', () => {
+    const r = buildRoute(content, plot('p-tower'), 'conforming');
+    const i = r.findIndex((q) => q.stationId === 'design-plan');
+    expect(r[i + 1].type).toBe('cityArchitect');
+  });
+  it('ממ"ד בבניין משותף מחייב תוכנית צל', () => {
+    expect(stationSequence(content, plot('p-mamad-apt'), 'conforming')).toContain('design-extension');
+  });
   it('המסלול מסתיים בהיתר', () => {
     const r = buildRoute(content, plot('p-tower'), 'conforming');
     expect(r[r.length - 1].stationId).toBe('permit');
@@ -67,7 +75,7 @@ describe('בניית מסלול', () => {
 
 describe('משחק מלא', () => {
   it('שחקן יחיד מגיע להיתר בכל מסלול ובכל דרך מותרת', () => {
-    for (const track of ['extension', 'house', 'building'] as const) {
+    for (const track of ['extension', 'house', 'building', 'mamad'] as const) {
       for (let seed = 1; seed <= 5; seed++) {
         let s = start(track, ['א'], seed);
         const p = content.plots.find((x) => x.id === s.players[0].plotId)!;

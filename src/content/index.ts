@@ -1,11 +1,12 @@
 // טוען התוכן: כל הקבצים כאן ניתנים לעריכה בלי לגעת בקוד המשחק.
-import type { Card, Content, GlossaryEntry, PathDef, Plot, Station, TrackDef } from '../engine/types';
+import type { Card, Content, ExemptionItem, GlossaryEntry, PathDef, Plot, Station, TrackDef } from '../engine/types';
 import tracks from './tracks.json';
 import paths from './paths.json';
 import stations from './stations.json';
 import cards from './cards.json';
 import plots from './plots.json';
 import glossary from './glossary.json';
+import exemptions from './exemptions.json';
 
 export const content: Content = {
   tracks: tracks as TrackDef[],
@@ -14,6 +15,7 @@ export const content: Content = {
   cards: cards as Card[],
   plots: plots as Plot[],
   glossary: glossary as GlossaryEntry[],
+  exemptions: exemptions as ExemptionItem[],
 };
 
 /** בדיקת שלמות תוכן — מחזירה רשימת שגיאות (ריקה = תקין) */
@@ -45,7 +47,11 @@ export function validateContent(c: Content): string[] {
     if (!s.meta?.status) errors.push(`תחנה ${s.id}: חסר סטטוס אימות`);
   }
   for (const card of c.cards) if (!card.meta?.status) errors.push(`כרטיס ${card.id}: חסר סטטוס אימות`);
-  const ids = [...c.stations.map((s) => s.id), ...c.cards.map((x) => x.id), ...c.plots.map((p) => p.id)];
+  for (const ex of c.exemptions) {
+    if (!['exempt', 'exemptReport', 'permit'].includes(ex.answer)) errors.push(`פטור ${ex.id}: תשובה לא תקינה`);
+    if (!ex.meta?.status) errors.push(`פטור ${ex.id}: חסר סטטוס אימות`);
+  }
+  const ids = [...c.stations.map((s) => s.id), ...c.cards.map((x) => x.id), ...c.plots.map((p) => p.id), ...c.exemptions.map((e) => e.id)];
   const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
   if (dup.length) errors.push(`מזהים כפולים: ${dup.join(', ')}`);
   return errors;

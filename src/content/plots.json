@@ -14,6 +14,7 @@
     "controlInstitute": false,
     "requiresDesignPlan": false,
     "agencies": [
+      "design-materials-house",
       "agency-trees"
     ],
     "dream": "חדר לילדים וממ\"ד",
@@ -37,6 +38,7 @@
     "controlInstitute": false,
     "requiresDesignPlan": false,
     "agencies": [
+      "design-extension",
       "agency-properties"
     ],
     "dream": "פינת עבודה במרפסת",
@@ -60,9 +62,12 @@
     "controlInstitute": false,
     "requiresDesignPlan": false,
     "agencies": [
+      "design-fence",
+      "design-materials-house",
       "agency-roads",
       "agency-trees",
       "agency-drainage",
+      "agency-waste",
       "agency-water"
     ],
     "dream": "בית עם חצר ומרפסת גג",
@@ -86,6 +91,8 @@
     "controlInstitute": false,
     "requiresDesignPlan": false,
     "agencies": [
+      "design-fence",
+      "design-materials-house",
       "agency-roads",
       "agency-trees",
       "agency-properties",
@@ -112,9 +119,12 @@
     "controlInstitute": true,
     "requiresDesignPlan": true,
     "agencies": [
+      "design-facade",
+      "design-shading",
+      "design-common",
       "agency-roads",
+      "agency-waste",
       "agency-trees",
-      "agency-properties",
       "agency-drainage",
       "agency-water"
     ],
@@ -139,14 +149,63 @@
     "controlInstitute": false,
     "requiresDesignPlan": true,
     "agencies": [
+      "design-facade",
       "agency-roads",
-      "agency-properties",
+      "agency-waste",
       "agency-water"
     ],
     "dream": "אגף חדש שמכבד את הישן",
     "meta": {
       "status": "illustrative",
       "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-mamad-house",
+    "track": "mamad",
+    "name": "ממ\"ד בבית צמוד קרקע",
+    "description": "בית בן 25 שנה, בלי ממ\"ד. המשפחה רוצה חדר מוגן שישמש גם כחדר עבודה.",
+    "residentialPct": 100,
+    "floors": 2,
+    "units": 1,
+    "buildingAge": 25,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "design-materials-house",
+      "agency-trees"
+    ],
+    "dream": "ממ\"ד עם שירותים צמודים",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-26"
+    }
+  },
+  {
+    "id": "p-mamad-apt",
+    "track": "mamad",
+    "name": "ממ\"ד בדירה בבניין משותף",
+    "description": "דירה בקומה שנייה בבניין בן 35 שנה, 4 קומות ו-12 דירות. לאף דירה אין ממ\"ד.",
+    "residentialPct": 100,
+    "floors": 4,
+    "units": 12,
+    "buildingAge": 35,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "design-extension",
+      "agency-properties"
+    ],
+    "dream": "ממ\"ד לכל דירה באגף, בתכנון אחד",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-26"
     }
   }
 ]

@@ -19,6 +19,7 @@ export const DECK_LABEL: Record<CardDeck, string> = {
   knowledge: 'כרטיס ידע',
   neighborhood: 'כרטיס שכונה',
   responsibility: 'כרטיס אחריות',
+  cityArchitect: 'הערת אדריכלית העיר',
 };
 
 export const STATUS_LABEL: Record<ContentStatus, string> = {

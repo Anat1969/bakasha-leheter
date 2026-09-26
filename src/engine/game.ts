@@ -132,13 +132,17 @@ const FILLERS: CardDeck[][] = [['event', 'neighborhood'], ['knowledge'], ['neigh
 export function buildRoute(c: Content, plot: Plot, pathId: PathId): Square[] {
   const path = c.paths.find((p) => p.id === pathId);
   const route: Square[] = [];
+  let prev = '';
   stationSequence(c, plot, pathId).forEach((stationId, i) => {
     if (i > 0) {
-      const fill = [...FILLERS[i % FILLERS.length]];
+      let fill = [...FILLERS[i % FILLERS.length]];
       if (path?.responsibilitySquares && i % 2 === 0) fill[0] = 'responsibility';
+      // אחרי תוכנית עיצוב ובינוי: הערות אדריכלית העיר (נספח א')
+      if (prev === 'design-plan') fill = ['cityArchitect', 'cityArchitect'];
       for (const deck of fill) route.push({ type: deck });
     }
     route.push({ type: 'station', stationId });
+    prev = stationId;
   });
   return route;
 }

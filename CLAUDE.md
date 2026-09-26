@@ -20,6 +20,8 @@
 - `src/content/index.ts` — טעינה ו-`validateContent()`.
 - `src/screens/` — מסכים. `src/components/common.tsx` — תגיות, מקורות, השפעות.
 - `src/styles.css` — מערכת העיצוב (טוקנים בהירים/כהים).
+- `docs/sources/` — מסמכי המקור (PDF + טקסט מחולץ). כל דרישה חדשה מצטטת סעיף מכאן.
+- `docs/verification-table.csv` — טבלת האימות למחלקת הרישוי.
 
 ## כללים שאסור לשבור
 1. **עברית, RTL, בלי אייקונים ובלי אימוג'י.** טקסט בלבד, ניסוח טבעי וקצר.

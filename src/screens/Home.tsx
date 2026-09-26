@@ -2,21 +2,25 @@ interface Props {
   canContinue: boolean;
   onNew: () => void;
   onContinue: () => void;
+  onQuiz: () => void;
 }
 
-export default function Home({ canContinue, onNew, onContinue }: Props) {
+export default function Home({ canContinue, onNew, onContinue, onQuiz }: Props) {
   return (
     <section className="cover">
       <div className="stack">
         <span className="eyebrow">משחק לשיתוף ציבור · בהשראת "החבילה הגיעה" של אפרים קישון</span>
         <h1>בקשה להיתר</h1>
         <p className="lead">
-          מחדר נוסף ועד בניין שלם: עוברים את הדרך מהחלום להיתר, תחנה אחר תחנה. אצל קישון כל מכשול היה אבסורד. כאן לכל
+          מחדר נוסף וממ"ד ועד בניין שלם: עוברים את הדרך מהחלום להיתר, תחנה אחר תחנה. אצל קישון כל מכשול היה אבסורד. כאן לכל
           מכשול יש סיבה, ומי שמבין אותה מתקדם מהר יותר.
         </p>
         <div className="row">
           <button className="btn primary" onClick={onNew}>
             משחק חדש
+          </button>
+          <button className="btn" onClick={onQuiz}>
+            בדיקה מהירה: צריך היתר?
           </button>
           {canContinue && (
             <button className="btn" onClick={onContinue}>
