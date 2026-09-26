@@ -814,3 +814,21 @@ p { margin: 0; max-width: 65ch; }
 .onboard-card { max-width: 420px; display: grid; gap: 10px; padding: 20px; border: 2px solid var(--ink); border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow); }
 .onboard-card h3 { margin: 0; }
 .onboard-card p { margin: 0; color: var(--muted); }
+
+/* "מה זה עולה באמת" — תוסף מידע, לא חלק מזרימת המשחק */
+.econ { display: grid; gap: 8px; justify-items: start; }
+.econ-toggle { font-size: 0.9rem; }
+.econ-body {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px dashed var(--line);
+  border-inline-start: 3px solid var(--warn);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+.econ-item { display: grid; gap: 5px; }
+.econ-item h4 { margin: 0; font-size: 0.98rem; }
+.econ-item p { margin: 0; font-size: 0.93rem; line-height: 1.55; }
+.econ-foot { margin: 0; font-size: 0.82rem; color: var(--muted); }

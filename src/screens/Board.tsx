@@ -3,6 +3,7 @@ import { cardById, pathById, plotById, stationById, trackById } from '../content
 import BoardMap from './BoardMap';
 import Die from './Die';
 import Onboarding, { seenOnboarding } from './Onboarding';
+import Economics from './Economics';
 import { play, type Cue } from '../sound';
 import { isOnOpenStation, TABU_VALID_MONTHS } from '../engine/game';
 import type { Action, GameState, Player, Square } from '../engine/types';
@@ -295,6 +296,7 @@ function Panel({ game, act, player }: Props & { player: Player }) {
           <p>{st.why}</p>
         </div>
         <SourceLine meta={st.meta} />
+        <Economics stationId={st.id} />
         <div className="row">
           <button className="btn primary" onClick={() => act({ type: 'CONTINUE' })} autoFocus>
             {isPermit ? 'לסיכום' : multi ? 'העברת התור' : 'המשך'}

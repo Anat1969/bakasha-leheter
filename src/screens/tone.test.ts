@@ -1,4 +1,4 @@
-import { content } from '../content';
+import { content, economics } from '../content';
 import { STEPS } from './Onboarding';
 import { CUE_NAMES, loadSoundPref } from '../sound';
 
@@ -14,6 +14,7 @@ function allText(): { where: string; text: string }[] {
   for (const e of content.exemptions) out.push({ where: `פטור ${e.id}`, text: `${e.work} ${e.explanation}` });
   for (const g of content.glossary) out.push({ where: `מונח ${g.term}`, text: `${g.term} ${g.definition}` });
   for (const t of content.tracks) out.push({ where: `מסלול ${t.id}`, text: `${t.title} ${t.summary}` });
+  for (const e of economics) out.push({ where: `כלכלה ${e.id}`, text: `${e.title} ${e.body}` });
   for (const p of content.plots) out.push({ where: `מגרש ${p.id}`, text: `${p.name} ${p.description} ${p.dream}` });
   return out;
 }

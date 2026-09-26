@@ -1,4 +1,4 @@
-import { content } from '../content';
+import { content, economics } from '../content';
 import { STATUS_LABEL } from '../components/common';
 import type { ContentStatus, Meta } from '../engine/types';
 
@@ -14,6 +14,7 @@ export default function About({ onBack }: { onBack: () => void }) {
     ...content.paths.map((p) => ({ kind: 'דרך', title: p.title, meta: p.meta })),
     ...content.cards.map((c) => ({ kind: 'כרטיס', title: c.title, meta: c.meta })),
     ...content.exemptions.map((e) => ({ kind: 'צריך היתר?', title: e.work, meta: e.meta })),
+    ...economics.map((e) => ({ kind: 'מה זה עולה', title: e.title, meta: e.meta })),
   ];
   const count = (s: ContentStatus) => rows.filter((r) => r.meta.status === s).length;
 

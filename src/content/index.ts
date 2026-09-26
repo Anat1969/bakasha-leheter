@@ -7,6 +7,7 @@ import cards from './cards.json';
 import plots from './plots.json';
 import glossary from './glossary.json';
 import exemptions from './exemptions.json';
+import { economics } from './economics';
 
 export const content: Content = {
   tracks: tracks as TrackDef[],
@@ -17,6 +18,8 @@ export const content: Content = {
   glossary: glossary as GlossaryEntry[],
   exemptions: exemptions as ExemptionItem[],
 };
+
+export { economics, economicsFor, type EconomicFact } from './economics';
 
 /** בדיקת שלמות תוכן — מחזירה רשימת שגיאות (ריקה = תקין) */
 export function validateContent(c: Content): string[] {
@@ -51,7 +54,15 @@ export function validateContent(c: Content): string[] {
     if (!['exempt', 'exemptReport', 'permit'].includes(ex.answer)) errors.push(`פטור ${ex.id}: תשובה לא תקינה`);
     if (!ex.meta?.status) errors.push(`פטור ${ex.id}: חסר סטטוס`);
   }
-  const ids = [...c.stations.map((s) => s.id), ...c.cards.map((x) => x.id), ...c.plots.map((p) => p.id), ...c.exemptions.map((e) => e.id)];
+  // שכבת המידע הכלכלי נבדקת כאן אף שאינה חלק מ-Content, כדי שלא תישאר בלי בדיקה
+  for (const e of economics) {
+    if (!e.meta?.status) errors.push(`כלכלה ${e.id}: חסר סטטוס`);
+    if (!['source', 'rule'].includes(e.meta?.status)) errors.push(`כלכלה ${e.id}: סטטוס לא תקין`);
+    if (e.meta?.status === 'source' && !e.meta.source && !e.meta.sourceUrl)
+      errors.push(`כלכלה ${e.id}: מסומן "לפי מקור" בלי מקור`);
+    if (!c.stations.some((s) => s.id === e.stationId)) errors.push(`כלכלה ${e.id}: תחנה לא קיימת ${e.stationId}`);
+  }
+  const ids = [...c.stations.map((s) => s.id), ...c.cards.map((x) => x.id), ...c.plots.map((p) => p.id), ...c.exemptions.map((e) => e.id), ...economics.map((e) => e.id)];
   const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
   if (dup.length) errors.push(`מזהים כפולים: ${dup.join(', ')}`);
   return errors;
