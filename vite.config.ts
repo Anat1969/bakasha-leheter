@@ -8,5 +8,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    // בלי זה ייבוא styles.css?raw בבדיקות מחזיר מחרוזת ריקה
+    css: true,
   },
 });

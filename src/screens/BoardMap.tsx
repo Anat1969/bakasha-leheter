@@ -82,7 +82,7 @@ function useWalk(players: Player[], reduced: boolean): Record<number, number> {
   return shown;
 }
 
-export default function BoardMap({ game }: { game: GameState }) {
+export default function BoardMap({ game, fit }: { game: GameState; fit: boolean }) {
   const mode = useBoardMode();
   const reduced = useReducedMotion();
   const shown = useWalk(game.players, reduced);
@@ -100,10 +100,11 @@ export default function BoardMap({ game }: { game: GameState }) {
 
   // גלילה אוטומטית אחרי הכלי
   useEffect(() => {
+    if (fit) return;
     const el = pawnRef.current;
     if (!el) return;
     el.scrollIntoView({ block: 'center', inline: 'center', behavior: reduced ? 'auto' : 'smooth' });
-  }, [shownPos, reduced]);
+  }, [shownPos, reduced, fit]);
 
   const totalStations = route.filter((sq) => sq.type === 'station').length;
   const approved = current.resolved.filter((id) => route.some((q) => q.stationId === id)).length;
@@ -111,7 +112,7 @@ export default function BoardMap({ game }: { game: GameState }) {
     approved === 0 ? 'עוד לא אושרה תחנה' : approved === 1 ? 'אושרה תחנה אחת' : `אושרו ${approved} תחנות`;
 
   return (
-    <div className={`boardmap ${mode} ${dry ? 'dry' : ''}`} ref={wrapRef}>
+    <div className={`boardmap ${mode} ${dry ? 'dry' : ''} ${fit ? 'fit' : ''}`} ref={wrapRef}>
       <svg
         viewBox={`0 0 ${lay.width} ${lay.height}`}
         className="boardmap-svg"

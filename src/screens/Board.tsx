@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { cardById, pathById, plotById, stationById, trackById } from '../content';
 import BoardMap from './BoardMap';
+import Die from './Die';
 import { isOnOpenStation, TABU_VALID_MONTHS } from '../engine/game';
 import type { Action, GameState, Player, Square } from '../engine/types';
 import { CATEGORY_LABEL, CategoryChip, DECK_LABEL, EffectList, SourceLine } from '../components/common';
@@ -14,6 +15,7 @@ export default function Board({ game, act }: Props) {
   const player = game.players[game.current];
   const plot = plotById(player.plotId)!;
   const [view, setView] = useState<'map' | 'sheet'>('map');
+  const [fit, setFit] = useState(false);
   const done = player.resolved.filter((id) => player.route.some((q) => q.stationId === id)).length;
   const total = player.route.filter((q) => q.type === 'station').length;
 
@@ -26,7 +28,7 @@ export default function Board({ game, act }: Props) {
         {game.players.length > 1 && <PlayerTags game={game} />}
         <Resources player={player} />
       </div>
-      <div className="board">
+      <div className={`board ${game.phase.name === 'station' ? 'gated' : ''}`}>
         <div className="stack">
           <div className="row" style={{ justifyContent: 'space-between' }}>
             <div className="view-switch" role="group" aria-label="תצוגה">
@@ -36,13 +38,18 @@ export default function Board({ game, act }: Props) {
               <button className="btn" aria-pressed={view === 'sheet'} onClick={() => setView('sheet')}>
                 גיליון הדרישות
               </button>
+              {view === 'map' && (
+                <button className="btn" aria-pressed={fit} onClick={() => setFit((f) => !f)}>
+                  {fit ? 'תצוגה מלאה' : 'התאמה למסך'}
+                </button>
+              )}
             </div>
             <span className="mono">
               {done}/{total}
             </span>
           </div>
           {view === 'map' ? (
-            <BoardMap game={game} />
+            <BoardMap game={game} fit={fit} />
           ) : (
             <div className="sheet stack">
               <h3>גיליון הדרישות של {player.name}</h3>
@@ -177,7 +184,7 @@ function Panel({ game, act, player }: Props & { player: Player }) {
         ) : (
           <>
             <div className="row">
-              <span className="die" aria-live="polite">{game.lastRoll ?? '·'}</span>
+              <Die value={game.lastRoll} />
               <p>מטילים קובייה ומתקדמים. בתחנה הבאה עוצרים גם אם נשארו צעדים.</p>
             </div>
             <div className="row">
@@ -192,11 +199,11 @@ function Panel({ game, act, player }: Props & { player: Player }) {
   if (ph.name === 'station') {
     const st = stationById(ph.stationId)!;
     return (
-      <div className="sheet stack">
+      <div className="sheet stack gate-open">
         <div className="row">
           <CategoryChip category={st.category} />
           {st.agency && <span className="chip process">{st.agency}</span>}
-          {game.lastRoll && <span className="mono" style={{ color: 'var(--muted)' }}>קובייה: {game.lastRoll}</span>}
+          {game.lastRoll && <Die value={game.lastRoll} rolling small />}
         </div>
         <h2>{st.title}</h2>
         <p>{st.prompt}</p>
@@ -223,13 +230,29 @@ function Panel({ game, act, player }: Props & { player: Player }) {
     const base = st.id === 'committee' ? track.committeeMonths : st.baseMonths;
     const isPermit = st.id === 'permit' && ph.passed;
     return (
-      <div className="sheet stack">
+      <div className={`sheet stack ${!ph.passed ? 'shake' : ''}`}>
         {isPermit ? (
-          <div className="row"><span className="stamp big animate">היתר</span></div>
+          <div className="certificate">
+            <span className="eyebrow">רשות הרישוי · עיריית אשדוד</span>
+            <h2>היתר בנייה</h2>
+            <span className="seal-big">אושר</span>
+            <span className="cert-line">
+              {trackById(game.track)?.title} · {player.res.months} חודשים · מדד עיר {player.res.city}
+            </span>
+          </div>
         ) : ph.passed ? (
-          <div className="row"><span className="stamp animate">אושר</span><span className="result-ok">{st.title}</span></div>
+          <div className="row">
+            <span className="stamp-wrap">
+              <span className="ink" />
+              <span className="stamp animate">אושר</span>
+            </span>
+            <span className="result-ok">{st.title}</span>
+          </div>
         ) : (
-          <span className="result-no">לא עברתם. נסו שוב בתור הבא.</span>
+          <div className="row">
+            <span className="stamp reject">הוחזר לתיקון</span>
+            <span className="result-no">גם האדריכל הכי טוב מגיש פעמיים.</span>
+          </div>
         )}
         <p>
           <strong>{opt.text}.</strong> {opt.feedback}
@@ -256,7 +279,7 @@ function Panel({ game, act, player }: Props & { player: Player }) {
     const card = cardById(ph.cardId)!;
     return (
       <div className="sheet stack">
-        <div className="card-face">
+        <div className={`card-face draw ${card.deck === 'responsibility' ? 'gold' : ''}`}>
           <span className="deck-name">{DECK_LABEL[card.deck]}</span>
           <h2>{card.title}</h2>
           <p>{card.text}</p>

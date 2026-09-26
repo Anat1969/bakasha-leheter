@@ -38,6 +38,17 @@
 
   --r-sm: 6px;
   --r-md: 10px;
+
+  /* רגעי המשחק — DESIGN.md סעיף 5 */
+  --t-die: 600ms;
+  --t-step: 180ms;
+  --t-gate: 300ms;
+  --t-approve: 350ms;
+  --t-reject: 300ms;
+  --t-card: 450ms;
+  --t-responsibility: 600ms;
+  --t-permit: 900ms;
+  --t-reduced: 150ms;
   --shadow: 0 1px 0 rgba(27, 38, 41, 0.06), 0 6px 18px -10px rgba(27, 38, 41, 0.25);
   color-scheme: light;
 }
@@ -373,9 +384,20 @@ p { margin: 0; max-width: 65ch; }
 
 .confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: var(--r-sm); background: var(--warn-soft); }
 
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+/* prefers-reduced-motion: לא מבטלים הכול, אלא מקצרים ל-fade אחיד */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: var(--t-reduced) !important; }
+  .stamp.animate,
+  .stamp.reject,
+  .card-face.draw,
+  .card-face.gold,
+  .certificate,
+  .gate-open { animation: fade-in var(--t-reduced) ease-out both !important; }
+  .die.rolling { animation: none !important; }
+  .pawn { transition: none !important; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes press { from { transform: scale(1.4) rotate(-14deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
-.stamp.animate { animation: press 0.35s ease-out both; }
 
 .disclaimer {
   color: var(--muted);
@@ -475,3 +497,138 @@ p { margin: 0; max-width: 65ch; }
 @media (prefers-reduced-motion: reduce) {
   .pawn { transition: none; }
 }
+
+/* ============================================================
+   רגעי המשחק — DESIGN.md סעיף 5
+   ============================================================ */
+
+/* הטלת קובייה: תלת-ממד מזויף, מתגלגלת ונעצרת */
+.die-3d {
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 7px;
+  gap: 2px;
+  box-shadow: inset -3px -3px 0 rgba(27, 38, 41, 0.08);
+  transform-style: preserve-3d;
+}
+.die-3d > span { display: grid; place-items: center; }
+.die-3d .pip { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); }
+.die-3d.rolling { animation: die-roll var(--t-die) cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes die-roll {
+  0% { transform: rotateX(0) rotateZ(0) scale(0.8); }
+  30% { transform: rotateX(140deg) rotateZ(90deg) scale(1.1); }
+  60% { transform: rotateX(300deg) rotateZ(200deg) scale(0.95); }
+  80% { transform: rotateX(350deg) rotateZ(350deg) scale(1.06); }
+  100% { transform: rotateX(360deg) rotateZ(360deg) scale(1); }
+}
+
+/* עצירה בשער: התחנה נפתחת כחלון, הלוח מתעמעם */
+.gate-open { animation: gate-open var(--t-gate) ease-out both; transform-origin: top center; }
+@keyframes gate-open {
+  from { opacity: 0; transform: perspective(700px) rotateX(-12deg) scaleY(0.88); }
+  to { opacity: 1; transform: perspective(700px) rotateX(0) scaleY(1); }
+}
+.board.gated .boardmap { filter: saturate(0.45) brightness(0.96); opacity: 0.65; transition: opacity var(--t-gate) ease-out, filter var(--t-gate) ease-out; }
+.boardmap { transition: opacity var(--t-gate) ease-out, filter var(--t-gate) ease-out; }
+
+/* חותמת "אושר" — נוחתת עם כתם דיו */
+.stamp.animate { animation: press var(--t-approve) ease-out both; }
+.stamp-wrap { position: relative; display: inline-block; }
+.stamp-wrap .ink {
+  position: absolute;
+  inset: -8px -10px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, currentColor 0%, transparent 72%);
+  opacity: 0;
+  animation: ink-blot var(--t-approve) ease-out both;
+  pointer-events: none;
+}
+@keyframes ink-blot {
+  0% { opacity: 0; transform: scale(0.4); }
+  45% { opacity: 0.22; transform: scale(1.06); }
+  100% { opacity: 0.1; transform: scale(1); }
+}
+
+/* טעות: חותמת אדומה, והכרטיס רועד קלות */
+.stamp.reject {
+  color: var(--danger);
+  border-color: var(--danger);
+  transform: rotate(5deg);
+  animation: press-reject var(--t-reject) ease-out both;
+}
+@keyframes press-reject {
+  from { transform: scale(1.35) rotate(13deg); opacity: 0; }
+  to { transform: scale(1) rotate(5deg); opacity: 1; }
+}
+.shake { animation: shake var(--t-reject) ease-in-out both; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  45% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+}
+
+/* כרטיס: נשלף מהחפיסה ומתהפך */
+.card-face.draw { animation: card-draw var(--t-card) ease-out both; transform-origin: center; backface-visibility: hidden; }
+@keyframes card-draw {
+  0% { opacity: 0; transform: perspective(900px) translateY(-14px) rotateY(88deg) scale(0.94); }
+  55% { opacity: 1; transform: perspective(900px) translateY(0) rotateY(-10deg) scale(1.01); }
+  100% { opacity: 1; transform: perspective(900px) rotateY(0) scale(1); }
+}
+
+/* כרטיס אחריות: מסגרת זהב */
+.card-face.gold { border-color: var(--gold); border-width: 2.5px; animation: gold-frame var(--t-responsibility) ease-out both; }
+@keyframes gold-frame {
+  0% { box-shadow: 0 0 0 0 var(--gold); }
+  50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--gold) 35%, transparent); }
+  100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 55%, transparent); }
+}
+.card-face.gold .deck-name { color: var(--gold); }
+
+/* היתר: התעודה נפרשת, חותמת זהב גדולה */
+.certificate {
+  border: 2.5px solid var(--gold);
+  border-radius: var(--r-md);
+  padding: 18px;
+  background: var(--surface);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+  transform-origin: top center;
+  animation: unfurl var(--t-permit) cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  overflow: hidden;
+}
+@keyframes unfurl {
+  0% { opacity: 0; transform: scaleY(0.04); }
+  45% { opacity: 1; transform: scaleY(1.03); }
+  70% { transform: scaleY(0.99); }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+.certificate .seal-big {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  color: var(--gold);
+  border: 3px double var(--gold);
+  border-radius: 50%;
+  width: 5.2rem;
+  height: 5.2rem;
+  display: grid;
+  place-items: center;
+  transform: rotate(-7deg);
+  animation: press var(--t-approve) ease-out both;
+  animation-delay: calc(var(--t-permit) - var(--t-approve));
+}
+.certificate .cert-line { font-size: 0.9rem; color: var(--muted); }
+.die-3d.small { width: 2.8rem; height: 2.8rem; padding: 5px; border-radius: 6px; }
+.die-3d.small .pip { width: 7px; height: 7px; }
+
+/* התאמה למסך: כל הלוח נכנס למסגרת, בלי גלילה פנימית */
+.boardmap.fit { max-height: none; overflow: visible; }
+.boardmap.fit .boardmap-svg { max-height: 78vh; width: 100%; height: auto; object-fit: contain; }
