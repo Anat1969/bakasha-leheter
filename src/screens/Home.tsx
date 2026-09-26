@@ -15,6 +15,9 @@ export default function Home({ canContinue, onNew, onContinue, onQuiz }: Props) 
           מחדר נוסף וממ"ד ועד בניין שלם: עוברים את הדרך מהחלום להיתר, תחנה אחר תחנה. אצל קישון כל מכשול היה אבסורד. כאן לכל
           מכשול יש סיבה, ומי שמבין אותה מתקדם מהר יותר.
         </p>
+        <p className="disclaimer">
+          המשחק מלמד עקרונות. לפני בנייה בודקים את תיק המידע של המגרש.
+        </p>
         <div className="row">
           <button className="btn primary" onClick={onNew}>
             משחק חדש

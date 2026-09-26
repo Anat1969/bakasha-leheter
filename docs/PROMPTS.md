@@ -13,7 +13,7 @@ Report what passes, then start the dev server and summarize the game flow in 5 l
 Read docs/sources/ogdan-29-09-2025.pdf. For each agency (roads/parking, trees, properties, drainage,
 water, fire, home front command, environment, waste), extract the concrete planning requirements.
 Update or add stations in src/content/stations.json following docs/CONTENT-GUIDE.md.
-Every requirement must cite the page number in meta.note and set status "verified".
+Every requirement must cite the section number in meta.note and set status "source" with the source.
 Do not invent requirements. Add new agency ids to the relevant plots. Run npm test.
 ```
 
@@ -29,7 +29,7 @@ Extend types.ts, game.ts and tests. Keep the engine pure.
 ```
 Add a "conflict" card deck: each card names two agencies with competing demands and offers 3 design
 solutions: one serves agency A, one serves agency B, one serves both at a higher cost. Only the
-balanced solution raises city index. Add 4 conflict cards marked "illustrative" and tests.
+balanced solution raises city index. Add 4 conflict cards marked "rule" and tests.
 ```
 
 ## 4. מצב סדנה

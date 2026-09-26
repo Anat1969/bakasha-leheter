@@ -44,12 +44,12 @@ export function validateContent(c: Content): string[] {
     if (s.kind === 'question' && s.options.filter((o) => o.correct).length !== 1) {
       errors.push(`תחנה ${s.id}: שאלה חייבת תשובה נכונה אחת בדיוק`);
     }
-    if (!s.meta?.status) errors.push(`תחנה ${s.id}: חסר סטטוס אימות`);
+    if (!s.meta?.status) errors.push(`תחנה ${s.id}: חסר סטטוס`);
   }
-  for (const card of c.cards) if (!card.meta?.status) errors.push(`כרטיס ${card.id}: חסר סטטוס אימות`);
+  for (const card of c.cards) if (!card.meta?.status) errors.push(`כרטיס ${card.id}: חסר סטטוס`);
   for (const ex of c.exemptions) {
     if (!['exempt', 'exemptReport', 'permit'].includes(ex.answer)) errors.push(`פטור ${ex.id}: תשובה לא תקינה`);
-    if (!ex.meta?.status) errors.push(`פטור ${ex.id}: חסר סטטוס אימות`);
+    if (!ex.meta?.status) errors.push(`פטור ${ex.id}: חסר סטטוס`);
   }
   const ids = [...c.stations.map((s) => s.id), ...c.cards.map((x) => x.id), ...c.plots.map((p) => p.id), ...c.exemptions.map((e) => e.id)];
   const dup = ids.filter((id, i) => ids.indexOf(id) !== i);

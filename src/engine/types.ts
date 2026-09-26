@@ -8,9 +8,8 @@ export type PathId = 'conforming' | 'flexibility' | 'relief' | 'oldBuilding' | '
 
 /** סטטוס אמינות לכל פריט תוכן */
 export type ContentStatus =
-  | 'verified' // מבוסס על מקור רשמי או מקצועי שנבדק
-  | 'pending' // מבוסס על מקור ישן/משני — ממתין לאישור מחלקת הרישוי
-  | 'illustrative'; // תרחיש משחקי להמחשה, לא טענה עובדתית
+  | 'source' // מבוסס על מקור, והמקור מצוין
+  | 'rule'; // חוק משחק: הדין אינו ודאי, או שזה תרחיש להמחשה
 
 export interface Meta {
   status: ContentStatus;

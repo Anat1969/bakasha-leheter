@@ -23,9 +23,8 @@ export const DECK_LABEL: Record<CardDeck, string> = {
 };
 
 export const STATUS_LABEL: Record<ContentStatus, string> = {
-  verified: 'מאומת',
-  pending: 'ממתין לאימות',
-  illustrative: 'תרחיש להמחשה',
+  source: 'לפי מקור',
+  rule: 'חוק משחק',
 };
 
 export function CategoryChip({ category }: { category: Category }) {

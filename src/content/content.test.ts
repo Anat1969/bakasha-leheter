@@ -5,9 +5,16 @@ describe('תוכן המשחק', () => {
     expect(validateContent(content)).toEqual([]);
   });
 
-  it('לכל פריט יש סטטוס אימות', () => {
-    const all = [...content.stations, ...content.cards, ...content.plots, ...content.paths, ...content.glossary];
-    for (const item of all) expect(['verified', 'pending', 'illustrative']).toContain(item.meta.status);
+  it('לכל פריט יש תווית תקינה', () => {
+    const all = [...content.stations, ...content.cards, ...content.plots, ...content.paths, ...content.glossary, ...content.exemptions];
+    for (const item of all) expect(['source', 'rule']).toContain(item.meta.status);
+  });
+
+  it('פריט "לפי מקור" מציין מקור', () => {
+    const all = [...content.stations, ...content.cards, ...content.paths, ...content.glossary, ...content.exemptions];
+    for (const item of all) {
+      if (item.meta.status === 'source') expect(item.meta.source || item.meta.sourceUrl).toBeTruthy();
+    }
   });
 
   it('לכל מסלול יש לפחות שני מגרשים', () => {

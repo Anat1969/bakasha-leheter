@@ -8,7 +8,7 @@
       "months": 1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25",
       "note": "תרחיש משחקי שמלמד שהדין משתנה"
     }
@@ -23,7 +23,7 @@
       "budget": -5
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -36,7 +36,7 @@
       "months": -1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -49,9 +49,9 @@
       "months": 2
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25",
-      "note": "באשדוד יש אזורים עם ממצאים ארכיאולוגיים. הנוהל המדויק לאימות"
+      "note": "באשדוד יש אזורים עם ממצאים ארכיאולוגיים"
     }
   },
   {
@@ -65,7 +65,7 @@
       "budget": -10
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "עיריית אשדוד — מדיניות אכיפת עבירות בנייה (2023)",
       "sourceUrl": "https://www.ashdod.muni.il/media/16509862/%D7%9E%D7%A1%D7%9E%D7%9A-%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%90%D7%9B%D7%99%D7%A4%D7%AA-%D7%A2%D7%91%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%99%D7%99%D7%94-%D7%90%D7%A9%D7%93%D7%95%D7%93-%D7%A0%D7%95%D7%A1%D7%97-%D7%A1%D7%95%D7%A4%D7%99-01-02-23.pdf"
@@ -80,7 +80,7 @@
       "trust": 1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -93,7 +93,7 @@
       "shields": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "עיריית אשדוד — איתור מידע הנדסי",
       "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%90%D7%99%D7%AA%D7%95%D7%A8-%D7%9E%D7%99%D7%93%D7%A2-%D7%94%D7%A0%D7%93%D7%A1%D7%99/"
@@ -108,7 +108,7 @@
       "shields": 1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -121,7 +121,7 @@
       "months": -1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -134,7 +134,7 @@
       "shields": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "עיריית אשדוד — אוגדן הנחיות, גרסת 29-09-2025",
       "sourceUrl": "https://www.ashdod.muni.il/media/16515813/%D7%90%D7%95%D7%92%D7%93%D7%9F-%D7%94%D7%A0%D7%97%D7%99%D7%95%D7%AA-%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%94%D7%99%D7%AA%D7%A8-%D7%9E%D7%95%D7%AA%D7%90%D7%9D-%D7%9C%D7%A0%D7%95%D7%94%D7%9C-29-09-2025-pdfua.pdf"
@@ -150,7 +150,7 @@
       "budget": -5
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -163,7 +163,7 @@
       "city": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "תכנית 603-0236315 לב אשדוד",
       "sourceUrl": "https://apps.land.gov.il/IturTabotData/takanonim/jerus/1052407.pdf"
@@ -178,7 +178,7 @@
       "city": 2
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "עיריית אשדוד — אגף תכנון ובינוי עיר",
       "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%90%D7%92%D7%A4%D7%99%D7%9D-%D7%95%D7%9E%D7%97%D7%9C%D7%A7%D7%95%D7%AA-%D7%91%D7%9E%D7%99%D7%A0%D7%94%D7%9C-%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%AA%D7%9B%D7%A0%D7%95%D7%9F-%D7%95%D7%91%D7%99%D7%A0%D7%95%D7%99-%D7%A2%D7%99%D7%A8/"
@@ -193,7 +193,7 @@
       "city": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "עיריית אשדוד — מדיניות להצבת שילוט (2024)",
       "sourceUrl": "https://www.ashdod.muni.il/media/16515178/%D7%A0%D7%95%D7%94%D7%9C-%D7%A9%D7%99%D7%9C%D7%95%D7%98-%D7%95%D7%94%D7%A0%D7%97%D7%99%D7%95%D7%AA-%D7%A2%D7%99%D7%A6%D7%95%D7%91%D7%99%D7%95%D7%AA-%D7%9C%D7%A1%D7%95%D7%92%D7%99-%D7%94%D7%A9%D7%99%D7%9C%D7%95%D7%98-pdfua.pdf"
@@ -208,7 +208,7 @@
       "trust": 2
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -222,7 +222,7 @@
       "trust": 1
     },
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -239,7 +239,7 @@
       "murshe"
     ],
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "מודיעין — מורשה להיתר",
       "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
@@ -258,7 +258,7 @@
       "murshe"
     ],
     "meta": {
-      "status": "verified",
+      "status": "source",
       "dateChecked": "2026-09-25",
       "source": "מודיעין — מורשה להיתר",
       "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
@@ -276,7 +276,7 @@
       "murshe"
     ],
     "meta": {
-      "status": "illustrative",
+      "status": "rule",
       "dateChecked": "2026-09-25"
     }
   },
@@ -290,10 +290,9 @@
       "murshe"
     ],
     "meta": {
-      "status": "pending",
+      "status": "source",
       "dateChecked": "2026-09-25",
-      "source": "מוזס אדריכלות — אדריכל מורשה להיתר",
-      "note": "דרישת הביטוח לאימות במקור ראשוני"
+      "source": "מוזס אדריכלות — אדריכל מורשה להיתר"
     }
   },
   {
@@ -306,7 +305,7 @@
       "budget": -3
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח א' — דגשים לעקרונות תכנון אדריכלי עירוני (07/2024)",
       "dateChecked": "2026-09-26"
     }
@@ -321,7 +320,7 @@
       "months": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח א' — דגשים לעקרונות תכנון אדריכלי עירוני (07/2024)",
       "dateChecked": "2026-09-26"
     }
@@ -336,7 +335,7 @@
       "budget": -3
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח א' — דגשים לעקרונות תכנון אדריכלי עירוני (07/2024)",
       "dateChecked": "2026-09-26"
     }
@@ -350,7 +349,7 @@
       "city": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח א' — דגשים לעקרונות תכנון אדריכלי עירוני (07/2024)",
       "dateChecked": "2026-09-26"
     }
@@ -365,10 +364,9 @@
       "months": 1
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח ב' — הנחיות מקור (07/2024)",
-      "dateChecked": "2026-09-26",
-      "note": "תחולת ההנחיה על בקשה ספציפית לאימות מול התוכנית החלה"
+      "dateChecked": "2026-09-26"
     }
   },
   {
@@ -381,10 +379,9 @@
       "budget": -5
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח ב' — הנחיות מקור (07/2024)",
-      "dateChecked": "2026-09-26",
-      "note": "תחולת ההנחיה על בקשה ספציפית לאימות מול התוכנית החלה"
+      "dateChecked": "2026-09-26"
     }
   },
   {
@@ -397,10 +394,9 @@
       "budget": -5
     },
     "meta": {
-      "status": "verified",
+      "status": "source",
       "source": "נספח ב' — הנחיות מקור (07/2024)",
-      "dateChecked": "2026-09-26",
-      "note": "תחולת ההנחיה על בקשה ספציפית לאימות מול התוכנית החלה"
+      "dateChecked": "2026-09-26"
     }
   }
 ]

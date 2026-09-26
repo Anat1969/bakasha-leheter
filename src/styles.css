@@ -174,9 +174,8 @@ p { margin: 0; max-width: 65ch; }
 .chip.need { color: var(--approve); background: var(--approve-soft); }
 .chip.want { color: var(--warn); background: var(--warn-soft); }
 .chip.process { color: var(--muted); background: var(--surface-2); }
-.chip.verified { color: var(--approve); background: var(--approve-soft); }
-.chip.pending { color: var(--warn); background: var(--warn-soft); }
-.chip.illustrative { color: var(--muted); background: var(--surface-2); }
+.chip.source { color: var(--approve); background: var(--approve-soft); }
+.chip.rule { color: var(--muted); background: var(--surface-2); }
 
 /* ---------- פתיחה ---------- */
 .cover { display: grid; gap: 24px; padding-block: 24px 8px; }
@@ -348,3 +347,11 @@ p { margin: 0; max-width: 65ch; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 @keyframes press { from { transform: scale(1.4) rotate(-14deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
 .stamp.animate { animation: press 0.35s ease-out both; }
+
+.disclaimer {
+  color: var(--muted);
+  font-size: 0.95rem;
+  border-inline-start: 3px solid var(--stamp);
+  padding-inline-start: 0.75rem;
+  margin: 0;
+}

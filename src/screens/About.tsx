@@ -20,19 +20,20 @@ export default function About({ onBack }: { onBack: () => void }) {
   return (
     <section className="stack-lg">
       <div className="row" style={{ justifyContent: 'space-between' }}>
-        <h2>מקורות ואימות</h2>
+        <h2>מקורות</h2>
         <button className="btn" onClick={onBack}>חזרה</button>
       </div>
       <p className="lead">
-        כל פריט במשחק מסומן לפי רמת האמינות שלו. זו גרסת MVP: פריטים שממתינים לאימות יש לבדוק מול מחלקת הרישוי
-        בעיריית אשדוד לפני שימוש ציבורי. אין לראות במשחק ייעוץ משפטי או תחליף לתיק המידע.
+        לכל פריט במשחק יש תווית. <strong>לפי מקור</strong> — הפריט מבוסס על מקור, והמקור מצוין לצדו.
+        <strong> חוק משחק</strong> — כלל שנקבע לצורך המשחק, במקום שבו הדין אינו ודאי או שהמצב מובא להמחשה.
+        המשחק מלמד עקרונות, ואינו ייעוץ משפטי או תחליף לתיק המידע של המגרש.
       </p>
       <div className="note">
-        רוב הדרישות העיצוביות מבוססות על ההנחיות המרחביות לעיר אשדוד, מהדורה 18 (12/2024), שפורסמה להשגות הציבור,
-        ועל נספחים א' ו-ב' של אדריכלית העיר (07/2024). יש לוודא שהמהדורה אושרה ולעדכן מספרי סעיפים לפי הנוסח המאושר.
+        רוב הדרישות העיצוביות מבוססות על ההנחיות המרחביות לעיר אשדוד, מהדורה 18 (12/2024), ועל נספחים א' ו-ב'
+        של אדריכלית העיר (07/2024). מספרי הסעיפים מצוינים בעמודת ההערה.
       </div>
       <div className="row">
-        {(['verified', 'pending', 'illustrative'] as ContentStatus[]).map((s) => (
+        {(['source', 'rule'] as ContentStatus[]).map((s) => (
           <span key={s} className={`chip ${s}`}>
             {STATUS_LABEL[s]}: {count(s)}
           </span>
@@ -44,7 +45,7 @@ export default function About({ onBack }: { onBack: () => void }) {
             <tr>
               <th>סוג</th>
               <th>פריט</th>
-              <th>סטטוס</th>
+              <th>תווית</th>
               <th>מקור</th>
               <th>הערה</th>
             </tr>

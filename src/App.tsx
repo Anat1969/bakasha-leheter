@@ -75,7 +75,7 @@ export default function App() {
             מילון מונחים
           </button>
           <button className="btn ghost" onClick={() => open('about')}>
-            מקורות ואימות
+            מקורות
           </button>
         </nav>
       </header>
