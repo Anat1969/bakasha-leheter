@@ -15,7 +15,7 @@
   --stamp-soft: #dde8f2;
   --approve: #2d7550; /* אושר */
   --approve-soft: #dcefe3;
-  --warn: #9c6410; /* רוצים / זהירות */
+  --warn: #8f5a0d; /* רוצים / זהירות — כהה מספיק ל-AA על warn-soft */
   --warn-soft: #f6ead3;
   --danger: #a5372b;
   --danger-soft: #f6dfdb;
