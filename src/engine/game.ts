@@ -127,7 +127,17 @@ export function stationSequence(c: Content, plot: Plot, pathId: PathId): string[
   return seq.filter((id) => !path.skipStations.includes(id));
 }
 
-const FILLERS: CardDeck[][] = [['event', 'neighborhood'], ['knowledge'], ['neighborhood', 'event']];
+/**
+ * המשבצות שבין תחנה לתחנה. האורך משתנה בכוונה (3–5), כדי שהטלת הקובייה
+ * תיתן תחושת התקדמות אמיתית ולא תגיע כמעט תמיד לתחנה הבאה במכה אחת.
+ */
+const FILLERS: CardDeck[][] = [
+  ['event', 'neighborhood', 'knowledge'],
+  ['knowledge', 'event', 'neighborhood', 'event'],
+  ['neighborhood', 'knowledge', 'event', 'knowledge', 'neighborhood'],
+  ['event', 'knowledge', 'neighborhood'],
+  ['knowledge', 'neighborhood', 'event', 'knowledge'],
+];
 
 export function buildRoute(c: Content, plot: Plot, pathId: PathId): Square[] {
   const path = c.paths.find((p) => p.id === pathId);
@@ -138,7 +148,7 @@ export function buildRoute(c: Content, plot: Plot, pathId: PathId): Square[] {
       let fill = [...FILLERS[i % FILLERS.length]];
       if (path?.responsibilitySquares && i % 2 === 0) fill[0] = 'responsibility';
       // אחרי תוכנית עיצוב ובינוי: הערות אדריכלית העיר (נספח א')
-      if (prev === 'design-plan') fill = ['cityArchitect', 'cityArchitect'];
+      if (prev === 'design-plan') fill = ['cityArchitect', 'cityArchitect', 'cityArchitect'];
       for (const deck of fill) route.push({ type: deck });
     }
     route.push({ type: 'station', stationId });

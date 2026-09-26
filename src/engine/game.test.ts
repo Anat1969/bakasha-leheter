@@ -115,3 +115,167 @@ describe('משחק מלא', () => {
     expect(scorePlayer(s.players[0], 1).lines[0].value).toBe(50);
   });
 });
+
+// ============================================================
+// סימולציה רחבה — שומרת על המנוע כשמכווננים את קצב המשחק
+// ============================================================
+
+/** אקראיות דטרמיניסטית לבוט, כדי שכישלון יהיה ניתן לשחזור */
+function botRandom(seed: number) {
+  let s = seed >>> 0 || 1;
+  return () => {
+    s ^= s << 13;
+    s >>>= 0;
+    s ^= s >> 17;
+    s ^= s << 5;
+    s >>>= 0;
+    return s / 4294967296;
+  };
+}
+
+interface SimResult {
+  track: string;
+  seed: number;
+  plotId: string;
+  path: string;
+  steps: number;
+  ended: boolean;
+  reachedPermit: boolean;
+  score: number;
+  months: number;
+  trust: number;
+  city: number;
+}
+
+function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: number, wrongRate: number): SimResult {
+  const r = botRandom(seed * 7919 + 13);
+  let s = start(track, ['בוט'], seed);
+  const p0 = content.plots.find((p) => p.id === s.players[0].plotId)!;
+  const allowed = pathAvailability(p0).filter((a) => a.allowed);
+  const path = allowed[Math.floor(r() * allowed.length)].path;
+  s = reducer(s, { type: 'CHOOSE_PATH', path })!;
+
+  let steps = 0;
+  while (s.phase.name !== 'ended' && steps < 4000) {
+    steps++;
+    const ph = s.phase;
+    if (ph.name === 'turn') s = reducer(s, { type: 'ROLL' })!;
+    else if (ph.name === 'station') {
+      const st = content.stations.find((x) => x.id === ph.stationId)!;
+      const correct = st.options.find((o) => o.correct) ?? st.options[0];
+      const wrong = st.options.find((o) => !o.correct) ?? st.options[0];
+      s = reducer(s, { type: 'ANSWER', optionId: r() < wrongRate ? wrong.id : correct.id })!;
+    } else if (ph.name === 'stationResult' || ph.name === 'card') s = reducer(s, { type: 'CONTINUE' })!;
+    else break;
+  }
+
+  const p = s.players[0];
+  return {
+    track,
+    seed,
+    plotId: p0.id,
+    path,
+    steps,
+    ended: s.phase.name === 'ended',
+    reachedPermit: p.resolved.includes('permit'),
+    score: scorePlayer(p, 1).total,
+    months: p.res.months,
+    trust: p.res.trust,
+    city: p.res.city,
+  };
+}
+
+describe('מרווח בין תחנות', () => {
+  /** גדלי המרווחים בין תחנות עוקבות במסלול */
+  function gaps(route: { type: string; stationId?: string }[]): number[] {
+    const out: number[] = [];
+    let run = 0;
+    let seenStation = false;
+    for (const sq of route) {
+      if (sq.type === 'station') {
+        if (seenStation) out.push(run);
+        seenStation = true;
+        run = 0;
+      } else run++;
+    }
+    return out;
+  }
+
+  const routes = content.plots.flatMap((p) =>
+    pathAvailability(p)
+      .filter((a) => a.allowed)
+      .map((a) => ({ id: `${p.id}/${a.path}`, route: buildRoute(content, p, a.path) })),
+  );
+
+  it('כל מרווח הוא בין 3 ל-5 משבצות', () => {
+    const bad: string[] = [];
+    for (const r of routes) {
+      for (const g of gaps(r.route)) if (g < 3 || g > 5) bad.push(`${r.id}: מרווח ${g}`);
+    }
+    expect(bad).toEqual([]);
+  });
+
+  it('המרווח לא קבוע — הקובייה צריכה להרגיש', () => {
+    const long = routes.filter((r) => gaps(r.route).length >= 6);
+    expect(long.length).toBeGreaterThan(0);
+    for (const r of long) {
+      expect(new Set(gaps(r.route)).size, `${r.id} מרווח אחיד`).toBeGreaterThan(1);
+    }
+  });
+
+  it('ממוצע המרווחים בטווח שנקבע', () => {
+    const all = routes.flatMap((r) => gaps(r.route));
+    const avg = all.reduce((a, b) => a + b, 0) / all.length;
+    expect(avg).toBeGreaterThanOrEqual(3);
+    expect(avg).toBeLessThanOrEqual(5);
+  });
+});
+
+describe('סימולציה: 300 משחקים', () => {
+  const TRACKS = ['extension', 'house', 'building', 'mamad'] as const;
+  const results: SimResult[] = [];
+  const crashes: string[] = [];
+  for (const track of TRACKS) {
+    for (let i = 0; i < 75; i++) {
+      const seed = i * 977 + 1;
+      try {
+        results.push(simulate(track, seed, i % 5 === 0 ? 0.45 : 0.15));
+      } catch (e) {
+        crashes.push(`${track}/${seed}: ${(e as Error).message}`);
+      }
+    }
+  }
+  const steps = results.map((x) => x.steps);
+  const avgSteps = steps.reduce((a, b) => a + b, 0) / steps.length;
+
+  it('אין קריסה, וכל 300 המשחקים הורצו', () => {
+    expect(crashes).toEqual([]);
+    expect(results).toHaveLength(300);
+  });
+
+  it('כל משחק מסתיים ומגיע להיתר', () => {
+    expect(results.filter((x) => !x.ended).map((x) => `${x.track}/${x.seed}`)).toEqual([]);
+    expect(results.filter((x) => !x.reachedPermit).map((x) => `${x.track}/${x.seed}`)).toEqual([]);
+  });
+
+  it('הניקוד תמיד מספר סופי ובטווח שפוי', () => {
+    for (const x of results) {
+      expect(Number.isFinite(x.score), `${x.track}/${x.seed}`).toBe(true);
+      expect(x.score).toBeGreaterThan(0);
+      expect(x.score).toBeLessThan(300);
+    }
+  });
+
+  it('כל המגרשים וכל הדרכים המותרות נבדקים', () => {
+    const plots = new Set(results.map((x) => x.plotId));
+    expect(content.plots.filter((p) => !plots.has(p.id)).map((p) => p.id)).toEqual([]);
+    expect(new Set(results.map((x) => x.path)).size).toBeGreaterThanOrEqual(4);
+  });
+
+  // תקרת קצב: כיוונון מרחק המשבצות לא יאריך את המשחק בלי גבול.
+  // הבסיס לפני הארכת FILLERS היה ממוצע ~68 צעדים, והתקרה היא 40% מעליו.
+  it('אורך משחק ממוצע נשאר מתחת לתקרה', () => {
+    expect(avgSteps).toBeLessThanOrEqual(95);
+    expect(Math.max(...steps)).toBeLessThan(400);
+  });
+});
