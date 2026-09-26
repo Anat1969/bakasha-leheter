@@ -1,0 +1,152 @@
+[
+  {
+    "id": "p-room",
+    "track": "extension",
+    "name": "חדר נוסף בבית צמוד קרקע",
+    "description": "בית בן שתי קומות בשכונה ותיקה. המשפחה גדלה.",
+    "residentialPct": 100,
+    "floors": 2,
+    "units": 1,
+    "buildingAge": 30,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "agency-trees"
+    ],
+    "dream": "חדר לילדים וממ\"ד",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-balcony",
+    "track": "extension",
+    "name": "סגירת מרפסת בבניין משותף",
+    "description": "דירה בקומה שלישית בבניין בן 40 שנה עם 16 דירות.",
+    "residentialPct": 100,
+    "floors": 4,
+    "units": 16,
+    "buildingAge": 40,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": false,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "agency-properties"
+    ],
+    "dream": "פינת עבודה במרפסת",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-newhouse",
+    "track": "house",
+    "name": "בית פרטי על מגרש ריק",
+    "description": "מגרש ריק בשכונה חדשה, מיועד לבית אחד.",
+    "residentialPct": 100,
+    "floors": 2,
+    "units": 1,
+    "buildingAge": 0,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "agency-roads",
+      "agency-trees",
+      "agency-drainage",
+      "agency-water"
+    ],
+    "dream": "בית עם חצר ומרפסת גג",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-rebuild",
+    "track": "house",
+    "name": "הריסה ובנייה של בית ישן",
+    "description": "בית בן 45 שנה שאין טעם לשפץ. המשפחה רוצה לבנות מחדש.",
+    "residentialPct": 100,
+    "floors": 2,
+    "units": 1,
+    "buildingAge": 45,
+    "demolition": true,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": false,
+    "agencies": [
+      "agency-roads",
+      "agency-trees",
+      "agency-properties",
+      "agency-drainage"
+    ],
+    "dream": "בית גדול יותר מהקיים",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-tower",
+    "track": "building",
+    "name": "בניין מגורים בשכונה חדשה",
+    "description": "בניין בן 9 קומות עם 36 דירות ומסחר קטן בקומת הקרקע.",
+    "residentialPct": 90,
+    "floors": 9,
+    "units": 36,
+    "buildingAge": 0,
+    "demolition": false,
+    "preservation": false,
+    "allOwnersSigned": true,
+    "controlInstitute": true,
+    "requiresDesignPlan": true,
+    "agencies": [
+      "agency-roads",
+      "agency-trees",
+      "agency-properties",
+      "agency-drainage",
+      "agency-water"
+    ],
+    "dream": "בניין עם חזית פעילה ולובי פתוח לרחוב",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "p-heritage",
+    "track": "building",
+    "name": "מבנה לשימור עם תוספת",
+    "description": "מבנה ותיק לשימור, 60% מגורים ומסחר, שמבקשים להוסיף לו אגף.",
+    "residentialPct": 60,
+    "floors": 3,
+    "units": 8,
+    "buildingAge": 60,
+    "demolition": false,
+    "preservation": true,
+    "allOwnersSigned": true,
+    "controlInstitute": false,
+    "requiresDesignPlan": true,
+    "agencies": [
+      "agency-roads",
+      "agency-properties",
+      "agency-water"
+    ],
+    "dream": "אגף חדש שמכבד את הישן",
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  }
+]

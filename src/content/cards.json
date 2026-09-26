@@ -1,0 +1,299 @@
+[
+  {
+    "id": "ev-law",
+    "deck": "event",
+    "title": "החוק התעדכן",
+    "text": "נכנס לתוקף תיקון בתקנות. עורך הבקשה בודק שוב את תיק המידע ומעדכן את התוכניות.",
+    "effects": {
+      "months": 1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25",
+      "note": "תרחיש משחקי שמלמד שהדין משתנה"
+    }
+  },
+  {
+    "id": "ev-rain",
+    "deck": "event",
+    "title": "חורף גשום",
+    "text": "המים מהמגרש זרמו לרחוב. צריך להוסיף שטח מחלחל לתוכנית.",
+    "effects": {
+      "months": 1,
+      "budget": -5
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "ev-complete",
+    "deck": "event",
+    "title": "הגשה שלמה",
+    "text": "עורך הבקשה צירף את כל המסמכים כבר בפעם הראשונה. הבקשה עברה בלי סבב תיקונים.",
+    "effects": {
+      "months": -1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "ev-antiq",
+    "deck": "event",
+    "title": "ממצא בחפירת ניסיון",
+    "text": "בבדיקה מקדימה התגלה ממצא שמחייב בדיקה נוספת לפני שממשיכים.",
+    "effects": {
+      "months": 2
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25",
+      "note": "באשדוד יש אזורים עם ממצאים ארכיאולוגיים. הנוהל המדויק לאימות"
+    }
+  },
+  {
+    "id": "ev-illegal",
+    "deck": "event",
+    "title": "סגרתי מרפסת בלי היתר",
+    "text": "בנייה בלי היתר היא עבירה. לפי מדיניות האכיפה של אשדוד, אם לא הוצא היתר בתוך שנה, נפתח תיק פיקוח וההליכים ממשיכים.",
+    "effects": {
+      "months": 2,
+      "trust": -1,
+      "budget": -10
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "עיריית אשדוד — מדיניות אכיפת עבירות בנייה (2023)",
+      "sourceUrl": "https://www.ashdod.muni.il/media/16509862/%D7%9E%D7%A1%D7%9E%D7%9A-%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%90%D7%9B%D7%99%D7%A4%D7%AA-%D7%A2%D7%91%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A0%D7%99%D7%99%D7%94-%D7%90%D7%A9%D7%93%D7%95%D7%93-%D7%A0%D7%95%D7%A1%D7%97-%D7%A1%D7%95%D7%A4%D7%99-01-02-23.pdf"
+    }
+  },
+  {
+    "id": "ev-objection",
+    "deck": "event",
+    "title": "שכן מודאג",
+    "text": "שכן שמע על הבנייה ושואל שאלות. שיחה פתוחה מרגיעה, אבל לוקחת זמן.",
+    "effects": {
+      "trust": 1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "kn-archive",
+    "deck": "knowledge",
+    "title": "בדקתם את תיק הבניין",
+    "text": "חיפשתם באתר ההנדסי של אשדוד לפי כתובת או גוש וחלקה, ומצאתם היתרים קודמים. קיבלתם כרטיס ידע: הטעות הבאה לא תעלה לכם זמן.",
+    "effects": {
+      "shields": 1
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "עיריית אשדוד — איתור מידע הנדסי",
+      "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%90%D7%99%D7%AA%D7%95%D7%A8-%D7%9E%D7%99%D7%93%D7%A2-%D7%94%D7%A0%D7%93%D7%A1%D7%99/"
+    }
+  },
+  {
+    "id": "kn-guidelines",
+    "deck": "knowledge",
+    "title": "קראתם את ההנחיות המרחביות",
+    "text": "לפני התכנון קראתם את ההנחיות המרחביות של העיר. קיבלתם כרטיס ידע.",
+    "effects": {
+      "shields": 1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "kn-early",
+    "deck": "knowledge",
+    "title": "פגישת תיאום מוקדמת",
+    "text": "ישבתם עם עורך הבקשה על כל גיליון הדרישות לפני ההגשה. חסכתם סבב תיקונים.",
+    "effects": {
+      "months": -1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "kn-ogdan",
+    "deck": "knowledge",
+    "title": "קראתם את האוגדן",
+    "text": "עברתם על אוגדן הנחיות הרישוי, התשתית והסביבה של אשדוד. קיבלתם כרטיס ידע.",
+    "effects": {
+      "shields": 1
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "עיריית אשדוד — אוגדן הנחיות, גרסת 29-09-2025",
+      "sourceUrl": "https://www.ashdod.muni.il/media/16515813/%D7%90%D7%95%D7%92%D7%93%D7%9F-%D7%94%D7%A0%D7%97%D7%99%D7%95%D7%AA-%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%94%D7%99%D7%AA%D7%A8-%D7%9E%D7%95%D7%AA%D7%90%D7%9D-%D7%9C%D7%A0%D7%95%D7%94%D7%9C-29-09-2025-pdfua.pdf"
+    }
+  },
+  {
+    "id": "nb-shade",
+    "deck": "neighborhood",
+    "title": "הצללה לרחוב",
+    "text": "תכננתם עצים ופרגולה לאורך המדרכה. הרחוב נעשה נעים יותר בקיץ.",
+    "effects": {
+      "city": 2,
+      "budget": -5
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "nb-paving",
+    "deck": "neighborhood",
+    "title": "ריצוף קריר",
+    "text": "בחרתם ריצוף בהיר שאינו אוגר חום, אבל לא לבן בוהק. כך נקבע גם בתוכנית לב אשדוד.",
+    "effects": {
+      "city": 1
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "תכנית 603-0236315 לב אשדוד",
+      "sourceUrl": "https://apps.land.gov.il/IturTabotData/takanonim/jerus/1052407.pdf"
+    }
+  },
+  {
+    "id": "nb-frontage",
+    "deck": "neighborhood",
+    "title": "חזית פעילה",
+    "text": "קומת הקרקע פונה לרחוב עם חלונות וכניסות, ולא עם קיר אטום. זה הכיוון שהעירייה מקדמת גם ברחוב הרצל.",
+    "effects": {
+      "city": 2
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "עיריית אשדוד — אגף תכנון ובינוי עיר",
+      "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%90%D7%92%D7%A4%D7%99%D7%9D-%D7%95%D7%9E%D7%97%D7%9C%D7%A7%D7%95%D7%AA-%D7%91%D7%9E%D7%99%D7%A0%D7%94%D7%9C-%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%AA%D7%9B%D7%A0%D7%95%D7%9F-%D7%95%D7%91%D7%99%D7%A0%D7%95%D7%99-%D7%A2%D7%99%D7%A8/"
+    }
+  },
+  {
+    "id": "nb-sign",
+    "deck": "neighborhood",
+    "title": "שלט אחד בחזית",
+    "text": "לעסק בקומת הקרקע תכננתם שלט אחד, במיקום אחיד ובתאורה חמה במישור החזית, לפי מדיניות השילוט.",
+    "effects": {
+      "city": 1
+    },
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "עיריית אשדוד — מדיניות להצבת שילוט (2024)",
+      "sourceUrl": "https://www.ashdod.muni.il/media/16515178/%D7%A0%D7%95%D7%94%D7%9C-%D7%A9%D7%99%D7%9C%D7%95%D7%98-%D7%95%D7%94%D7%A0%D7%97%D7%99%D7%95%D7%AA-%D7%A2%D7%99%D7%A6%D7%95%D7%91%D7%99%D7%95%D7%AA-%D7%9C%D7%A1%D7%95%D7%92%D7%99-%D7%94%D7%A9%D7%99%D7%9C%D7%95%D7%98-pdfua.pdf"
+    }
+  },
+  {
+    "id": "nb-share",
+    "deck": "neighborhood",
+    "title": "שיתפתם את השכנים",
+    "text": "הצגתם לשכנים את התכנון בחדר המדרגות. הם שאלו, אתם הסברתם.",
+    "effects": {
+      "trust": 2
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "nb-bench",
+    "deck": "neighborhood",
+    "title": "ספסל בגבול המגרש",
+    "text": "השארתם פינת ישיבה מוצלת בגבול המגרש. השכנים משתמשים בה.",
+    "effects": {
+      "city": 1,
+      "trust": 1
+    },
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "rs-report",
+    "deck": "responsibility",
+    "title": "חובת דיווח",
+    "text": "המורשה מצא מרפסת שנסגרה בניגוד להיתר קודם. הוא חייב לדווח לרשות הרישוי. המסלול המהיר נעצר, ואתם חוזרים לוועדה.",
+    "effects": {
+      "months": 1
+    },
+    "action": "backToRegularTrack",
+    "onlyPaths": [
+      "murshe"
+    ],
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "מודיעין — מורשה להיתר",
+      "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
+    }
+  },
+  {
+    "id": "rs-owner",
+    "deck": "responsibility",
+    "title": "חתימה חסרה",
+    "text": "אחד מבעלי הזכויות לא חתם על הבקשה. בלי הסכמת כל הבעלים המורשה אינו מוסמך. חוזרים למסלול הרגיל.",
+    "effects": {
+      "months": 1
+    },
+    "action": "backToRegularTrack",
+    "onlyPaths": [
+      "murshe"
+    ],
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "source": "מודיעין — מורשה להיתר",
+      "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
+    }
+  },
+  {
+    "id": "rs-ok",
+    "deck": "responsibility",
+    "title": "הכול תקין",
+    "text": "המורשה בדק את התוכניות מול התב\"ע ואישר. חסכתם את זמן ההמתנה.",
+    "effects": {
+      "months": -1
+    },
+    "onlyPaths": [
+      "murshe"
+    ],
+    "meta": {
+      "status": "illustrative",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "rs-ok2",
+    "deck": "responsibility",
+    "title": "ביטוח ואחריות",
+    "text": "המורשה נושא באחריות מקצועית גבוהה ומבוטח בהתאם. התהליך מהיר, אבל בדיקתו יסודית.",
+    "effects": {},
+    "onlyPaths": [
+      "murshe"
+    ],
+    "meta": {
+      "status": "pending",
+      "dateChecked": "2026-09-25",
+      "source": "מוזס אדריכלות — אדריכל מורשה להיתר",
+      "note": "דרישת הביטוח לאימות במקור ראשוני"
+    }
+  }
+]

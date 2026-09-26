@@ -1,0 +1,128 @@
+[
+  {
+    "term": "תב\"ע",
+    "definition": "תוכנית בניין עיר. קובעת מה מותר לבנות במגרש: שימושים, זכויות בנייה, קווי בניין וגובה.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.nadlancenter.co.il/article/5556"
+    }
+  },
+  {
+    "term": "תיק מידע להיתר",
+    "definition": "מסמך מהוועדה המקומית שמרכז את המידע התכנוני והדרישות למגרש. תנאי סף להגשת בקשה.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%94%D7%99%D7%AA%D7%A8/%D7%90%D7%99%D7%9A-%D7%9E%D7%92%D7%99%D7%A9%D7%99%D7%9D-%D7%91%D7%A7%D7%A9%D7%94-%D7%9C%D7%AA%D7%99%D7%A7-%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%94%D7%99%D7%AA%D7%A8/"
+    }
+  },
+  {
+    "term": "רישוי זמין",
+    "definition": "המערכת המקוונת להגשת בקשות להיתר ולניהולן.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.nadlancenter.co.il/article/5556"
+    }
+  },
+  {
+    "term": "עורך בקשה",
+    "definition": "איש מקצוע מוסמך (אדריכל, מהנדס, הנדסאי) שעורך את הבקשה, חותם עליה ואחראי לתכנון.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.nadlancenter.co.il/article/5556"
+    }
+  },
+  {
+    "term": "הקלה",
+    "definition": "אישור לסטות מהוראות התוכנית. אחרי תיקון 134 מצומצמת לרשימה סגורה, למעט בניינים ותיקים לפי תיקון 160.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.globes.co.il/news/article.aspx?did=1001496352"
+    }
+  },
+  {
+    "term": "גמישות (סטייה מתוכנית)",
+    "definition": "שינוי קל שהשפעתו מעטה וזניחה, בנושא שנקבע בתקנות, שרשות הרישוי רשאית להתיר בלי הליך הקלה.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://arnontl.com/he/news/%D7%A8%D7%A4%D7%95%D7%A8%D7%9E%D7%AA-%D7%91%D7%99%D7%98%D7%95%D7%9C-%D7%94%D7%94%D7%A7%D7%9C%D7%95%D7%AA/"
+    }
+  },
+  {
+    "term": "שימוש חורג",
+    "definition": "שימוש במבנה או בקרקע שאינו תואם את התוכנית או את ההיתר.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://sdan.complot.co.il/licensing/applyingstages/"
+    }
+  },
+  {
+    "term": "מורשה להיתר",
+    "definition": "אדריכל רישוי הרשום בפנקס המורשים, שמוסמך לבוא במקום רשות הרישוי ולאשר היתרים בתנאים.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
+    }
+  },
+  {
+    "term": "מכון בקרה",
+    "definition": "גוף מוסמך שבודק את התכן ההנדסי והבטיחותי של הבניין בסוגי מבנים שנקבעו.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/"
+    }
+  },
+  {
+    "term": "בקרת תכן",
+    "definition": "בדיקת שלד וביסוס, בטיחות אש, מיגון, בטיחות משתמש ותברואה.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://sdan.complot.co.il/licensing/applyingstages/"
+    }
+  },
+  {
+    "term": "היטלי פיתוח",
+    "definition": "תשלומי חובה לרשות המקומית עבור תשתיות: סלילת רחובות, תיעול ושטחים ציבוריים פתוחים.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://ashdod.muni.il/he-il/אתר-העיר/הנדסה/אגרות-והיטלים/"
+    }
+  },
+  {
+    "term": "תוכנית עיצוב ובינוי",
+    "definition": "תוכנית שמפרטת את עיצוב הבניין והפיתוח סביבו, כשהתב\"ע דורשת זאת. באשדוד נדונה מול אדריכלית העיר ופורום מנהלי האגפים.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%94%D7%A0%D7%97%D7%99%D7%95%D7%AA-%D7%9E%D7%A8%D7%97%D7%91%D7%99%D7%95%D7%AA-%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%A2%D7%99%D7%A8%D7%95%D7%A0%D7%99%D7%AA-%D7%95%D7%9E%D7%A1%D7%9E%D7%9B%D7%99-%D7%A2%D7%96%D7%A8/%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%95%D7%9E%D7%A1%D7%9E%D7%9B%D7%99-%D7%A2%D7%96%D7%A8/%D7%AA%D7%95%D7%9B%D7%A0%D7%99%D7%AA-%D7%A2%D7%99%D7%A6%D7%95%D7%91-%D7%95%D7%91%D7%99%D7%A0%D7%95%D7%99/"
+    }
+  },
+  {
+    "term": "נסח טאבו",
+    "definition": "מסמך מרשם המקרקעין על הבעלות בנכס. באשדוד תקף חצי שנה לצורך בקשה.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%A8%D7%99%D7%A9%D7%95%D7%99-%D7%91%D7%A0%D7%99%D7%99%D7%94/%D7%A9%D7%9C%D7%91%D7%99-%D7%94%D7%92%D7%A9%D7%AA-%D7%91%D7%A7%D7%A9%D7%94-%D7%9C%D7%94%D7%99%D7%AA%D7%A8/"
+    }
+  },
+  {
+    "term": "תעודת גמר",
+    "definition": "אישור בסיום הבנייה שהבניין נבנה לפי ההיתר.",
+    "meta": {
+      "status": "verified",
+      "dateChecked": "2026-09-25",
+      "sourceUrl": "https://www.ashdod.muni.il/he-il/%D7%90%D7%AA%D7%A8-%D7%94%D7%A2%D7%99%D7%A8/%D7%94%D7%A0%D7%93%D7%A1%D7%94/%D7%A4%D7%99%D7%A7%D7%95%D7%97-%D7%91%D7%A0%D7%99%D7%99%D7%94/"
+    }
+  }
+]

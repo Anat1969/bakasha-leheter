@@ -1,0 +1,80 @@
+[
+  {
+    "id": "conforming",
+    "title": "תואם תוכנית",
+    "summary": "בונים בדיוק לפי מה שהתב\"ע מתירה. בלי פרסום ובלי התנגדויות.",
+    "teaches": "התוכנית היא הכלל. תכנון טוב בתוך הכללים הוא הדרך הקצרה ביותר להיתר.",
+    "preStations": [],
+    "postStations": [],
+    "skipStations": [],
+    "meta": {
+      "status": "verified",
+      "source": "גלובס — ההליכים שיתקצרו, ההקלות שיבוטלו",
+      "sourceUrl": "https://www.globes.co.il/news/article.aspx?did=1001496352",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "flexibility",
+    "title": "סטייה קלה (גמישות)",
+    "summary": "שינוי קטן שהשפעתו מעטה וזניחה, בנושא שנקבע בתקנות. רשות הרישוי יכולה להתיר אותו בלי הליך הקלה.",
+    "teaches": "יש מרחב גמישות קטן ומוגדר, והוא לא דלת אחורית להגדלת זכויות.",
+    "preStations": ["flex-check"],
+    "postStations": [],
+    "skipStations": [],
+    "meta": {
+      "status": "verified",
+      "source": "ארנון, תדמור-לוי — רפורמת ביטול ההקלות (תיקון 134)",
+      "sourceUrl": "https://arnontl.com/he/news/%D7%A8%D7%A4%D7%95%D7%A8%D7%9E%D7%AA-%D7%91%D7%99%D7%98%D7%95%D7%9C-%D7%94%D7%94%D7%A7%D7%9C%D7%95%D7%AA/",
+      "dateChecked": "2026-09-25",
+      "note": "רשימת הנושאים המדויקת לאימות מול התקנות"
+    }
+  },
+  {
+    "id": "relief",
+    "title": "הקלה מהרשימה הסגורה",
+    "summary": "מבקשים הקלה בנושא שמופיע ברשימה הסגורה של התקנות. נדרשים פרסום ושמיעת התנגדויות.",
+    "teaches": "אחרי תיקון 134 רוב ההקלות בוטלו. נשארה רשימה סגורה, והרחוב נכנס לתהליך דרך הפרסום.",
+    "preStations": ["relief-list"],
+    "postStations": ["publication"],
+    "skipStations": [],
+    "meta": {
+      "status": "verified",
+      "source": "מועצה אזורית חבל מודיעין — ביטול הקלות, תיקון 134",
+      "sourceUrl": "https://www.modiin-region.muni.il/%D7%91%D7%99%D7%98%D7%95%D7%9C-%D7%94%D7%A7%D7%9C%D7%95%D7%AA-%D7%AA%D7%99%D7%A7%D7%95%D7%9F-134-%D7%9C%D7%97%D7%95%D7%A7-%D7%94%D7%AA%D7%9B%D7%A0%D7%95%D7%9F-%D7%95%D7%94%D7%91%D7%A0%D7%99%D7%94-%D7%94%D7%95%D7%93%D7%A2%D7%94-%D7%97%D7%A9%D7%95%D7%91%D7%94/",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "oldBuilding",
+    "title": "בניין ותיק (8 שנים ומעלה)",
+    "summary": "בבניין קיים שהושלם לפני 8 שנים לפחות, ובלי הריסה ובנייה מחדש, תיקון 160 מאפשר מסלול הקלה רחב יותר, בכפוף למגבלות.",
+    "teaches": "החוק מבחין בין התאמה של בניין ותיק לעידן חדש לבין הגדלת זכויות בבנייה חדשה.",
+    "preStations": ["relief-160"],
+    "postStations": ["publication"],
+    "skipStations": [],
+    "meta": {
+      "status": "verified",
+      "source": "Lexology — מעו\"דכן תכנון ובנייה, אפריל 2025 (תיקון 160)",
+      "sourceUrl": "https://www.lexology.com/library/detail.aspx?g=9c9460a7-4951-4045-887b-bf87d6db3187",
+      "dateChecked": "2026-09-25"
+    }
+  },
+  {
+    "id": "murshe",
+    "title": "מורשה להיתר",
+    "summary": "אדריכל רישוי הרשום בפנקס המורשים בא במקום רשות הרישוי ומאשר את ההיתר, בתנאים. מדלגים על ההמתנה לוועדה, אבל האחריות עוברת אליו.",
+    "teaches": "מהירות היא לא פרצה. היא אמון שניתן בתנאים, עם חובת דיווח.",
+    "preStations": ["murshe-appoint"],
+    "postStations": [],
+    "skipStations": ["committee"],
+    "responsibilitySquares": true,
+    "meta": {
+      "status": "verified",
+      "source": "מודיעין — אתר הנדסה: מורשה להיתר (עודכן 04/2025)",
+      "sourceUrl": "https://modiin.complot.co.il/meidatihnuni/murshe_heiter/",
+      "dateChecked": "2026-09-25",
+      "note": "לאמת שההסדר זהה באשדוד ולבדוק מול עמוד מינהל התכנון"
+    }
+  }
+]

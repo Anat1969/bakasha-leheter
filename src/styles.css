@@ -1,0 +1,350 @@
+/* ============================================================
+   בקשה להיתר — מערכת עיצוב
+   עולם החומר: טופס עירוני, חותמת דיו, תיק בקשה.
+   ללא אייקונים. כל הצבעים דרך טוקנים, בהיר וכהה.
+   ============================================================ */
+
+:root {
+  --paper: #f3f4ef;
+  --surface: #ffffff;
+  --surface-2: #e9ece5;
+  --ink: #1b2629;
+  --muted: #5a686c;
+  --line: #d3d8d0;
+  --stamp: #1d5a8c; /* דיו חותמת — צבע המותג */
+  --stamp-soft: #dde8f2;
+  --approve: #2d7550; /* אושר */
+  --approve-soft: #dcefe3;
+  --warn: #9c6410; /* רוצים / זהירות */
+  --warn-soft: #f6ead3;
+  --danger: #a5372b;
+  --danger-soft: #f6dfdb;
+  --focus: #1d5a8c;
+
+  --font-display: 'Suez One', 'Frank Ruhl Libre', 'David', serif;
+  --font-body: 'Assistant', 'Rubik', 'Arial Hebrew', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --shadow: 0 1px 0 rgba(27, 38, 41, 0.06), 0 6px 18px -10px rgba(27, 38, 41, 0.25);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #101618;
+    --surface: #172023;
+    --surface-2: #1e292c;
+    --ink: #e3e9e7;
+    --muted: #97a6a9;
+    --line: #2a3639;
+    --stamp: #82b4e2;
+    --stamp-soft: #1b3346;
+    --approve: #6cc095;
+    --approve-soft: #16362a;
+    --warn: #e2aa4f;
+    --warn-soft: #3a2c14;
+    --danger: #e27d6f;
+    --danger-soft: #3d1f1b;
+    --focus: #82b4e2;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --paper: #101618;
+  --surface: #172023;
+  --surface-2: #1e292c;
+  --ink: #e3e9e7;
+  --muted: #97a6a9;
+  --line: #2a3639;
+  --stamp: #82b4e2;
+  --stamp-soft: #1b3346;
+  --approve: #6cc095;
+  --approve-soft: #16362a;
+  --warn: #e2aa4f;
+  --warn-soft: #3a2c14;
+  --danger: #e27d6f;
+  --danger-soft: #3d1f1b;
+  --focus: #82b4e2;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  direction: rtl;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+a { color: var(--stamp); }
+
+.app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 20px 48px;
+  display: grid;
+  gap: 20px;
+}
+
+/* ---------- כותרת טופס ---------- */
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 20px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 8px;
+}
+.masthead .brand {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.masthead nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.file-no { font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--muted); letter-spacing: 0.04em; }
+
+/* ---------- טיפוגרפיה ---------- */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.2; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.2rem; }
+p { margin: 0; max-width: 65ch; }
+.lead { font-size: 1.15rem; color: var(--muted); }
+.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.mono, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.stack { display: grid; gap: 12px; }
+.stack-lg { display: grid; gap: 20px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* ---------- כפתורים ---------- */
+.btn {
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  border-radius: var(--r-sm);
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--stamp); border-color: var(--stamp); color: var(--surface); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 6px 10px; }
+.btn.ghost:hover { color: var(--ink); background: var(--surface-2); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---------- משטחים ---------- */
+.sheet {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.sheet.flat { box-shadow: none; }
+.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
+
+/* ---------- תגיות קטגוריה ---------- */
+.chip {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.chip.must { color: var(--stamp); background: var(--stamp-soft); }
+.chip.need { color: var(--approve); background: var(--approve-soft); }
+.chip.want { color: var(--warn); background: var(--warn-soft); }
+.chip.process { color: var(--muted); background: var(--surface-2); }
+.chip.verified { color: var(--approve); background: var(--approve-soft); }
+.chip.pending { color: var(--warn); background: var(--warn-soft); }
+.chip.illustrative { color: var(--muted); background: var(--surface-2); }
+
+/* ---------- פתיחה ---------- */
+.cover { display: grid; gap: 24px; padding-block: 24px 8px; }
+.triad { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.triad .sheet { display: grid; gap: 6px; align-content: start; }
+
+/* ---------- בחירה ---------- */
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.choice {
+  text-align: right;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px;
+  cursor: pointer;
+}
+.choice > * { text-align: start; justify-self: stretch; }
+.choice:hover:not(:disabled) { border-color: var(--ink); }
+.choice[aria-pressed='true'] { border-color: var(--stamp); box-shadow: inset 0 0 0 1px var(--stamp); }
+.choice:disabled { cursor: not-allowed; opacity: 0.6; background: var(--surface-2); }
+.choice .why-blocked { font-size: 0.9rem; color: var(--danger); }
+.choice .why-ok { font-size: 0.9rem; color: var(--muted); }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 0.9rem; font-weight: 600; }
+.field input {
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  background: var(--surface);
+  max-width: 320px;
+}
+
+/* ---------- כרטיס מגרש (טופס) ---------- */
+.plot-card { display: grid; gap: 14px; }
+.spec {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.spec div { padding: 8px 12px; border-inline-start: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: -1px 0 0 -1px; }
+.spec dt { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.spec dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------- שער מורשה ---------- */
+.gate { border: 1.5px dashed var(--stamp); border-radius: var(--r-md); padding: 16px; display: grid; gap: 10px; background: var(--stamp-soft); }
+.gate ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.gate li { display: grid; grid-template-columns: 4.2rem 1fr; gap: 10px; align-items: baseline; }
+.mark { font-size: 0.8rem; font-weight: 700; text-align: center; border-radius: 4px; padding: 1px 4px; }
+.mark.ok { color: var(--approve); border: 1px solid var(--approve); }
+.mark.no { color: var(--danger); border: 1px solid var(--danger); }
+
+/* ---------- לוח ---------- */
+.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .board { grid-template-columns: 1fr; } .board .panel { order: -1; } }
+
+.resources {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.resources > div { padding: 8px 10px; border-inline-start: 1px solid var(--line); display: grid; }
+.resources > div:first-child { border-inline-start: 0; }
+.resources .k { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
+.resources .v { font-family: var(--font-mono); font-size: 1.25rem; font-variant-numeric: tabular-nums; line-height: 1.3; }
+@media (max-width: 480px) {
+  .resources { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .resources > div:nth-child(4) { border-inline-start: 0; }
+  .resources > div:nth-child(n + 4) { border-top: 1px solid var(--line); }
+}
+
+.players { display: flex; flex-wrap: wrap; gap: 6px; }
+.player-tag { font-size: 0.85rem; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.player-tag.active { border-color: var(--stamp); color: var(--stamp); font-weight: 700; }
+.player-tag.done { border-color: var(--approve); color: var(--approve); }
+
+/* מסלול: רשימת תחנות כמו גיליון דרישות */
+.route { list-style: none; margin: 0; padding: 0; display: grid; }
+.route li { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 10px; align-items: center; padding: 8px 4px; border-bottom: 1px solid var(--line); }
+.route li .idx { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; }
+.route li .t { font-weight: 600; }
+.route li .sub { font-size: 0.82rem; color: var(--muted); display: block; font-weight: 400; }
+.route li.here { background: var(--stamp-soft); border-radius: var(--r-sm); }
+.route li.passed .t { color: var(--muted); }
+.route .ticks { display: flex; gap: 3px; }
+.route .tick { width: 8px; height: 8px; border-radius: 2px; background: var(--line); }
+.route .tick.here { background: var(--stamp); }
+
+.stamp {
+  margin-inline-end: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--approve);
+  border: 2px solid var(--approve);
+  border-radius: 4px;
+  padding: 0 8px;
+  transform: rotate(-6deg);
+  display: inline-block;
+  line-height: 1.5;
+}
+.stamp.big { font-size: 1.6rem; padding: 2px 14px; border-width: 3px; }
+
+/* פאנל פעולה */
+.panel { display: grid; gap: 16px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+@media (max-width: 860px) { .panel { position: static; } }
+.die {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.options { display: grid; gap: 8px; }
+.option {
+  text-align: right;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  cursor: pointer;
+  line-height: 1.45;
+  text-align: start;
+}
+.option:hover { border-color: var(--ink); }
+.why { border-inline-start: 4px solid var(--stamp); padding: 10px 14px; background: var(--surface-2); border-radius: var(--r-sm); display: grid; gap: 4px; }
+.why .eyebrow { color: var(--stamp); }
+.result-ok { color: var(--approve); font-weight: 700; }
+.result-no { color: var(--danger); font-weight: 700; }
+.note { font-size: 0.92rem; padding: 8px 12px; border-radius: var(--r-sm); background: var(--warn-soft); color: var(--ink); }
+.source { font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.effects { display: flex; flex-wrap: wrap; gap: 6px; }
+.effects span { font-family: var(--font-mono); font-size: 0.82rem; padding: 1px 8px; border-radius: 4px; background: var(--surface-2); }
+.card-face { border: 1.5px solid var(--ink); border-radius: var(--r-md); padding: 18px; display: grid; gap: 10px; background: var(--surface); }
+.deck-name { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+
+.log { font-size: 0.85rem; color: var(--muted); max-height: 9rem; overflow-y: auto; margin: 0; padding-inline-start: 18px; }
+
+/* סוף */
+.ranking { display: grid; gap: 12px; }
+.score-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.score-table td { padding: 4px 0; border-bottom: 1px solid var(--line); }
+.score-table td:last-child { text-align: left; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.score-table tr.total td { font-weight: 700; border-bottom: 0; }
+
+/* מילון ומקורות */
+.gloss { display: grid; gap: 0; margin: 0; }
+.gloss div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.gloss dt { font-weight: 700; }
+.gloss dd { margin: 0; }
+@media (max-width: 560px) { .gloss div { grid-template-columns: 1fr; gap: 2px; } }
+.table-wrap { overflow-x: auto; }
+.src-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 560px; }
+.src-table th, .src-table td { text-align: right; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.src-table th { font-size: 0.8rem; color: var(--muted); }
+
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: var(--r-sm); background: var(--warn-soft); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@keyframes press { from { transform: scale(1.4) rotate(-14deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
+.stamp.animate { animation: press 0.35s ease-out both; }
