@@ -185,6 +185,94 @@ function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: num
   };
 }
 
+describe('ביצועים משפיעים על אמון ועל מדד העיר', () => {
+  const questions = content.stations.filter((s) => s.kind === 'question' && s.options.some((o) => o.correct));
+  const correctOf = (id: string) => content.stations.find((s) => s.id === id)!.options.find((o) => o.correct)!;
+
+  it('תשובה נכונה בתחנת "צריך" מוסיפה אמון אחד', () => {
+    for (const st of questions.filter((s) => s.category === 'need')) {
+      expect(correctOf(st.id).effects?.trust, st.id).toBe(1);
+    }
+  });
+
+  it('תשובה נכונה בתחנת "רוצים" מוסיפה נקודת מדד עיר אחת', () => {
+    for (const st of questions.filter((s) => s.category === 'want')) {
+      expect(correctOf(st.id).effects?.city, st.id).toBe(1);
+    }
+  });
+
+  it('תחנות "חובה" ו"הליך" לא מחלקות אמון או מדד — הן חוק, לא שיפוט', () => {
+    for (const st of questions.filter((s) => s.category === 'must' || s.category === 'process')) {
+      const e = correctOf(st.id).effects ?? {};
+      expect(e.trust ?? 0, st.id).toBe(0);
+      expect(e.city ?? 0, st.id).toBe(0);
+    }
+  });
+
+  /**
+   * הכלל החדש: תשובה שגויה עולה זמן וכסף, לא מוניטין.
+   * בתחנות "החלטה" אין תשובה שגויה — לכל בחירה מחיר משלה, ולכן מדד שלילי שם תקין.
+   * שש התשובות שלהלן הן תוכן שנכתב לפני הכלל, ומופיעות כאן במפורש כדי
+   * שלא ייווצרו חדשות בשקט. ההחלטה אם לשנות אותן היא של בעלת התוכן.
+   */
+  const LEGACY_PENALTIES = [
+    'design-plan/d',
+    'design-fence/b',
+    'design-extension/b',
+    'design-facade/b',
+    'agency-waste/b',
+    'agency-properties/c',
+  ];
+
+  it('תשובה שגויה לא מורידה אמון ולא מדד — בלי עונש כפול', () => {
+    const offenders: string[] = [];
+    for (const st of content.stations) {
+      if (st.kind !== 'question') continue; // החלטה אינה "שגויה"
+      for (const o of st.options) {
+        if (o.correct) continue;
+        const e = o.effects ?? {};
+        if ((e.trust ?? 0) < 0 || (e.city ?? 0) < 0) offenders.push(`${st.id}/${o.id}`);
+      }
+    }
+    expect(offenders.sort()).toEqual([...LEGACY_PENALTIES].sort());
+  });
+
+  it('במשחק בפועל: מענה נכון בתחנת "צריך" מעלה אמון', () => {
+    let s = start('building', ['א'], 42);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    // תחנת "צריך" אמיתית מתוך המסלול שנבנה לשחקן הזה
+    const needIds = s.players[0].route
+      .filter((q) => q.type === 'station' && q.stationId)
+      .map((q) => content.stations.find((x) => x.id === q.stationId)!)
+      .filter((x) => x.category === 'need' && x.kind === 'question')
+      .map((x) => x.id);
+    expect(needIds.length, 'אין תחנת "צריך" במסלול הבדיקה').toBeGreaterThan(0);
+    const target = needIds[0];
+
+    let guard = 0;
+    let before = -1;
+    while (s.phase.name !== 'ended' && guard++ < 3000) {
+      const ph = s.phase;
+      if (ph.name === 'turn') s = reducer(s, { type: 'ROLL' })!;
+      else if (ph.name === 'station') {
+        const st = content.stations.find((x) => x.id === ph.stationId)!;
+        if (st.id === target) before = s.players[0].res.trust;
+        s = reducer(s, { type: 'ANSWER', optionId: (st.options.find((o) => o.correct) ?? st.options[0]).id })!;
+      } else if (ph.name === 'stationResult') {
+        const hit = ph.stationId === target && ph.passed;
+        s = reducer(s, { type: 'CONTINUE' })!;
+        if (hit) {
+          expect(before).toBeGreaterThanOrEqual(0);
+          expect(s.players[0].res.trust).toBe(before + 1);
+          return;
+        }
+      } else if (ph.name === 'card') s = reducer(s, { type: 'CONTINUE' })!;
+      else break;
+    }
+    throw new Error(`התחנה ${target} לא נפגשה במסלול`);
+  });
+});
+
 describe('מרווח בין תחנות', () => {
   /** גדלי המרווחים בין תחנות עוקבות במסלול */
   function gaps(route: { type: string; stationId?: string }[]): number[] {
