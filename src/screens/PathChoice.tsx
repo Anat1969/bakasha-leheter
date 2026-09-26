@@ -29,24 +29,37 @@ export default function PathChoice({ game, act }: Props) {
         <p className="lead">{plot.description}</p>
       </div>
 
-      <div className="sheet plot-card">
-        <div className="row" style={{ justifyContent: 'space-between' }}>
-          <h3>כרטיס מגרש</h3>
-          <span className="lead">החלום: {plot.dream}</span>
+      {/* כרטיס מגרש = טופס: שורות מודפסות, ערכים בכתב יד */}
+      <div className="formcard">
+        <div className="form-head">
+          <span className="form-title">כרטיס מגרש</span>
+          <span className="form-no">טופס 1 · פרטי המגרש</span>
         </div>
-        <dl className="spec">
-          <div><dt>קומות</dt><dd>{plot.floors}</dd></div>
-          <div><dt>יחידות דיור</dt><dd>{plot.units}</dd></div>
-          <div><dt>מגורים</dt><dd>{plot.residentialPct}%</dd></div>
-          <div><dt>גיל הבניין</dt><dd>{plot.buildingAge === 0 ? 'מגרש ריק' : `${plot.buildingAge} שנים`}</dd></div>
-          <div><dt>הריסה ובנייה</dt><dd>{plot.demolition ? 'כן' : 'לא'}</dd></div>
-          <div><dt>מבנה לשימור</dt><dd>{plot.preservation ? 'כן' : 'לא'}</dd></div>
-          <div><dt>כל הבעלים חתמו</dt><dd>{plot.allOwnersSigned ? 'כן' : 'לא'}</dd></div>
-          <div><dt>מכון בקרה</dt><dd>{plot.controlInstitute ? 'כן' : 'לא'}</dd></div>
-          <div><dt>תוכנית עיצוב ובינוי</dt><dd>{plot.requiresDesignPlan ? 'נדרשת' : 'לא נדרשת'}</dd></div>
+        <p className="form-dream">
+          <span className="form-label">החלום</span>
+          <span className="hand">{plot.dream}</span>
+        </p>
+        <dl className="form-rows">
+          {[
+            ['קומות', String(plot.floors)],
+            ['יחידות דיור', String(plot.units)],
+            ['מגורים', `${plot.residentialPct}%`],
+            ['גיל הבניין', plot.buildingAge === 0 ? 'מגרש ריק' : `${plot.buildingAge} שנים`],
+            ['הריסה ובנייה', plot.demolition ? 'כן' : 'לא'],
+            ['מבנה לשימור', plot.preservation ? 'כן' : 'לא'],
+            ['כל הבעלים חתמו', plot.allOwnersSigned ? 'כן' : 'לא'],
+            ['מכון בקרה', plot.controlInstitute ? 'כן' : 'לא'],
+            ['תוכנית עיצוב ובינוי', plot.requiresDesignPlan ? 'נדרשת' : 'לא נדרשת'],
+          ].map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd className="hand">{v}</dd>
+            </div>
+          ))}
         </dl>
-        <p>
-          <strong>תיק המידע דורש אישור מ:</strong> {agencyNames.join(' · ') || 'אין גורמים נוספים'}
+        <p className="form-foot">
+          <span className="form-label">תיק המידע דורש אישור מ</span>
+          <span className="hand">{agencyNames.join(' · ') || 'אין גורמים נוספים'}</span>
         </p>
       </div>
 
@@ -82,7 +95,7 @@ export default function PathChoice({ game, act }: Props) {
         )}
       </div>
 
-      <div className="gate">
+      <div className={`gate goldcard ${checks.every((c) => c.pass) ? 'open' : 'shut'}`}>
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <h3>שער הכשירות: מורשה להיתר</h3>
           <span className={`mark ${checks.every((c) => c.pass) ? 'ok' : 'no'}`}>

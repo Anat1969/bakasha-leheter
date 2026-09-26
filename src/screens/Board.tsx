@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cardById, pathById, plotById, stationById, trackById } from '../content';
 import BoardMap from './BoardMap';
 import Die from './Die';
+import Onboarding, { seenOnboarding } from './Onboarding';
+import { play, type Cue } from '../sound';
 import { isOnOpenStation, TABU_VALID_MONTHS } from '../engine/game';
 import type { Action, GameState, Player, Square } from '../engine/types';
 import { CATEGORY_LABEL, CategoryChip, DECK_LABEL, EffectList, SourceLine } from '../components/common';
@@ -16,6 +18,24 @@ export default function Board({ game, act }: Props) {
   const plot = plotById(player.plotId)!;
   const [view, setView] = useState<'map' | 'sheet'>('map');
   const [fit, setFit] = useState(false);
+  const [onboard, setOnboard] = useState(() => !seenOnboarding());
+
+  // צליל אחד לכל רגע. cue מחושב מהשלב, ומשתנה רק כשהשלב משתנה.
+  const ph = game.phase;
+  const cue: Cue | null =
+    ph.name === 'station' ? 'die'
+    : ph.name === 'card' ? 'card'
+    : ph.name === 'stationResult' ? (ph.stationId === 'permit' && ph.passed ? 'permit' : 'stamp')
+    : null;
+  const cueKey =
+    ph.name === 'card' ? `card:${ph.cardId}`
+    : ph.name === 'stationResult' ? `res:${ph.stationId}:${ph.passed}`
+    : ph.name === 'station' ? `st:${ph.stationId}`
+    : 'turn';
+  useEffect(() => {
+    if (cue) play(cue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cueKey]);
   const done = player.resolved.filter((id) => player.route.some((q) => q.stationId === id)).length;
   const total = player.route.filter((q) => q.type === 'station').length;
 
@@ -71,6 +91,7 @@ export default function Board({ game, act }: Props) {
           )}
         </div>
       </div>
+      {onboard && <Onboarding onDone={() => setOnboard(false)} />}
     </section>
   );
 }
@@ -199,26 +220,34 @@ function Panel({ game, act, player }: Props & { player: Player }) {
   if (ph.name === 'station') {
     const st = stationById(ph.stationId)!;
     return (
-      <div className="sheet stack gate-open">
-        <div className="row">
+      <div className="counter gate-open">
+        {/* שלט הגורם מעל הדלפק */}
+        <div className="counter-sign">
+          <span className="sign-text">{st.agency ?? 'רשות הרישוי'}</span>
           <CategoryChip category={st.category} />
-          {st.agency && <span className="chip process">{st.agency}</span>}
-          {game.lastRoll && <Die value={game.lastRoll} rolling small />}
         </div>
-        <h2>{st.title}</h2>
-        <p>{st.prompt}</p>
-        <div className="options">
-          {st.options.map((o) => (
-            <button key={o.id} className="option" onClick={() => act({ type: 'ANSWER', optionId: o.id })}>
-              {o.text}
-            </button>
-          ))}
+        <div className="counter-window stack">
+          <div className="row" style={{ justifyContent: 'space-between' }}>
+            <h2>{st.title}</h2>
+            {game.lastRoll && <Die value={game.lastRoll} rolling small />}
+          </div>
+          <p>{st.prompt}</p>
+          <div className="options">
+            {st.options.map((o, i) => (
+              <button key={o.id} className="option slip" onClick={() => act({ type: 'ANSWER', optionId: o.id })}>
+                <span className="slip-no" aria-hidden="true">{String.fromCharCode(1488 + i)}</span>
+                <span>{o.text}</span>
+              </button>
+            ))}
+          </div>
+          {st.kind === 'decision' ? (
+            <p className="lead">זו החלטה. אין תשובה אחת נכונה, ולכל בחירה יש מחיר ותועלת.</p>
+          ) : (
+            player.res.shields > 0 && (
+              <p className="lead">יש לכם {player.res.shields} כרטיסי ידע. טעות לא תעלה זמן.</p>
+            )
+          )}
         </div>
-        {st.kind === 'decision' ? (
-          <p className="lead">זו החלטה: אין תשובה אחת נכונה, לכל בחירה יש מחיר ותועלת.</p>
-        ) : (
-          player.res.shields > 0 && <p className="lead">יש לכם {player.res.shields} כרטיסי ידע: טעות לא תעלה זמן.</p>
-        )}
       </div>
     );
   }

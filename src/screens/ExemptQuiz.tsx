@@ -48,36 +48,45 @@ export default function ExemptQuiz({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="sheet stack">
-        <p style={{ fontSize: '1.2rem' }}>{item.work}</p>
-        <div className="options">
-          {ANSWERS.map((a) => (
-            <button
-              key={a.id}
-              className="option"
-              disabled={picked !== null}
-              aria-pressed={picked === a.id}
-              style={
-                picked !== null && a.id === item.answer
-                  ? { borderColor: 'var(--approve)', boxShadow: 'inset 0 0 0 1px var(--approve)' }
-                  : picked === a.id
-                    ? { borderColor: 'var(--danger)' }
-                    : undefined
-              }
-              onClick={() => {
-                setPicked(a.id);
-                if (a.id === item.answer) setScore((s) => s + 1);
-              }}
-            >
-              <strong>{a.label}</strong>
-              <span className="sub" style={{ display: 'block', color: 'var(--muted)', fontSize: '0.9rem' }}>{a.hint}</span>
-            </button>
-          ))}
+        {/* כרטיס העבודה במרכז */}
+        <div className="workcard">
+          <span className="eyebrow">העבודה המבוקשת</span>
+          <p className="work-text">{item.work}</p>
+          {picked !== null && (
+            <span className={`stamp ${right ? 'animate' : 'reject'} tray-stamp`}>
+              {ANSWERS.find((a) => a.id === item.answer)!.label}
+            </span>
+          )}
+        </div>
+
+        {/* שלושה מגשים */}
+        <div className="trays" role="group" aria-label="לאיזה מגש זה שייך">
+          {ANSWERS.map((a) => {
+            const isAnswer = picked !== null && a.id === item.answer;
+            const isWrongPick = picked === a.id && !right;
+            return (
+              <button
+                key={a.id}
+                className={`tray ${isAnswer ? 'correct' : ''} ${isWrongPick ? 'wrong' : ''}`}
+                disabled={picked !== null}
+                aria-pressed={picked === a.id}
+                onClick={() => {
+                  setPicked(a.id);
+                  if (a.id === item.answer) setScore((s) => s + 1);
+                }}
+              >
+                <span className="tray-lip" aria-hidden="true" />
+                <strong>{a.label}</strong>
+                <span className="tray-hint">{a.hint}</span>
+              </button>
+            );
+          })}
         </div>
 
         {picked !== null && (
           <>
             <span className={right ? 'result-ok' : 'result-no'}>
-              {right ? 'נכון.' : `לא בדיוק. התשובה: ${ANSWERS.find((a) => a.id === item.answer)!.label}.`}
+              {right ? 'נכון.' : `לא בדיוק. זה נכנס למגש "${ANSWERS.find((a) => a.id === item.answer)!.label}".`}
             </span>
             <div className="why">
               <span className="eyebrow">למה?</span>

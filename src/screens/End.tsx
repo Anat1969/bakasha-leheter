@@ -1,6 +1,7 @@
 import { pathById, plotById } from '../content';
 import { scorePlayer } from '../engine/game';
 import type { GameState } from '../engine/types';
+import { certificateLines } from './certificate';
 
 export default function End({ game, onNew }: { game: GameState; onNew: () => void }) {
   const scored = game.players
@@ -9,9 +10,31 @@ export default function End({ game, onNew }: { game: GameState; onNew: () => voi
 
   return (
     <section className="stack-lg">
+      {/* סיום = תעודת היתר. הניקוד בא אחריה. */}
+      {scored.map(({ p }) => (
+        <div className="certificate cert-full" key={p.id}>
+          <span className="eyebrow">רשות הרישוי · עיריית אשדוד</span>
+          <h2>היתר בנייה</h2>
+          <dl className="cert-rows">
+            {certificateLines(game, p, plotById(p.plotId)?.name ?? '', p.path ? (pathById(p.path)?.title ?? '') : '').map(
+              (l) => (
+                <div key={l.label}>
+                  <dt>{l.label}</dt>
+                  <dd className="hand">{l.value}</dd>
+                </div>
+              ),
+            )}
+          </dl>
+          <span className="seal-big">אושר</span>
+          <div className="cert-sign">
+            <span className="sign-line" aria-hidden="true" />
+            <span className="cert-line">חתימת רשות הרישוי</span>
+          </div>
+        </div>
+      ))}
+
       <div className="stack">
-        <span className="stamp big animate" style={{ justifySelf: 'start' }}>היתר</span>
-        <h2>{scored.length > 1 ? `${scored[0].p.name} מובילים את הרחוב` : 'קיבלתם היתר'}</h2>
+        <h3>{scored.length > 1 ? `${scored[0].p.name} מובילים את הרחוב` : 'איך זה נראה בניקוד'}</h3>
         <p className="lead">
           הציון לא מודד רק מהירות. הוא כולל את התרומה לרחוב, את אמון השכנים ואת ניהול התקציב והזמן.
         </p>
@@ -25,7 +48,9 @@ export default function End({ game, onNew }: { game: GameState; onNew: () => voi
                 {scored.length > 1 ? `מקום ${i + 1}: ` : ''}
                 {p.name}
               </h3>
-              <span className="mono" style={{ fontSize: '1.5rem' }}>{s.total}</span>
+              <span className="mono" style={{ fontSize: '1.5rem' }}>
+                {s.total}
+              </span>
             </div>
             <span className="eyebrow">
               {plotById(p.plotId)?.name} · {p.path ? pathById(p.path)?.title : ''} · {p.res.months} חודשים
@@ -51,13 +76,15 @@ export default function End({ game, onNew }: { game: GameState; onNew: () => voi
       <div className="why">
         <span className="eyebrow">מהיתר למפתח</span>
         <p>
-          ההיתר הוא לא הסוף. מכאן מגישים תוכנית התארגנות אתר, עומדים ברשימת הדרישות להתחלת עבודות, והפיקוח מלווה
-          את הבנייה עד תעודת הגמר. הפרק הזה ייכנס לגרסה הבאה של המשחק.
+          ההיתר הוא לא הסוף. מכאן מגישים תוכנית התארגנות אתר, עומדים ברשימת הדרישות להתחלת עבודות, והפיקוח מלווה את
+          הבנייה עד תעודת הגמר. הפרק הזה ייכנס לגרסה הבאה של המשחק.
         </p>
       </div>
 
       <div className="row">
-        <button className="btn primary" onClick={onNew}>משחק חדש</button>
+        <button className="btn primary" onClick={onNew}>
+          משחק חדש
+        </button>
       </div>
     </section>
   );

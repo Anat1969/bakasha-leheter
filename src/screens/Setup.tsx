@@ -7,6 +7,9 @@ interface Props {
   onCancel: () => void;
 }
 
+/** צבעי הדיסקיות, בסדר השחקנים — תואם לכלים על הלוח */
+const DISC = ['var(--stamp)', 'var(--brick)', 'var(--leaf)', 'var(--gold)'];
+
 export default function Setup({ onStart, onCancel }: Props) {
   const [track, setTrack] = useState<TrackId>('extension');
   const [count, setCount] = useState(1);
@@ -19,29 +22,48 @@ export default function Setup({ onStart, onCancel }: Props) {
         <h2>מה בונים?</h2>
       </div>
 
-      <div className="choices" role="group" aria-label="סוג הבקשה">
+      {/* כרטיסי תיק עם לשונית */}
+      <div className="tabs" role="radiogroup" aria-label="סוג הבקשה">
         {content.tracks.map((t) => (
-          <button key={t.id} className="choice" aria-pressed={track === t.id} onClick={() => setTrack(t.id)}>
-            <h3>{t.title}</h3>
-            <span>{t.summary}</span>
+          <button
+            key={t.id}
+            className="filecard"
+            role="radio"
+            aria-checked={track === t.id}
+            onClick={() => setTrack(t.id)}
+          >
+            <span className="tab">{t.title}</span>
+            <span className="filecard-body">{t.summary}</span>
           </button>
         ))}
       </div>
 
       <div className="sheet flat stack">
         <h3>מי משחק?</h3>
-        <div className="row" role="group" aria-label="מספר שחקנים">
+        <div className="discs" role="radiogroup" aria-label="מספר שחקנים">
           {[1, 2, 3, 4].map((n) => (
-            <button key={n} className="btn" aria-pressed={count === n} onClick={() => setCount(n)}
-              style={count === n ? { borderColor: 'var(--stamp)', color: 'var(--stamp)' } : undefined}>
-              {n === 1 ? 'לבד' : `${n} שחקנים`}
+            <button
+              key={n}
+              className="disc-pick"
+              role="radio"
+              aria-checked={count === n}
+              onClick={() => setCount(n)}
+            >
+              <span className="disc-row" aria-hidden="true">
+                {Array.from({ length: n }, (_, i) => (
+                  <span key={i} className="disc" style={{ background: DISC[i] }} />
+                ))}
+              </span>
+              <span className="disc-label">{n === 1 ? 'לבד' : `${n} שחקנים`}</span>
             </button>
           ))}
         </div>
+
         <div className="stack">
           {Array.from({ length: count }, (_, i) => (
-            <div className="field" key={i}>
-              <label htmlFor={`name-${i}`}>שם {count > 1 ? `שחקן ${i + 1}` : 'השחקן'}</label>
+            <div className="field named" key={i}>
+              <span className="disc" style={{ background: DISC[i] }} aria-hidden="true" />
+              <label htmlFor={`name-${i}`}>{count > 1 ? `שם שחקן ${i + 1}` : 'שם השחקן'}</label>
               <input
                 id={`name-${i}`}
                 value={names[i]}

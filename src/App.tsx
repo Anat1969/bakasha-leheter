@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useReducer, useState } from 'react';
+import { initSound, setSound } from './sound';
 import { content } from './content';
 import { createReducer } from './engine/game';
 import type { Action, GameState } from './engine/types';
@@ -40,6 +41,7 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>('home');
   const [back, setBack] = useState<Screen>('home');
   const [saved, setSaved] = useState<GameState | null>(() => loadSaved());
+  const [sound, setSoundOn] = useState(() => initSound());
 
   useEffect(() => {
     if (game) save(game);
@@ -76,6 +78,17 @@ export default function App() {
           </button>
           <button className="btn ghost" onClick={() => open('about')}>
             מקורות
+          </button>
+          <button
+            className="btn ghost"
+            aria-pressed={sound}
+            onClick={() => {
+              const next = !sound;
+              setSound(next);
+              setSoundOn(next);
+            }}
+          >
+            צליל: {sound ? 'פועל' : 'כבוי'}
           </button>
         </nav>
       </header>

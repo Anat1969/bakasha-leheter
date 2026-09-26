@@ -35,6 +35,7 @@
   --font-display: 'Suez One', 'Frank Ruhl Libre', 'David', serif;
   --font-body: 'Assistant', 'Rubik', 'Arial Hebrew', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
+  --font-hand: 'Amatic SC', 'Segoe Script', cursive;
 
   --r-sm: 6px;
   --r-md: 10px;
@@ -632,3 +633,184 @@ p { margin: 0; max-width: 65ch; }
 /* התאמה למסך: כל הלוח נכנס למסגרת, בלי גלילה פנימית */
 .boardmap.fit { max-height: none; overflow: visible; }
 .boardmap.fit .boardmap-svg { max-height: 78vh; width: 100%; height: auto; object-fit: contain; }
+
+/* ============================================================
+   מסכים — DESIGN.md סעיף 8
+   ============================================================ */
+
+/* ערכים בכתב יד על גבי טפסים מודפסים */
+.hand {
+  font-family: var(--font-hand);
+  font-size: 1.45rem;
+  line-height: 1.1;
+  color: var(--stamp);
+}
+
+/* 1. פתיחה = מכסה הקופסה */
+.boxlid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  padding: 22px;
+  border: 3px double var(--ink);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+@media (max-width: 760px) { .boxlid { grid-template-columns: 1fr; } }
+.lid-text { display: grid; gap: 12px; }
+.lid-text h1 { margin: 0; }
+.lid-actions { gap: 8px; flex-wrap: wrap; }
+.lid-art { width: 100%; height: auto; border-radius: var(--r-sm); border: 1.5px solid var(--line); display: block; }
+.la-sky { fill: var(--board-bg); }
+.la-sea { fill: var(--sea); opacity: 0.55; }
+.la-sand { fill: var(--sand); opacity: 0.8; }
+.la-wave { fill: none; stroke: var(--surface); stroke-width: 1.6; opacity: 0.5; }
+.la-street rect { fill: var(--surface); stroke: var(--ink); stroke-width: 1.6; }
+.la-windows rect { fill: var(--stamp-soft); stroke: var(--stamp); stroke-width: 0.8; }
+.la-trunk { fill: var(--ink); opacity: 0.6; }
+.la-canopy { fill: var(--leaf); opacity: 0.85; }
+.la-road { fill: var(--ink); opacity: 0.16; }
+
+/* איך משחקים: שלושה צעדים */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+.step { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 14px; border: 1.5px solid var(--line); border-radius: var(--r-sm); background: var(--surface); }
+.step h3 { margin: 0 0 2px; font-size: 1rem; }
+.step p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.step-n {
+  font-family: var(--font-display);
+  width: 2rem; height: 2rem;
+  display: grid; place-items: center;
+  border: 2px solid var(--stamp); color: var(--stamp);
+  border-radius: 50%;
+}
+
+/* 2. הגדרה: כרטיסי תיק עם לשונית */
+.tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; align-items: start; }
+.filecard {
+  position: relative;
+  text-align: start;
+  padding: 26px 14px 14px;
+  margin-top: 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 0 var(--r-sm) var(--r-sm) var(--r-sm);
+  background: var(--surface);
+  cursor: pointer;
+  display: grid;
+  gap: 6px;
+}
+.filecard .tab {
+  position: absolute;
+  top: -16px; inset-inline-start: -1.5px;
+  padding: 3px 14px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  border: 1.5px solid var(--line);
+  border-bottom: none;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.filecard-body { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.filecard:hover { border-color: var(--ink); }
+.filecard[aria-checked='true'] { border-color: var(--stamp); box-shadow: inset 0 0 0 1px var(--stamp); }
+.filecard[aria-checked='true'] .tab { background: var(--stamp); border-color: var(--stamp); color: var(--paper); }
+
+/* דיסקיות שחקנים */
+.discs { display: flex; flex-wrap: wrap; gap: 8px; }
+.disc-pick { display: grid; gap: 6px; justify-items: center; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: var(--r-sm); background: var(--surface); cursor: pointer; min-width: 84px; min-height: 44px; }
+.disc-pick[aria-checked='true'] { border-color: var(--stamp); box-shadow: inset 0 0 0 1px var(--stamp); }
+.disc-row { display: flex; gap: 3px; }
+.disc { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--surface); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18); display: inline-block; }
+.disc-label { font-size: 0.88rem; color: var(--muted); }
+.field.named { display: grid; grid-template-columns: auto auto 1fr; gap: 8px; align-items: center; }
+
+/* 3. כרטיס מגרש = טופס */
+.formcard {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.form-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 14px; border-bottom: 1.5px solid var(--ink); background: var(--surface-2); }
+.form-title { font-family: var(--font-display); font-size: 1.05rem; }
+.form-no { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.form-label { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--muted); display: block; }
+.form-dream, .form-foot { margin: 0; padding: 10px 14px; border-bottom: 1px dashed var(--line); }
+.form-foot { border-bottom: none; border-top: 1px dashed var(--line); }
+.form-rows { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 700px) { .form-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.form-rows > div { padding: 8px 14px; border-bottom: 1px dashed var(--line); border-inline-start: 1px dashed var(--line); }
+.form-rows dt { font-size: 0.78rem; color: var(--muted); }
+.form-rows dd { margin: 0; }
+
+/* שער המורשה = כרטיס זהב שמשנה צבע כשהוא נפתח */
+.goldcard { border: 2px solid var(--gold); background: color-mix(in srgb, var(--gold) 7%, var(--surface)); }
+.goldcard.open { border-color: var(--approve); background: var(--approve-soft); }
+
+/* 5. תחנה = חלון דלפק */
+.counter { display: grid; gap: 0; }
+.counter-sign {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-md) var(--r-md) 0 0;
+}
+.counter-sign .sign-text { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; }
+.counter-window {
+  border: 1.5px solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 var(--r-md) var(--r-md);
+  background: var(--surface);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.option.slip { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; background: var(--surface); }
+.option.slip .slip-no { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; }
+.option.slip:hover { background: var(--surface-2); }
+
+/* 6. צריך היתר = שלושה מגשים */
+.workcard { position: relative; border: 1.5px dashed var(--ink); border-radius: var(--r-sm); padding: 16px; background: var(--surface-2); display: grid; gap: 6px; }
+.work-text { margin: 0; font-size: 1.15rem; line-height: 1.5; }
+.tray-stamp { position: absolute; inset-inline-end: 12px; bottom: -14px; background: var(--surface); }
+.trays { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 620px) { .trays { grid-template-columns: 1fr; } }
+.tray {
+  position: relative;
+  display: grid; gap: 4px; justify-items: center; text-align: center;
+  padding: 18px 10px 14px;
+  min-height: 92px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px 4px var(--r-md) var(--r-md);
+  background: linear-gradient(var(--surface) 62%, var(--surface-2));
+  cursor: pointer;
+}
+.tray .tray-lip { position: absolute; top: 6px; inset-inline: 14px; height: 4px; border-radius: 2px; background: var(--line); }
+.tray:hover:not(:disabled) { border-color: var(--ink); }
+.tray:disabled { cursor: default; }
+.tray-hint { font-size: 0.85rem; color: var(--muted); }
+.tray.correct { border-color: var(--approve); box-shadow: inset 0 0 0 1px var(--approve); }
+.tray.correct .tray-lip { background: var(--approve); }
+.tray.wrong { border-color: var(--danger); }
+.tray.wrong .tray-lip { background: var(--danger); }
+
+/* 7. סיום = תעודת היתר מלאה */
+.cert-full { max-width: 620px; margin-inline: auto; padding: 26px; }
+.cert-rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; width: 100%; margin: 6px 0; }
+@media (max-width: 560px) { .cert-rows { grid-template-columns: 1fr; } }
+.cert-rows > div { display: grid; gap: 0; padding: 7px 0; border-bottom: 1px dashed var(--line); text-align: start; }
+.cert-rows dt { font-size: 0.76rem; color: var(--muted); letter-spacing: 0.03em; }
+.cert-rows dd { margin: 0; }
+.cert-sign { display: grid; gap: 4px; justify-items: center; margin-top: 4px; }
+.cert-sign .sign-line { display: block; width: 168px; border-bottom: 1.5px solid var(--ink); height: 26px; }
+
+/* 9. הדרכה בכניסה */
+.onboard { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(12, 18, 20, 0.5); z-index: 50; padding: 16px; }
+.onboard-card { max-width: 420px; display: grid; gap: 10px; padding: 20px; border: 2px solid var(--ink); border-radius: var(--r-md); background: var(--surface); box-shadow: var(--shadow); }
+.onboard-card h3 { margin: 0; }
+.onboard-card p { margin: 0; color: var(--muted); }
