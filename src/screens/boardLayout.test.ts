@@ -1,6 +1,6 @@
 import { content } from '../content';
 import { buildRoute } from '../engine/game';
-import { DECK_COLOR, layoutRoute, smoothPath, stationIndexes, stationShape, treeSlots } from './boardLayout';
+import { DECK_COLOR, layoutRoute, smoothPath, stationIndexes, stationShape } from './boardLayout';
 
 const plot = (id: string) => content.plots.find((p) => p.id === id)!;
 
@@ -67,26 +67,6 @@ describe('סימני הלוח', () => {
     for (const deck of ['event', 'knowledge', 'neighborhood', 'responsibility', 'cityArchitect']) {
       expect(DECK_COLOR[deck]).toBeTruthy();
     }
-  });
-});
-
-describe('מדד העיר על הלוח', () => {
-  it('מדד אפס או שלילי — בלי עצים', () => {
-    expect(treeSlots(0, 30)).toEqual([]);
-    expect(treeSlots(-3, 30)).toEqual([]);
-  });
-
-  it('עץ לכל נקודת מדד, בתוך גבולות המסלול', () => {
-    const slots = treeSlots(4, 30);
-    expect(slots).toHaveLength(4);
-    for (const s of slots) {
-      expect(s).toBeGreaterThan(0);
-      expect(s).toBeLessThan(30);
-    }
-  });
-
-  it('מספר העצים מוגבל', () => {
-    expect(treeSlots(99, 40).length).toBeLessThanOrEqual(10);
   });
 });
 

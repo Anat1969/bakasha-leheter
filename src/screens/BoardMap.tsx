@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { stationById } from '../content';
 import type { GameState, Player } from '../engine/types';
-import { DECK_COLOR, layoutRoute, stationShape, treeSlots, type BoardMode, type StationShape } from './boardLayout';
+import { DECK_COLOR, layoutRoute, stationShape, type BoardMode, type StationShape } from './boardLayout';
 
 const STEP_MS = 180; // משך צעד אחד במסלול, לפי DESIGN.md סעיף 5
 
@@ -93,7 +93,8 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
   const route = current.route;
   const lay = layoutRoute(route.length, mode);
   const city = current.res.city;
-  const trees = treeSlots(city, route.length);
+  // עץ נשתל במשבצת שבה מדד העיר עלה בפועל. משחק שמור ישן עוד בלי הסימונים.
+  const trees = current.cityMarks ?? [];
   const dry = city < 0;
 
   const shownPos = shown[current.id] ?? current.position;
@@ -132,12 +133,14 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
         <path d={lay.d} className="track-shadow" />
         <path d={lay.d} className="track" />
 
-        {/* עצים וצל לפי מדד העיר */}
+        {/* עצים: אחד לכל נקודה שבה מדד העיר עלה, ליד המשבצת שבה זה קרה */}
         {trees.map((idx, i) => {
           const p = lay.points[Math.min(idx, lay.points.length - 1)];
           if (!p) return null;
-          const side = i % 2 === 0 ? -1 : 1;
-          return <Tree key={`t${i}`} x={p.x + side * 46} y={p.y + 30} />;
+          // כמה עליות באותה משבצת — מתפזרות סביבה במקום להיערם
+          const sameSpot = trees.slice(0, i).filter((x) => x === idx).length;
+          const side = (i + sameSpot) % 2 === 0 ? -1 : 1;
+          return <Tree key={`t${i}`} x={p.x + side * (44 + sameSpot * 15)} y={p.y + 26 + sameSpot * 8} />;
         })}
 
         {/* משבצות */}

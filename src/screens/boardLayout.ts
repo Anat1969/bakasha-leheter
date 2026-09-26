@@ -132,17 +132,6 @@ export const DECK_COLOR: Record<string, string> = {
   cityArchitect: 'var(--tracing-ink)',
 };
 
-/**
- * מיקום עצי מדד העיר: עץ אחד לכל נקודת מדד, מפוזר לאורך המסלול.
- * מדד שלילי מוחזר כ-0 עצים; ההתייבשות מטופלת בעיצוב.
- */
-export function treeSlots(cityIndex: number, routeLength: number, max = 10): number[] {
-  const n = Math.min(Math.max(cityIndex, 0), max);
-  if (n === 0 || routeLength < 2) return [];
-  const step = routeLength / (n + 1);
-  return Array.from({ length: n }, (_, i) => Math.round(step * (i + 1)));
-}
-
 /** אינדקסים של משבצות שהן תחנה — לשימוש בתוויות ובגלילה */
 export function stationIndexes(route: Square[]): number[] {
   return route.map((sq, i) => (sq.type === 'station' ? i : -1)).filter((i) => i >= 0);

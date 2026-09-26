@@ -168,6 +168,18 @@ function applyEffects(res: Resources, e: Effects = {}): Resources {
   };
 }
 
+/**
+ * מחיל אפקטים על שחקן, ואם מדד העיר עלה — מסמן את המשבצת שבה זה קרה.
+ * כך העץ נשתל על הלוח במקום שבו ההחלטה התקבלה, ולא במרווח שרירותי.
+ */
+function withEffects(p: Player, ...effects: (Effects | undefined)[]): Player {
+  let res = p.res;
+  for (const e of effects) res = applyEffects(res, e);
+  const rose = res.city - p.res.city;
+  const cityMarks = rose > 0 ? [...(p.cityMarks ?? []), ...Array.from({ length: rose }, () => p.position)] : (p.cityMarks ?? []);
+  return { ...p, res, cityMarks };
+}
+
 function updatePlayer(state: GameState, idx: number, fn: (p: Player) => Player): GameState {
   return { ...state, players: state.players.map((p, i) => (i === idx ? fn(p) : p)) };
 }
@@ -272,6 +284,7 @@ export function createReducer(c: Content) {
           resolved: [],
           res: { ...START_RESOURCES },
           tabuAt: null,
+          cityMarks: [],
           finished: false,
           finishOrder: null,
           log: [],
@@ -334,7 +347,7 @@ export function createReducer(c: Content) {
         if (!card) return nextTurn(s2);
         const notes: string[] = [];
         let after = updatePlayer(s2, s2.current, (p) => {
-          let np: Player = { ...p, res: applyEffects(p.res, card.effects), log: [...p.log, `כרטיס: ${card.title}`] };
+          let np: Player = { ...withEffects(p, card.effects), log: [...p.log, `כרטיס: ${card.title}`] };
           if (card.action === 'backToRegularTrack' && np.path === 'murshe') {
             const plot = plotOf(np);
             const route = buildRoute(c, plot, 'conforming');
@@ -365,8 +378,7 @@ export function createReducer(c: Content) {
           const base = st.id === 'committee' ? track.committeeMonths : st.baseMonths;
           s = updatePlayer(s, s.current, (p) => {
             let np: Player = {
-              ...p,
-              res: applyEffects(applyEffects(p.res, { months: base }), opt.effects),
+              ...withEffects(p, { months: base }, opt.effects),
               resolved: [...p.resolved, st.id],
               log: [...p.log, `עבר: ${st.title}`],
             };
@@ -388,7 +400,7 @@ export function createReducer(c: Content) {
               notes.push('כרטיס הידע ביטל את הקנס. נסו שוב בתור הבא.');
               return { ...p, res: { ...p.res, shields: p.res.shields - 1 } };
             }
-            return { ...p, res: applyEffects(p.res, opt.effects), log: [...p.log, `טעות: ${st.title}`] };
+            return { ...withEffects(p, opt.effects), log: [...p.log, `טעות: ${st.title}`] };
           });
         }
         return { ...s, phase: { name: 'stationResult', stationId: st.id, optionId: opt.id, passed, notes } };

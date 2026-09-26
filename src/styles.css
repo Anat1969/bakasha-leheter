@@ -154,6 +154,7 @@ a { color: var(--stamp); }
   border: 0;
   padding: 0;
   cursor: pointer;
+  min-height: 44px;
 }
 .masthead nav { display: flex; gap: 6px; flex-wrap: wrap; }
 .file-no { font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--muted); letter-spacing: 0.04em; }
@@ -180,12 +181,15 @@ p { margin: 0; max-width: 65ch; }
   cursor: pointer;
   font-weight: 600;
   transition: transform 0.08s ease, background 0.15s ease;
+  /* משטח מגע 44×44 — DESIGN.md סעיף 10 */
+  min-height: 44px;
+  min-width: 44px;
 }
 .btn:hover { background: var(--surface-2); }
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: var(--stamp); border-color: var(--stamp); color: var(--surface); }
 .btn.primary:hover { filter: brightness(1.08); }
-.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 6px 10px; }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 6px 10px; min-height: 44px; }
 .btn.ghost:hover { color: var(--ink); background: var(--surface-2); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -235,6 +239,7 @@ p { margin: 0; max-width: 65ch; }
   border-radius: var(--r-md);
   padding: 16px;
   cursor: pointer;
+  min-height: 44px;
 }
 .choice > * { text-align: start; justify-self: stretch; }
 .choice:hover:not(:disabled) { border-color: var(--ink); }
@@ -350,6 +355,7 @@ p { margin: 0; max-width: 65ch; }
   cursor: pointer;
   line-height: 1.45;
   text-align: start;
+  min-height: 44px;
 }
 .option:hover { border-color: var(--ink); }
 .why { border-inline-start: 4px solid var(--stamp); padding: 10px 14px; background: var(--surface-2); border-radius: var(--r-sm); display: grid; gap: 4px; }
@@ -700,6 +706,7 @@ p { margin: 0; max-width: 65ch; }
   cursor: pointer;
   display: grid;
   gap: 6px;
+  min-height: 44px;
 }
 .filecard .tab {
   position: absolute;

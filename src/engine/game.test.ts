@@ -145,6 +145,9 @@ interface SimResult {
   months: number;
   trust: number;
   city: number;
+  cityMarks: number[];
+  cityRises: number;
+  routeLength: number;
 }
 
 function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: number, wrongRate: number): SimResult {
@@ -156,8 +159,10 @@ function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: num
   s = reducer(s, { type: 'CHOOSE_PATH', path })!;
 
   let steps = 0;
+  let cityRises = 0;
   while (s.phase.name !== 'ended' && steps < 4000) {
     steps++;
+    const cityBefore = s.players[0].res.city;
     const ph = s.phase;
     if (ph.name === 'turn') s = reducer(s, { type: 'ROLL' })!;
     else if (ph.name === 'station') {
@@ -167,6 +172,8 @@ function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: num
       s = reducer(s, { type: 'ANSWER', optionId: r() < wrongRate ? wrong.id : correct.id })!;
     } else if (ph.name === 'stationResult' || ph.name === 'card') s = reducer(s, { type: 'CONTINUE' })!;
     else break;
+    const rise = s.players[0].res.city - cityBefore;
+    if (rise > 0) cityRises += rise;
   }
 
   const p = s.players[0];
@@ -182,6 +189,9 @@ function simulate(track: 'extension' | 'house' | 'building' | 'mamad', seed: num
     months: p.res.months,
     trust: p.res.trust,
     city: p.res.city,
+    cityMarks: p.cityMarks,
+    cityRises,
+    routeLength: p.route.length,
   };
 }
 
@@ -270,6 +280,62 @@ describe('ביצועים משפיעים על אמון ועל מדד העיר', (
       else break;
     }
     throw new Error(`התחנה ${target} לא נפגשה במסלול`);
+  });
+});
+
+describe('סימוני מדד העיר על הלוח', () => {
+  it('משחק חדש מתחיל בלי סימונים', () => {
+    const s = start('building', ['א'], 11);
+    expect(s.players[0].cityMarks).toEqual([]);
+  });
+
+  it('עלייה במדד מסמנת את המשבצת שבה היא קרתה', () => {
+    let s = start('extension', ['א'], 4);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    let guard = 0;
+    while (s.phase.name !== 'ended' && guard++ < 3000) {
+      const before = s.players[0];
+      const ph = s.phase;
+      if (ph.name === 'turn') s = reducer(s, { type: 'ROLL' })!;
+      else if (ph.name === 'station') {
+        const st = content.stations.find((x) => x.id === ph.stationId)!;
+        s = reducer(s, { type: 'ANSWER', optionId: (st.options.find((o) => o.correct) ?? st.options[0]).id })!;
+      } else if (ph.name === 'stationResult' || ph.name === 'card') s = reducer(s, { type: 'CONTINUE' })!;
+      else break;
+
+      const after = s.players[0];
+      const rose = after.res.city - before.res.city;
+      if (rose > 0) {
+        // נוספו בדיוק כמה סימונים כמו גודל העלייה, כולם במשבצת שעליה השחקן עומד
+        // כשהאפקט חל — בהטלה זו משבצת הנחיתה, בתשובה זו משבצת התחנה.
+        expect(after.cityMarks.length - before.cityMarks.length).toBe(rose);
+        for (const m of after.cityMarks.slice(before.cityMarks.length)) expect(m).toBe(after.position);
+      }
+    }
+    expect(s.phase.name).toBe('ended');
+  });
+
+  it('מספר הסימונים שווה לסך העליות במדד לאורך המשחק', () => {
+    for (const track of ['extension', 'house', 'building', 'mamad'] as const) {
+      for (const seed of [7, 23, 101]) {
+        const r = simulate(track, seed, 0.2);
+        expect(r.cityMarks.length, `${track}/${seed}`).toBe(r.cityRises);
+        expect(r.cityMarks.every((m) => m >= 0 && m < r.routeLength), `${track}/${seed}`).toBe(true);
+      }
+    }
+  });
+
+  it('ירידה במדד לא מוסיפה סימון', () => {
+    let s = start('building', ['א'], 5);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    const before = s.players[0].cityMarks.length;
+    // תחנה עם אפשרות שמורידה מדד
+    const st = content.stations.find((x) => x.options.some((o) => (o.effects?.city ?? 0) < 0))!;
+    const bad = st.options.find((o) => (o.effects?.city ?? 0) < 0)!;
+    const forced: GameState = { ...s, phase: { name: 'station', stationId: st.id } };
+    const after = reducer(forced, { type: 'ANSWER', optionId: bad.id })!;
+    expect(after.players[0].res.city).toBeLessThan(0);
+    expect(after.players[0].cityMarks.length).toBe(before);
   });
 });
 

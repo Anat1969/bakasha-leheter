@@ -171,6 +171,7 @@ export interface Player {
   resolved: string[]; // תחנות שעברו
   res: Resources;
   tabuAt: number | null; // החודש שבו הופק נסח הטאבו
+  cityMarks: number[]; // משבצות שבהן מדד העיר עלה — שם נשתל עץ על הלוח
   finished: boolean;
   finishOrder: number | null;
   log: string[];
