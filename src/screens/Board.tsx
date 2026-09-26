@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { cardById, pathById, plotById, stationById, trackById } from '../content';
+import BoardMap from './BoardMap';
 import { isOnOpenStation, TABU_VALID_MONTHS } from '../engine/game';
 import type { Action, GameState, Player, Square } from '../engine/types';
 import { CATEGORY_LABEL, CategoryChip, DECK_LABEL, EffectList, SourceLine } from '../components/common';
@@ -11,6 +13,10 @@ interface Props {
 export default function Board({ game, act }: Props) {
   const player = game.players[game.current];
   const plot = plotById(player.plotId)!;
+  const [view, setView] = useState<'map' | 'sheet'>('map');
+  const done = player.resolved.filter((id) => player.route.some((q) => q.stationId === id)).length;
+  const total = player.route.filter((q) => q.type === 'station').length;
+
   return (
     <section className="stack-lg">
       <div className="stack">
@@ -21,15 +27,28 @@ export default function Board({ game, act }: Props) {
         <Resources player={player} />
       </div>
       <div className="board">
-        <div className="sheet stack">
+        <div className="stack">
           <div className="row" style={{ justifyContent: 'space-between' }}>
-            <h3>גיליון הדרישות של {player.name}</h3>
+            <div className="view-switch" role="group" aria-label="תצוגה">
+              <button className="btn" aria-pressed={view === 'map'} onClick={() => setView('map')}>
+                לוח
+              </button>
+              <button className="btn" aria-pressed={view === 'sheet'} onClick={() => setView('sheet')}>
+                גיליון הדרישות
+              </button>
+            </div>
             <span className="mono">
-              {player.resolved.filter((id) => player.route.some((q) => q.stationId === id)).length}/
-              {player.route.filter((q) => q.type === 'station').length}
+              {done}/{total}
             </span>
           </div>
-          <Route player={player} />
+          {view === 'map' ? (
+            <BoardMap game={game} />
+          ) : (
+            <div className="sheet stack">
+              <h3>גיליון הדרישות של {player.name}</h3>
+              <Route player={player} />
+            </div>
+          )}
         </div>
         <div className="panel">
           <Panel game={game} act={act} player={player} />

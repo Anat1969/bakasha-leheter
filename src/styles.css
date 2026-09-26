@@ -21,6 +21,17 @@
   --danger-soft: #f6dfdb;
   --focus: #1d5a8c;
 
+  /* טוקני לוח — DESIGN.md סעיף 3 */
+  --sea: #2f7c8e;
+  --sand: #e8d9b5;
+  --brick: #b5553a;
+  --leaf: #4f8a4b;
+  --tracing: #f6f3e7;
+  --tracing-ink: #8a8468;
+  --gold: #c99a2e;
+  --board-bg: #efe7d3;
+  --track: #c2b48d;
+
   --font-display: 'Suez One', 'Frank Ruhl Libre', 'David', serif;
   --font-body: 'Assistant', 'Rubik', 'Arial Hebrew', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
@@ -48,6 +59,15 @@
     --danger: #e27d6f;
     --danger-soft: #3d1f1b;
     --focus: #82b4e2;
+    --sea: #3f92a5;
+    --sand: #3a3627;
+    --brick: #c9674b;
+    --leaf: #5f9f5a;
+    --tracing: #2a2f28;
+    --tracing-ink: #9a9478;
+    --gold: #d7a93f;
+    --board-bg: #18211f;
+    --track: #3b4440;
     --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
     color-scheme: dark;
   }
@@ -68,6 +88,15 @@
   --danger: #e27d6f;
   --danger-soft: #3d1f1b;
   --focus: #82b4e2;
+  --sea: #3f92a5;
+  --sand: #3a3627;
+  --brick: #c9674b;
+  --leaf: #5f9f5a;
+  --tracing: #2a2f28;
+  --tracing-ink: #9a9478;
+  --gold: #d7a93f;
+  --board-bg: #18211f;
+  --track: #3b4440;
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
   color-scheme: dark;
 }
@@ -234,7 +263,7 @@ p { margin: 0; max-width: 65ch; }
 .mark.no { color: var(--danger); border: 1px solid var(--danger); }
 
 /* ---------- לוח ---------- */
-.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px; align-items: start; }
+.board { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
 @media (max-width: 860px) { .board { grid-template-columns: 1fr; } .board .panel { order: -1; } }
 
 .resources {
@@ -354,4 +383,95 @@ p { margin: 0; max-width: 65ch; }
   border-inline-start: 3px solid var(--stamp);
   padding-inline-start: 0.75rem;
   margin: 0;
+}
+
+/* ============================================================
+   לוח המשחק (SVG) — DESIGN.md סעיף 4
+   ============================================================ */
+.boardmap {
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-md);
+  background: var(--board-bg);
+  overflow: auto;
+  box-shadow: var(--shadow);
+}
+.boardmap.tall { max-height: 68vh; }
+.boardmap.wide { max-height: 72vh; }
+.boardmap-svg { display: block; width: 100%; height: auto; }
+
+/* נוף: ים, חול, רבעים */
+.scenery .land { fill: var(--board-bg); }
+.scenery .sea { fill: var(--sea); opacity: 0.5; }
+.scenery .sand { fill: var(--sand); opacity: 0.75; }
+.scenery .wave { fill: none; stroke: var(--surface); stroke-width: 1.4; opacity: 0.45; }
+.scenery .district { fill: var(--ink); opacity: 0.06; }
+
+/* המסלול */
+.track-shadow { fill: none; stroke: var(--ink); stroke-width: 26; opacity: 0.07; stroke-linecap: round; }
+.track {
+  fill: none;
+  stroke: var(--track);
+  stroke-width: 18;
+  stroke-linecap: round;
+  stroke-dasharray: 1 26;
+  stroke-linejoin: round;
+}
+
+/* משבצות כרטיס */
+.sq-card { stroke: var(--surface); stroke-width: 2; }
+.sq-card.here { stroke: var(--ink); stroke-width: 2.5; }
+
+/* תחנות */
+.station-base { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.station.here .station-base { stroke-width: 3; fill: var(--stamp-soft); }
+.station.passed .station-base { fill: var(--approve-soft); }
+.station .glyph { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.station .glyph .dash { stroke-dasharray: 3 2; }
+.station.cat-must .glyph { stroke: var(--stamp); }
+.station.cat-need .glyph { stroke: var(--approve); }
+.station.cat-want .glyph { stroke: var(--warn); }
+.station .glyph.seal { stroke: var(--gold); stroke-width: 2.2; }
+.station.passed .glyph { opacity: 0.45; }
+.station-stamp circle { fill: var(--approve); }
+.station-stamp path { fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.station-label {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--board-bg);
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+.station.passed .station-label { fill: var(--muted); }
+
+/* עצים — מדד העיר על הלוח */
+.tree .trunk { fill: var(--ink); opacity: 0.55; }
+.tree .canopy { fill: var(--leaf); opacity: 0.8; }
+.boardmap.dry .scenery .district { opacity: 0.03; }
+.boardmap.dry .scenery .sea,
+.boardmap.dry .scenery .sand { opacity: 0.25; }
+.boardmap.dry .track { stroke: var(--line); }
+
+/* כלי המשחק */
+.pawn-shadow { fill: var(--ink); opacity: 0.2; }
+.pawn-disc { opacity: 0.55; }
+.pawn-top { stroke: var(--surface); stroke-width: 2; }
+.pawn-letter {
+  font-family: var(--font-display);
+  font-size: 14px;
+  fill: var(--surface);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+.pawn { transition: transform 180ms linear; }
+.pawn.current .pawn-top { stroke: var(--ink); stroke-width: 2.5; }
+
+/* מתג תצוגה: לוח / גיליון */
+.view-switch { display: flex; gap: 6px; }
+.view-switch .btn[aria-pressed='true'] { background: var(--stamp); color: var(--paper); border-color: var(--stamp); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pawn { transition: none; }
 }
