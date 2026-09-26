@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 /** הדרכה בכניסה — DESIGN.md סעיף 9. שלוש שכבות על הלוח, עם "דלג". */
 const KEY = 'bakasha-leheter:onboarded';
@@ -42,7 +43,15 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
     return () => window.removeEventListener('keydown', onKey);
   });
 
-  return (
+  // כל עוד ההדרכה פתוחה, שאר המסך לא מקבל פוקוס ולא נקרא בקורא מסך
+  useEffect(() => {
+    const app = document.querySelector('.app');
+    app?.setAttribute('inert', '');
+    return () => app?.removeAttribute('inert');
+  }, []);
+
+  // מחוץ ל-.app, אחרת ה-inert היה חל גם על ההדרכה עצמה
+  return createPortal(
     <div className="onboard" role="dialog" aria-modal="true" aria-labelledby="onboard-title">
       <div className="onboard-card">
         <span className="eyebrow">
@@ -59,6 +68,7 @@ export default function Onboarding({ onDone }: { onDone: () => void }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
