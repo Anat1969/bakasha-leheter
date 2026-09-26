@@ -4,6 +4,7 @@ import BoardMap from './BoardMap';
 import Die from './Die';
 import Onboarding, { seenOnboarding } from './Onboarding';
 import Economics from './Economics';
+import { seededOrder } from './shuffle';
 import { play, type Cue } from '../sound';
 import { isOnOpenStation, TABU_VALID_MONTHS } from '../engine/game';
 import type { Action, GameState, Player, Square } from '../engine/types';
@@ -234,7 +235,7 @@ function Panel({ game, act, player }: Props & { player: Player }) {
           </div>
           <p>{st.prompt}</p>
           <div className="options">
-            {st.options.map((o, i) => (
+            {seededOrder(st.options, st.id, game.rng).map((o, i) => (
               <button key={o.id} className="option slip" onClick={() => act({ type: 'ANSWER', optionId: o.id })}>
                 <span className="slip-no" aria-hidden="true">{String.fromCharCode(1488 + i)}</span>
                 <span>{o.text}</span>
