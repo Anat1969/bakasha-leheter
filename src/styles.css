@@ -516,16 +516,17 @@ p { margin: 0; max-width: 65ch; }
   border: 2px solid var(--ink);
   border-radius: 8px;
   background: var(--surface);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 3px;
   padding: 7px;
-  gap: 2px;
   box-shadow: inset -3px -3px 0 rgba(27, 38, 41, 0.08);
   transform-style: preserve-3d;
+  flex: 0 0 auto;
 }
-.die-3d > span { display: grid; place-items: center; }
-.die-3d .pip { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); }
+.die-3d .pip { width: 8px; height: 8px; border-radius: 50%; background: var(--face); }
 .die-3d.rolling { animation: die-roll var(--t-die) cubic-bezier(0.3, 1.4, 0.5, 1) both; }
 @keyframes die-roll {
   0% { transform: rotateX(0) rotateZ(0) scale(0.8); }
@@ -634,7 +635,7 @@ p { margin: 0; max-width: 65ch; }
 }
 .certificate .cert-line { font-size: 0.9rem; color: var(--muted); }
 .die-3d.small { width: 2.8rem; height: 2.8rem; padding: 5px; border-radius: 6px; }
-.die-3d.small .pip { width: 7px; height: 7px; }
+.die-3d.small .pip { width: 6px; height: 6px; }
 
 /* התאמה למסך: כל הלוח נכנס למסגרת, בלי גלילה פנימית */
 .boardmap.fit { max-height: none; overflow: visible; }
@@ -839,3 +840,14 @@ p { margin: 0; max-width: 65ch; }
 .econ-item h4 { margin: 0; font-size: 0.98rem; }
 .econ-item p { margin: 0; font-size: 0.93rem; line-height: 1.55; }
 .econ-foot { margin: 0; font-size: 0.82rem; color: var(--muted); }
+
+/* פאות הקובייה: צבע מהטוקנים, והשם נכתב לידה */
+.die-wrap { display: inline-flex; align-items: center; gap: 8px; }
+.die-name { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
+.die-3d.face-knowledge { --face: var(--sea); background: color-mix(in srgb, var(--sea) 12%, var(--surface)); border-color: var(--sea); }
+.die-3d.face-event { --face: var(--brick); background: color-mix(in srgb, var(--brick) 12%, var(--surface)); border-color: var(--brick); }
+.die-3d.face-neighborhood { --face: var(--leaf); background: color-mix(in srgb, var(--leaf) 12%, var(--surface)); border-color: var(--leaf); }
+.die-3d.face-cityArchitect { --face: var(--tracing-ink); background: var(--tracing); border-color: var(--tracing-ink); }
+.die-3d.face-responsibility,
+.die-3d.face-station { --face: var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); border-color: var(--gold); }
+.die-3d.face-none { --face: var(--line); }

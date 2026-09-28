@@ -59,6 +59,12 @@ export interface Station {
 
 export type CardDeck = 'event' | 'knowledge' | 'neighborhood' | 'responsibility' | 'cityArchitect';
 
+/**
+ * פאת קובייה. הקובייה אינה מספרית: היא מראה איזה סוג משבצת מחפשים.
+ * 'station' = מתקדמים ישר לתחנה הבאה, בלי לעצור בדרך.
+ */
+export type DieFace = CardDeck | 'station';
+
 export interface Card {
   id: string;
   deck: CardDeck;
@@ -192,7 +198,7 @@ export interface GameState {
   current: number;
   phase: Phase;
   rng: number; // מצב מחולל אקראיות (seeded)
-  lastRoll: number | null;
+  lastRoll: DieFace | null; // הפאה האחרונה שיצאה
   finishedCount: number;
   usedCards: string[];
 }

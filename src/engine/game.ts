@@ -2,6 +2,7 @@
 // מנוע המשחק — פונקציות טהורות בלבד (ללא React, ללא DOM)
 // ============================================================
 import type {
+  DieFace,
   Action,
   Card,
   CardDeck,
@@ -18,7 +19,20 @@ import type {
 
 export const START_RESOURCES: Resources = { budget: 100, months: 0, trust: 0, city: 0, shields: 0 };
 export const TABU_VALID_MONTHS = 6;
-export const DIE_SIDES = 6;
+/**
+ * שש פאות הקובייה, אחת לכל סוג משבצת. ההרכב נבחר לפי סימולציה של 300
+ * משחקים: הרכב עם פאות כפולות (2 ידע, 2 אירוע) הותיר את חפיסות האחריות
+ * והערות אדריכלית העיר בלי שליפה אחת, כי אין פאה שתנחית עליהן, והאריך
+ * את המשחק ל-95 צעדים. ההרכב הזה נותן 78 צעדים וכל חמש החפיסות נשלפות.
+ */
+export const DIE_FACES: DieFace[] = [
+  'knowledge',
+  'event',
+  'neighborhood',
+  'responsibility',
+  'cityArchitect',
+  'station',
+];
 
 // ---------- אקראיות עם זרע (לשחזור ולבדיקות) ----------
 export function nextRandom(state: number): [number, number] {
@@ -329,14 +343,22 @@ export function createReducer(c: Content) {
           return { ...state, phase: { name: 'station', stationId: currentSquare(cur)!.stationId! } };
         }
         const [r, rng] = nextRandom(state.rng);
-        const roll = 1 + Math.floor(r * DIE_SIDES);
+        const face = DIE_FACES[Math.floor(r * DIE_FACES.length)];
+        // מחפשים קדימה את המשבצת הראשונה מהסוג שיצא. תחנה שטרם נפתרה
+        // חוסמת את הדרך, ולכן אם אין התאמה לפניה — עוצרים בתחנה עצמה.
         let pos = cur.position;
-        for (let step = 0; step < roll && pos < cur.route.length - 1; step++) {
-          pos++;
-          const sq = cur.route[pos];
-          if (sq.type === 'station' && sq.stationId && !cur.resolved.includes(sq.stationId)) break; // שער
+        let found = false;
+        for (let i = cur.position + 1; i < cur.route.length; i++) {
+          const sq = cur.route[i];
+          const gate = sq.type === 'station' && !!sq.stationId && !cur.resolved.includes(sq.stationId);
+          if (gate || sq.type === face) {
+            pos = i;
+            found = true;
+            break;
+          }
         }
-        let s: GameState = { ...state, rng, lastRoll: roll };
+        if (!found) return nextTurn({ ...state, rng, lastRoll: face });
+        let s: GameState = { ...state, rng, lastRoll: face };
         s = updatePlayer(s, s.current, (p) => ({ ...p, position: pos }));
         const moved = s.players[s.current];
         const sq = currentSquare(moved)!;

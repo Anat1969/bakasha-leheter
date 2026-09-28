@@ -1,35 +1,47 @@
-// קובייה מצוירת. התלת-ממד מזויף ב-CSS transform בלבד — DESIGN.md סעיף 5.
+import type { DieFace } from '../engine/types';
 
-/** מיקומי הנקודות ברשת 3×3, לכל ערך קובייה */
-const PIPS: Record<number, number[]> = {
-  1: [4],
-  2: [0, 8],
-  3: [0, 4, 8],
-  4: [0, 2, 6, 8],
-  5: [0, 2, 4, 6, 8],
-  6: [0, 2, 3, 5, 6, 8],
+// קובייה של סוגי משבצות. הצבע לקוח מטוקני המשחק, והשם נאמר בטקסט
+// כי צבע לבדו אינו נגיש — DESIGN.md סעיף 10.
+export const FACE_LABEL: Record<DieFace, string> = {
+  knowledge: 'ידע',
+  event: 'אירוע',
+  neighborhood: 'שכונה',
+  responsibility: 'אחריות',
+  cityArchitect: 'הערת אדריכלית',
+  station: 'תחנה',
+};
+
+/** הדוגמה שמבדילה בין הפאות גם בלי צבע: מספר הסימנים על הפאה */
+const FACE_MARKS: Record<DieFace, number> = {
+  knowledge: 1,
+  event: 2,
+  neighborhood: 3,
+  responsibility: 4,
+  cityArchitect: 5,
+  station: 6,
 };
 
 interface Props {
-  value: number | null | undefined;
+  value: DieFace | null | undefined;
   /** מתגלגלת פעם אחת כשהיא נכנסת למסך */
   rolling?: boolean;
   small?: boolean;
 }
 
 export default function Die({ value, rolling = false, small = false }: Props) {
-  const v = value && value >= 1 && value <= 6 ? value : null;
-  const cells = v ? PIPS[v] : [];
+  const label = value ? FACE_LABEL[value] : null;
   return (
-    <span
-      className={`die-3d ${rolling ? 'rolling' : ''} ${small ? 'small' : ''}`}
-      role="img"
-      aria-label={v ? `קובייה: ${v}` : 'טרם הוטלה קובייה'}
-      aria-live="polite"
-    >
-      {Array.from({ length: 9 }, (_, i) => (
-        <span key={i}>{cells.includes(i) && <span className="pip" />}</span>
-      ))}
+    <span className="die-wrap">
+      <span
+        className={`die-3d face-${value ?? 'none'} ${rolling ? 'rolling' : ''} ${small ? 'small' : ''}`}
+        aria-hidden="true"
+      >
+        {value &&
+          Array.from({ length: FACE_MARKS[value] }, (_, i) => <span key={i} className="pip" />)}
+      </span>
+      <span className="die-name" aria-live="polite">
+        {label ? `יצא: ${label}` : 'טרם הוטלה קובייה'}
+      </span>
     </span>
   );
 }

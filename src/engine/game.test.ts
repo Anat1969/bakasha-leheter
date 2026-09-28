@@ -1,6 +1,6 @@
 import { content } from '../content';
-import { buildRoute, createReducer, mursheChecks, pathAvailability, scorePlayer, stationSequence } from './game';
-import type { GameState } from './types';
+import { DIE_FACES, buildRoute, createReducer, mursheChecks, pathAvailability, scorePlayer, stationSequence } from './game';
+import type { DieFace, GameState, Square } from './types';
 
 const reducer = createReducer(content);
 const plot = (id: string) => content.plots.find((p) => p.id === id)!;
@@ -280,6 +280,95 @@ describe('ביצועים משפיעים על אמון ועל מדד העיר', (
       else break;
     }
     throw new Error(`התחנה ${target} לא נפגשה במסלול`);
+  });
+});
+
+describe('קובייה של סוגי משבצות', () => {
+  /** מריץ ROLL עם פאה כפויה, בלי להסתמך על ה-rng */
+  function rollWithFace(route: Square[], position: number, resolved: string[], face: DieFace) {
+    // חיקוי הכלל: התחנה הראשונה שטרם נפתרה חוסמת, אחרת המשבצת הראשונה מהסוג
+    for (let i = position + 1; i < route.length; i++) {
+      const sq = route[i];
+      const gate = sq.type === 'station' && !!sq.stationId && !resolved.includes(sq.stationId);
+      if (gate || sq.type === face) return i;
+    }
+    return -1;
+  }
+
+  it('שש פאות בדיוק, וכולן חוקיות', () => {
+    expect(DIE_FACES).toHaveLength(6);
+    const legal: DieFace[] = ['event', 'knowledge', 'neighborhood', 'responsibility', 'cityArchitect', 'station'];
+    for (const f of DIE_FACES) expect(legal).toContain(f);
+  });
+
+  it.each([...new Set(DIE_FACES)])('הפאה %s נוחתת על המשבצת הראשונה מסוגה', (face) => {
+    // מסלול מלאכותי: משבצת מכל אחד מחמשת הסוגים, ואז תחנה
+    const route: Square[] = [
+      { type: 'station', stationId: 'a' },
+      { type: 'event' },
+      { type: 'knowledge' },
+      { type: 'neighborhood' },
+      { type: 'responsibility' },
+      { type: 'cityArchitect' },
+      { type: 'station', stationId: 'b' },
+    ];
+    const landed = rollWithFace(route, 0, ['a'], face);
+    if (face === 'station') expect(route[landed].stationId).toBe('b');
+    else expect(route[landed].type).toBe(face);
+  });
+
+  it('פאה שאין לה משבצת לפני התחנה — עוצרים בתחנה', () => {
+    const route: Square[] = [
+      { type: 'station', stationId: 'a' },
+      { type: 'event' },
+      { type: 'station', stationId: 'b' },
+      { type: 'knowledge' },
+    ];
+    // knowledge קיים רק אחרי תחנה b, והיא חוסמת
+    const landed = rollWithFace(route, 0, ['a'], 'knowledge');
+    expect(route[landed].stationId).toBe('b');
+  });
+
+  it('תחנה שטרם נפתרה תמיד חוסמת, בכל פאה', () => {
+    const route: Square[] = [
+      { type: 'station', stationId: 'a' },
+      { type: 'station', stationId: 'b' },
+      { type: 'event' },
+    ];
+    for (const face of new Set(DIE_FACES)) {
+      expect(route[rollWithFace(route, 0, ['a'], face)].stationId, face).toBe('b');
+    }
+  });
+
+  it('במשחק אמיתי: lastRoll הוא פאה, והשחקן נוחת עליה או בתחנה', () => {
+    let s = start('building', ['א'], 21);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    let rolls = 0;
+    let guard = 0;
+    while (s.phase.name !== 'ended' && guard++ < 3000) {
+      const ph = s.phase;
+      if (ph.name === 'turn') {
+        const before = s.players[0].position;
+        s = reducer(s, { type: 'ROLL' })!;
+        const face = s.lastRoll;
+        if (face) {
+          rolls++;
+          expect(typeof face).toBe('string');
+          const p = s.players[0];
+          if (p.position !== before) {
+            const sq = p.route[p.position];
+            const ok = sq.type === face || sq.type === 'station';
+            expect(ok, `פאה ${face} נחתה על ${sq.type}`).toBe(true);
+          }
+        }
+      } else if (ph.name === 'station') {
+        const st = content.stations.find((x) => x.id === ph.stationId)!;
+        s = reducer(s, { type: 'ANSWER', optionId: (st.options.find((o) => o.correct) ?? st.options[0]).id })!;
+      } else if (ph.name === 'stationResult' || ph.name === 'card') s = reducer(s, { type: 'CONTINUE' })!;
+      else break;
+    }
+    expect(rolls).toBeGreaterThan(5);
+    expect(s.phase.name).toBe('ended');
   });
 });
 
