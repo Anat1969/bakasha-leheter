@@ -5,3 +5,8 @@ dist
 
 # סקילי UI/UX — משוחזרים ב-uipro init --ai claude
 .claude/skills/
+
+.vercel
+
+# קישור Vercel המקומי — מכיל מזהי פרויקט, לא שייך לגרסאות
+.vercel
