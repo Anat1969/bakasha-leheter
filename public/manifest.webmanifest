@@ -1,0 +1,17 @@
+{
+  "name": "בקשה להיתר",
+  "short_name": "בקשה להיתר",
+  "description": "משחק לשיתוף ציבור בתהליך הוצאת היתר בנייה",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f4ef",
+  "theme_color": "#1d5a8c",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
