@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { stationById } from '../content';
 import type { GameState, Player } from '../engine/types';
-import { DECK_COLOR, layoutRoute, stationShape, type BoardMode, type StationShape } from './boardLayout';
-
-const STEP_MS = 180; // משך צעד אחד במסלול, לפי DESIGN.md סעיף 5
+import { play } from '../sound';
+import { DECK_COLOR, layoutRoute, pathBetween, stationShape, type BoardMode, type StationShape } from './boardLayout';
+import { MOTION } from './motion';
 
 /** צבעי הכלים לפי סדר השחקנים */
-const PAWN = ['var(--stamp)', 'var(--brick)', 'var(--leaf)', 'var(--gold)'];
+export const PAWN = ['var(--stamp)', 'var(--brick)', 'var(--leaf)', 'var(--gold)'];
 
-function useBoardMode(): BoardMode {
+export function useBoardMode(): BoardMode {
   const [mode, setMode] = useState<BoardMode>(() =>
     typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches ? 'tall' : 'wide',
   );
@@ -21,7 +21,7 @@ function useBoardMode(): BoardMode {
   return mode;
 }
 
-function useReducedMotion(): boolean {
+export function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   );
@@ -35,14 +35,15 @@ function useReducedMotion(): boolean {
 }
 
 /**
- * מיקום מוצג לכל שחקן. המנוע מקפיץ את position מיד,
- * וכאן הכלי הולך משבצת-משבצת עד שהוא משלים את המרחק.
+ * מיקום מוצג לכל שחקן. המנוע מקפיץ את position מיד, וכאן הכלי הולך
+ * משבצת-משבצת עד שהוא משלים את המרחק. holdMs = המתנה עד שהקובייה נוחתת.
  */
-function useWalk(players: Player[], reduced: boolean): Record<number, number> {
+function useWalk(players: Player[], reduced: boolean, holdMs: number): Record<number, number> {
   const [shown, setShown] = useState<Record<number, number>>(() =>
     Object.fromEntries(players.map((p) => [p.id, p.position])),
   );
-  const timer = useRef<number | null>(null);
+  const shownRef = useRef(shown);
+  shownRef.current = shown;
 
   useEffect(() => {
     const target: Record<number, number> = Object.fromEntries(players.map((p) => [p.id, p.position]));
@@ -50,31 +51,40 @@ function useWalk(players: Player[], reduced: boolean): Record<number, number> {
       setShown(target);
       return;
     }
-    if (timer.current !== null) window.clearInterval(timer.current);
-    timer.current = window.setInterval(() => {
-      setShown((prev) => {
-        let done = true;
-        const next: Record<number, number> = { ...prev };
-        for (const p of players) {
-          const cur = next[p.id] ?? p.position;
-          if (cur < p.position) {
-            next[p.id] = cur + 1;
-            done = false;
-          } else if (cur > p.position) {
-            // חזרה אחורה (כרטיס אחריות) — קופצים, לא הולכים לאחור
-            next[p.id] = p.position;
-          }
+    let interval: number | null = null;
+    const tick = () => {
+      const prev = shownRef.current;
+      const next: Record<number, number> = { ...prev };
+      let moving = false;
+      let stepped = false;
+      for (const p of players) {
+        const cur = next[p.id] ?? p.position;
+        if (cur < p.position) {
+          next[p.id] = cur + 1;
+          moving = moving || cur + 1 < p.position;
+          stepped = true;
+        } else if (cur > p.position) {
+          // חזרה אחורה (כרטיס אחריות) — קופצים, לא הולכים לאחור
+          next[p.id] = p.position;
         }
-        if (done && timer.current !== null) {
-          window.clearInterval(timer.current);
-          timer.current = null;
-        }
-        return next;
-      });
-    }, STEP_MS);
+      }
+      if (stepped) play('step');
+      shownRef.current = next;
+      setShown(next);
+      if (!moving && interval !== null) {
+        window.clearInterval(interval);
+        interval = null;
+      }
+    };
+    const needs = players.some((p) => (shownRef.current[p.id] ?? p.position) !== p.position);
+    if (!needs) return;
+    const start = window.setTimeout(() => {
+      tick();
+      interval = window.setInterval(tick, MOTION.step);
+    }, holdMs);
     return () => {
-      if (timer.current !== null) window.clearInterval(timer.current);
-      timer.current = null;
+      window.clearTimeout(start);
+      if (interval !== null) window.clearInterval(interval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players.map((p) => `${p.id}:${p.position}`).join(','), reduced]);
@@ -82,11 +92,22 @@ function useWalk(players: Player[], reduced: boolean): Record<number, number> {
   return shown;
 }
 
-export default function BoardMap({ game, fit }: { game: GameState; fit: boolean }) {
+interface Props {
+  game: GameState;
+  fit: boolean;
+  /** המתנה לפני שהכלי יוצא לדרך, כדי שהקובייה תנחת קודם */
+  holdMs: number;
+  /** משבצת מסומנת מהיומן או מציר הזמן */
+  focus: number | null;
+  onFocus: (at: number | null) => void;
+  /** נקרא כשכל הכלים הגיעו ליעד — רק אז נחשף מה שמחכה במשבצת */
+  onSettled?: () => void;
+}
+
+export default function BoardMap({ game, fit, holdMs, focus, onFocus, onSettled }: Props) {
   const mode = useBoardMode();
   const reduced = useReducedMotion();
-  const shown = useWalk(game.players, reduced);
-  const wrapRef = useRef<HTMLDivElement>(null);
+  const shown = useWalk(game.players, reduced, holdMs);
   const pawnRef = useRef<SVGGElement>(null);
 
   const current = game.players[game.current];
@@ -98,6 +119,13 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
   const dry = city < 0;
 
   const shownPos = shown[current.id] ?? current.position;
+  const arrived = shownPos === current.position;
+  const settled = game.players.every((p) => (shown[p.id] ?? p.position) === p.position);
+  useEffect(() => {
+    if (settled) onSettled?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settled, shownPos]);
+  const gate = game.phase.name === 'station' && arrived ? lay.points[current.position] : null;
 
   // גלילה אוטומטית אחרי הכלי
   useEffect(() => {
@@ -112,8 +140,10 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
   const approvedText =
     approved === 0 ? 'עוד לא אושרה תחנה' : approved === 1 ? 'אושרה תחנה אחת' : `אושרו ${approved} תחנות`;
 
+  let stationCount = 0;
+
   return (
-    <div className={`boardmap ${mode} ${dry ? 'dry' : ''} ${fit ? 'fit' : ''}`} ref={wrapRef}>
+    <div className={`boardmap ${mode} ${dry ? 'dry' : ''} ${fit ? 'fit' : ''}`}>
       <svg
         viewBox={`0 0 ${lay.width} ${lay.height}`}
         className="boardmap-svg"
@@ -121,17 +151,47 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
         aria-label={`לוח המשחק. ${current.name} במשבצת ${shownPos + 1} מתוך ${route.length}. ${approvedText} מתוך ${totalStations}. גיליון הדרישות, בכפתור שמעל הלוח, מציג את אותו מידע כטקסט.`}
       >
         <defs>
-          <pattern id="grain" width="4" height="4" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.5" fill="var(--ink)" opacity="0.05" />
+          <pattern id="grid-minor" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" className="grid-minor" />
           </pattern>
+          <pattern id="grid-major" width="100" height="100" patternUnits="userSpaceOnUse">
+            <rect width="100" height="100" fill="url(#grid-minor)" />
+            <path d="M 100 0 L 0 0 0 100" className="grid-major" />
+          </pattern>
+          <pattern id="sea-hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+            <line x1="0" y1="0" x2="0" y2="9" className="sea-hatch" />
+          </pattern>
+          <pattern id="sand-stipple" width="11" height="11" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="3" r="0.9" className="stipple" />
+            <circle cx="8" cy="8" r="0.7" className="stipple" />
+            <circle cx="6" cy="1" r="0.5" className="stipple" />
+          </pattern>
+          <pattern id="poche" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="5" className="poche" />
+          </pattern>
+          {/* מסכה: שחור ולבן כאן הם ערכי שקיפות, לא צבעים שנראים על המסך */}
+          <radialGradient id="spot-grad">
+            <stop offset="0.55" stopColor="#000" />
+            <stop offset="1" stopColor="#fff" />
+          </radialGradient>
+          <mask id="spot-mask">
+            <rect x="0" y="0" width={lay.width} height={lay.height} fill="#fff" />
+            {gate && <circle cx={gate.x} cy={gate.y} r={mode === 'wide' ? 120 : 105} fill="url(#spot-grad)" />}
+          </mask>
         </defs>
 
         <Scenery lay={lay} />
-        <rect x="0" y="0" width={lay.width} height={lay.height} fill="url(#grain)" pointerEvents="none" />
 
-        {/* המסלול */}
-        <path d={lay.d} className="track-shadow" />
-        <path d={lay.d} className="track" />
+        {/* הדרך: רחוב בתוכנית, קו מרכזי מקווקו */}
+        <path d={lay.d} className="road-edge" />
+        <path d={lay.d} className="road" />
+        <path d={lay.d} className="road-center" />
+
+        {/* הקו המדויו: הדרך שכבר עברתם, מצוירת בעט */}
+        {shownPos > 0 && <path d={pathBetween(lay.points, 0, shownPos - 1)} className="ink-trail" />}
+        {shownPos > 0 && (
+          <path key={`seg-${shownPos}`} d={pathBetween(lay.points, shownPos - 1, shownPos)} className="ink-trail fresh" pathLength={1} />
+        )}
 
         {/* עצים: אחד לכל נקודה שבה מדד העיר עלה, ליד המשבצת שבה זה קרה */}
         {trees.map((idx, i) => {
@@ -140,42 +200,57 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
           // כמה עליות באותה משבצת — מתפזרות סביבה במקום להיערם
           const sameSpot = trees.slice(0, i).filter((x) => x === idx).length;
           const side = (i + sameSpot) % 2 === 0 ? -1 : 1;
-          return <Tree key={`t${i}`} x={p.x + side * (44 + sameSpot * 15)} y={p.y + 26 + sameSpot * 8} />;
+          return <Tree key={`t${i}`} x={p.x + side * (46 + sameSpot * 16)} y={p.y + 28 + sameSpot * 9} seed={i} />;
         })}
 
         {/* משבצות */}
         {route.map((sq, i) => {
           const p = lay.points[i];
           if (!p) return null;
+          const hot = focus === i;
           if (sq.type !== 'station') {
+            const tilt = ((i * 37) % 17) - 8;
             return (
-              <circle
+              <g
                 key={i}
-                cx={p.x}
-                cy={p.y}
-                r={9}
-                className={`sq-card ${i === shownPos ? 'here' : ''}`}
-                fill={DECK_COLOR[sq.type] ?? 'var(--line)'}
-              />
+                className={`sq-card ${i === shownPos ? 'here' : ''} ${i < shownPos ? 'past' : ''} ${hot ? 'hot' : ''}`}
+                transform={`translate(${p.x}, ${p.y}) rotate(${tilt})`}
+                onMouseEnter={() => onFocus(i)}
+                onMouseLeave={() => onFocus(null)}
+              >
+                {hot && <circle r="17" className="hot-ring" />}
+                <rect x="-7.5" y="-10.5" width="15" height="21" rx="2.2" className="sq-card-shadow" transform="translate(1.6, 1.8)" />
+                <rect x="-7.5" y="-10.5" width="15" height="21" rx="2.2" fill={DECK_COLOR[sq.type] ?? 'var(--line)'} className="sq-card-face" />
+                <rect x="-4.5" y="-7.5" width="9" height="15" rx="1" className="sq-card-inset" />
+              </g>
             );
           }
           const st = stationById(sq.stationId!);
           if (!st) return null;
+          stationCount++;
           const passed = current.resolved.includes(st.id);
           return (
             <Station
               key={i}
               x={p.x}
               y={p.y}
+              no={stationCount}
               shape={stationShape(st.id, st.agency)}
               title={st.title}
               category={st.category}
               passed={passed}
               here={i === shownPos}
+              open={!!gate && i === current.position}
+              hot={hot}
               mode={mode}
+              onEnter={() => onFocus(i)}
+              onLeave={() => onFocus(null)}
             />
           );
         })}
+
+        {/* הזרקור: כשעוצרים בתחנה, כל השאר נסוג */}
+        <rect x="0" y="0" width={lay.width} height={lay.height} mask="url(#spot-mask)" className={`spotlight ${gate ? 'on' : ''}`} pointerEvents="none" />
 
         {/* כלי המשחק */}
         {game.players.map((p, pi) => {
@@ -184,21 +259,30 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
           if (!pt) return null;
           const mates = game.players.filter((q) => (shown[q.id] ?? q.position) === pos);
           const slot = mates.findIndex((q) => q.id === p.id);
-          const spread = mates.length > 1 ? (slot - (mates.length - 1) / 2) * 17 : 0;
+          const spread = mates.length > 1 ? (slot - (mates.length - 1) / 2) * 20 : 0;
           const isCurrent = p.id === current.id;
+          const color = PAWN[pi % PAWN.length];
+          const landed = (shown[p.id] ?? p.position) === p.position;
           return (
             <g
               key={p.id}
               ref={isCurrent ? pawnRef : undefined}
               className={`pawn ${isCurrent ? 'current' : ''}`}
-              transform={`translate(${pt.x + spread}, ${pt.y - 32})`}
+              transform={`translate(${pt.x + spread}, ${pt.y})`}
             >
-              <ellipse cx="0" cy="15" rx="13" ry="4" className="pawn-shadow" />
-              <circle cx="0" cy="0" r="14" fill={PAWN[pi % PAWN.length]} className="pawn-disc" />
-              <circle cx="0" cy="-2" r="14" fill={PAWN[pi % PAWN.length]} className="pawn-top" />
-              <text x="0" y="2" className="pawn-letter">
-                {p.name.trim().charAt(0) || String(pi + 1)}
-              </text>
+              {isCurrent && landed && <circle key={`land-${pos}`} r="16" className="land-ring" />}
+              <ellipse cx="2" cy="1" rx="16" ry="5.5" className="pawn-shadow" />
+              <g key={`hop-${pos}`} className="hop">
+                <g transform="translate(0, -12)">
+                  <ellipse cx="0" cy="10" rx="15" ry="6" fill={color} className="pawn-base" />
+                  <rect x="-15" y="0" width="30" height="10" fill={color} className="pawn-side" />
+                  <ellipse cx="0" cy="0" rx="15" ry="6" fill={color} className="pawn-top" />
+                  <ellipse cx="0" cy="0" rx="10" ry="3.8" className="pawn-inlay" />
+                  <text x="0" y="-11" className="pawn-letter">
+                    {p.name.trim().charAt(0) || String(pi + 1)}
+                  </text>
+                </g>
+              </g>
             </g>
           );
         })}
@@ -207,58 +291,137 @@ export default function BoardMap({ game, fit }: { game: GameState; fit: boolean 
   );
 }
 
-/** רקע: קו ים, רצועת חול, גושי רבעים. רמז לעיר חוף, לא מפה. */
+/** קו חוף מתפתל — אותה פונקציה לים, לחול ולטיילת */
+const coast = (seaX: number, y: number) => seaX + 7 * Math.sin(y / 55) + 4 * Math.sin(y / 23 + 1);
+
+function coastPath(seaX: number, height: number, offset: number): string {
+  let d = `M ${coast(seaX, 0) + offset} 0`;
+  for (let y = 10; y <= height; y += 10) d += ` L ${(coast(seaX, y) + offset).toFixed(1)} ${y}`;
+  return d;
+}
+
+/** רצועה בין שני קווי חוף מוסטים — החול שבין הטיילת לים */
+function bandPath(seaX: number, height: number, a: number, b: number): string {
+  const left: string[] = [];
+  const right: string[] = [];
+  for (let y = 0; y <= height; y += 10) {
+    left.push(`${(coast(seaX, y) + a).toFixed(1)} ${y}`);
+    right.unshift(`${(coast(seaX, y) + b).toFixed(1)} ${y}`);
+  }
+  return `M ${left.join(' L ')} L ${right.join(' L ')} Z`;
+}
+
+/** פסאודו-אקראי קבוע לפי מספר — הנוף זהה בכל טעינה */
+const hash = (n: number) => {
+  const s = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return s - Math.floor(s);
+};
+
+/**
+ * רקע: תוכנית מצב של עיר חוף. ים מקווקו, חול מנוקד, קווי גובה של דיונות,
+ * טיילת, גושי בניינים בהצללה, חץ צפון וקנה מידה. רמז לעיר — לא מפה.
+ */
 function Scenery({ lay }: { lay: ReturnType<typeof layoutRoute> }) {
   const { width, height, mode } = lay;
   const seaW = mode === 'wide' ? width * 0.13 : width * 0.17;
-  const blocks =
-    mode === 'wide'
-      ? [
-          { x: 0.33, y: 0.1, w: 0.1, h: 0.07 },
-          { x: 0.6, y: 0.24, w: 0.13, h: 0.06 },
-          { x: 0.28, y: 0.45, w: 0.12, h: 0.08 },
-          { x: 0.66, y: 0.62, w: 0.1, h: 0.07 },
-          { x: 0.42, y: 0.8, w: 0.14, h: 0.06 },
-        ]
-      : [
-          { x: 0.55, y: 0.08, w: 0.2, h: 0.04 },
-          { x: 0.5, y: 0.3, w: 0.26, h: 0.035 },
-          { x: 0.56, y: 0.55, w: 0.2, h: 0.04 },
-          { x: 0.5, y: 0.78, w: 0.24, h: 0.035 },
-        ];
+  const seaX = width - seaW;
+
+  // גושי בניינים בין שורות המסלול (מחשב) או בצד הפנוי של העיקול (טלפון)
+  const blocks: { x: number; y: number; w: number; h: number; k: number }[] = [];
+  if (mode === 'wide') {
+    const rows = Math.round((height - 185) / 155) + 1;
+    for (let r = 0; r < rows - 1; r++) {
+      const y = 100 + r * 155 + 60;
+      for (let c = 0; c < 3; c++) {
+        const k = r * 3 + c;
+        if (hash(k) < 0.22) continue;
+        const w = 110 + hash(k + 50) * 40;
+        blocks.push({ x: 150 + c * 165 + hash(k + 9) * 20, y, w, h: 36 + hash(k + 3) * 10, k });
+      }
+    }
+  } else {
+    lay.points.forEach((p, i) => {
+      if (i % 2 === 0 && p.x > 250) blocks.push({ x: 14, y: p.y - 30, w: 70, h: 50, k: i });
+      if (i % 2 === 0 && p.x < 170) blocks.push({ x: 262, y: p.y - 26, w: 54, h: 44, k: i + 100 });
+    });
+  }
+
   return (
     <g aria-hidden="true" className="scenery">
       <rect x="0" y="0" width={width} height={height} className="land" />
-      {/* הים בצד ימין: ההתחלה של המסלול */}
-      <rect x={width - seaW} y="0" width={seaW} height={height} className="sea" />
-      <rect x={width - seaW - 26} y="0" width="26" height={height} className="sand" />
-      {Array.from({ length: Math.ceil(height / 90) }, (_, i) => (
-        <path
-          key={i}
-          d={`M ${width - seaW + 8} ${40 + i * 90} q 14 -9 28 0 t 28 0`}
-          className="wave"
-        />
-      ))}
-      {blocks.map((b, i) => (
-        <rect
-          key={i}
-          x={b.x * width}
-          y={b.y * height}
-          width={b.w * width}
-          height={b.h * height}
-          rx="3"
-          className="district"
-        />
-      ))}
+      <rect x="0" y="0" width={width} height={height} fill="url(#grid-major)" />
+
+      {/* ים: מילוי, הצללה אלכסונית, קו חוף */}
+      <path d={`${coastPath(seaX, height, 0)} L ${width} ${height} L ${width} 0 Z`} className="sea" />
+      <path d={`${coastPath(seaX, height, 0)} L ${width} ${height} L ${width} 0 Z`} fill="url(#sea-hatch)" />
+      <path d={bandPath(seaX, height, -30, 0)} className="sand-fill" />
+      <path d={bandPath(seaX, height, -30, 0)} fill="url(#sand-stipple)" />
+      <path d={coastPath(seaX, height, 0)} className="coastline" />
+      <path d={coastPath(seaX, height, -12)} className="contour" />
+      <path d={coastPath(seaX, height, -21)} className="contour faint" />
+      <path d={coastPath(seaX, height, -32)} className="promenade" />
+      <text
+        className="sea-label"
+        transform={`translate(${width - seaW / 2 + 4}, ${Math.min(height * 0.5, 420)}) rotate(90)`}
+      >
+        הים התיכון
+      </text>
+
+      {/* גושים: קו מגרש, ובתוכו בניינים בהצללה */}
+      {blocks.map((b) => {
+        const n = 2 + Math.floor(hash(b.k + 21) * 3);
+        const bw = (b.w - 10 - (n - 1) * 6) / n;
+        return (
+          <g key={b.k} className="block">
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="3" className="block-lot" />
+            {Array.from({ length: n }, (_, j) => {
+              const hh = b.h - 10 - hash(b.k + j * 7) * 10;
+              return (
+                <rect key={j} x={b.x + 5 + j * (bw + 6)} y={b.y + 5} width={bw} height={hh} className="footprint" />
+              );
+            })}
+          </g>
+        );
+      })}
+
+      {/* חץ צפון */}
+      <g className="north" transform={`translate(${mode === 'wide' ? 36 : 30}, 40)`}>
+        <circle r="15" />
+        <path d="M 0 -12 L 6 8 L 0 4 Z" className="north-fill" />
+        <path d="M 0 -12 L -6 8 L 0 4 Z" />
+        <text y="-19" className="north-letter">צ</text>
+      </g>
+
+      {/* קנה מידה — בכוונה לא אמיתי */}
+      <g className="scalebar" transform={`translate(${mode === 'wide' ? 22 : 16}, ${height - 22})`}>
+        <rect x="0" y="0" width="20" height="5" className="sb-dark" />
+        <rect x="20" y="0" width="20" height="5" className="sb-light" />
+        <rect x="40" y="0" width="40" height="5" className="sb-dark" />
+        <text x="0" y="-5" className="sb-text">לא בקנ״מ</text>
+      </g>
+
+      {/* מסגרת הגיליון */}
+      <rect x="6" y="6" width={width - 12} height={height - 12} className="sheet-frame" />
     </g>
   );
 }
 
-function Tree({ x, y }: { x: number; y: number }) {
+function Tree({ x, y, seed }: { x: number; y: number; seed: number }) {
+  const r = 9 + hash(seed) * 3;
+  // צמרת בתוכנית: עיגול גלי כמו בשרטוט נוף, ונקודת גזע במרכז
+  const pts = Array.from({ length: 10 }, (_, i) => {
+    const a = (i / 10) * Math.PI * 2;
+    const rr = r + (i % 2 ? 1.6 : -0.6);
+    return `${(Math.cos(a) * rr).toFixed(1)},${(Math.sin(a) * rr).toFixed(1)}`;
+  });
   return (
     <g className="tree" transform={`translate(${x}, ${y})`} aria-hidden="true">
-      <rect x="-1.5" y="0" width="3" height="10" className="trunk" />
-      <circle cx="0" cy="-4" r="9" className="canopy" />
+      <g className="tree-grow">
+        <ellipse cx="2.5" cy="3" rx={r} ry={r * 0.9} className="tree-shade" />
+        <polygon points={pts.join(' ')} className="canopy" />
+        <circle r={r * 0.45} className="canopy-inner" />
+        <circle r="1.4" className="trunk" />
+      </g>
     </g>
   );
 }
@@ -266,33 +429,48 @@ function Tree({ x, y }: { x: number; y: number }) {
 interface StationProps {
   x: number;
   y: number;
+  no: number;
   shape: StationShape;
   title: string;
   category: string;
   passed: boolean;
   here: boolean;
+  open: boolean;
+  hot: boolean;
   mode: BoardMode;
+  onEnter: () => void;
+  onLeave: () => void;
 }
 
-function Station({ x, y, shape, title, category, passed, here, mode }: StationProps) {
+function Station({ x, y, no, shape, title, category, passed, here, open, hot, mode, onEnter, onLeave }: StationProps) {
   return (
-    <g className={`station ${passed ? 'passed' : ''} ${here ? 'here' : ''} cat-${category}`} transform={`translate(${x}, ${y})`}>
-      <circle cx="0" cy="0" r="24" className="station-base" />
-      <g transform="translate(0, -3)">
+    <g
+      className={`station ${passed ? 'passed' : ''} ${here ? 'here' : ''} ${open ? 'open' : ''} ${hot ? 'hot' : ''} cat-${category}`}
+      transform={`translate(${x}, ${y})`}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      {open && <circle r="36" className="gate-ring" />}
+      {hot && <circle r="34" className="hot-ring" />}
+      {/* בלוק בתוכנית: גוף, צל אקסונומטרי, וגג */}
+      <rect x="-21" y="-21" width="42" height="42" rx="5" className="station-extrude" transform="translate(4, 4)" />
+      <rect x="-21" y="-21" width="42" height="42" rx="5" className="station-base" />
+      <g transform="translate(0, 1)">
         <Shape shape={shape} />
       </g>
+      <g className="station-no" transform="translate(21, -21)">
+        <circle r="9" />
+        <text>{String(no).padStart(2, '0')}</text>
+      </g>
       {passed && (
-        <g className="station-stamp" transform="translate(16, -16) rotate(-8)">
-          <circle cx="0" cy="0" r="9" />
-          <path d="M -4 0 L -1 3.4 L 4.4 -3" />
+        <g className="station-stamp" transform="translate(-19, -19)">
+          <g className="stamp-in">
+            <circle cx="0" cy="0" r="10" />
+            <path d="M -4.5 0 L -1.2 3.6 L 4.8 -3.2" />
+          </g>
         </g>
       )}
-      <text
-        x="0"
-        y={mode === 'wide' ? 44 : 42}
-        className="station-label"
-        textAnchor="middle"
-      >
+      <text x="0" y={mode === 'wide' ? 42 : 40} className="station-label" textAnchor="middle">
         {title}
       </text>
     </g>
@@ -300,7 +478,7 @@ function Station({ x, y, shape, title, category, passed, here, mode }: StationPr
 }
 
 /** צורות גאומטריות בלבד, ממורכזות סביב (0,0) בערך 22×22 */
-function Shape({ shape }: { shape: StationShape }) {
+export function Shape({ shape }: { shape: StationShape }) {
   switch (shape) {
     case 'columns':
       return (

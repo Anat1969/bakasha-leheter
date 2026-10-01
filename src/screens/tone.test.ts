@@ -76,8 +76,8 @@ describe('צליל', () => {
     else delete (globalThis as { localStorage?: unknown }).localStorage;
   });
 
-  it('ארבעה צלילים בלבד, כפי שהאפיון מגביל', () => {
-    expect(CUE_NAMES).toHaveLength(4);
-    expect(CUE_NAMES).toEqual(expect.arrayContaining(['die', 'stamp', 'card', 'permit']));
+  it('שישה צלילים בלבד, כפי שהאפיון מגביל', () => {
+    expect(CUE_NAMES).toHaveLength(6);
+    expect(CUE_NAMES).toEqual(expect.arrayContaining(['die', 'step', 'stamp', 'reject', 'card', 'permit']));
   });
 });

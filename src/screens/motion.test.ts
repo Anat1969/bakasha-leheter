@@ -52,11 +52,11 @@ describe('prefers-reduced-motion', () => {
   });
 
   it('הקובייה מציגה את התוצאה מיד, בלי גלגול', () => {
-    expect(block).toMatch(/\.die\.rolling\s*{\s*animation:\s*none/);
+    expect(block).toMatch(/\.die-cube\.rolling\s*{\s*animation:\s*none/);
   });
 
   it('הפחתת התנועה מכסה את כל הרגעים המונפשים', () => {
-    for (const cls of ['.stamp.animate', '.card-face.draw', '.certificate', '.gate-open']) {
+    for (const cls of ['.stamp.animate', '.card3d-inner', '.certificate', '.gate-open']) {
       expect(block, `${cls} לא מכוסה`).toContain(cls);
     }
   });

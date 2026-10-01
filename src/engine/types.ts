@@ -181,6 +181,27 @@ export interface Player {
   finished: boolean;
   finishOrder: number | null;
   log: string[];
+  /** יומן מובנה: כל אירוע עם החודש שבו התחיל ונגמר. חסר במשחק שמור ישן. */
+  journal?: JournalEntry[];
+}
+
+/**
+ * pass = תחנה אושרה · reject = הוחזר לתיקון · shielded = כרטיס ידע ביטל קנס
+ * card = כרטיס נשלף · tabuRenewed = נסח טאבו פג והופק מחדש (תלוי בתחנת הטאבו)
+ */
+export type JournalKind = 'pass' | 'reject' | 'shielded' | 'card' | 'tabuRenewed';
+
+export interface JournalEntry {
+  kind: JournalKind;
+  /** מזהה התחנה או הכרטיס */
+  ref: string;
+  /** המשבצת במסלול שבה זה קרה */
+  at: number;
+  /** חודש לפני האירוע ואחריו — הבסיס לציר הזמן */
+  from: number;
+  to: number;
+  /** השינוי במשאבים, רק מה שהשתנה */
+  delta: Partial<Resources>;
 }
 
 export type Phase =

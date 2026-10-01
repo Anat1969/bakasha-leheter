@@ -9,6 +9,8 @@ import type {
   Content,
   Effects,
   GameState,
+  JournalEntry,
+  JournalKind,
   PathId,
   Player,
   Plot,
@@ -194,6 +196,17 @@ function withEffects(p: Player, ...effects: (Effects | undefined)[]): Player {
   return { ...p, res, cityMarks };
 }
 
+/** רושם אירוע ביומן המובנה: מה השתנה בין המצב שלפני למצב שאחרי */
+function record(before: Player, after: Player, kind: JournalKind, ref: string): Player {
+  const delta: JournalEntry['delta'] = {};
+  for (const k of Object.keys(after.res) as (keyof Resources)[]) {
+    const d = after.res[k] - before.res[k];
+    if (d) delta[k] = d;
+  }
+  const entry: JournalEntry = { kind, ref, at: before.position, from: before.res.months, to: after.res.months, delta };
+  return { ...after, journal: [...(before.journal ?? []), entry] };
+}
+
 function updatePlayer(state: GameState, idx: number, fn: (p: Player) => Player): GameState {
   return { ...state, players: state.players.map((p, i) => (i === idx ? fn(p) : p)) };
 }
@@ -302,6 +315,7 @@ export function createReducer(c: Content) {
           finished: false,
           finishOrder: null,
           log: [],
+          journal: [],
         };
       });
       return {
@@ -369,7 +383,7 @@ export function createReducer(c: Content) {
         if (!card) return nextTurn(s2);
         const notes: string[] = [];
         let after = updatePlayer(s2, s2.current, (p) => {
-          let np: Player = { ...withEffects(p, card.effects), log: [...p.log, `כרטיס: ${card.title}`] };
+          let np: Player = record(p, { ...withEffects(p, card.effects), log: [...p.log, `כרטיס: ${card.title}`] }, 'card', card.id);
           if (card.action === 'backToRegularTrack' && np.path === 'murshe') {
             const plot = plotOf(np);
             const route = buildRoute(c, plot, 'conforming');
@@ -399,15 +413,20 @@ export function createReducer(c: Content) {
         if (passed) {
           const base = st.id === 'committee' ? track.committeeMonths : st.baseMonths;
           s = updatePlayer(s, s.current, (p) => {
-            let np: Player = {
-              ...withEffects(p, { months: base }, opt.effects),
-              resolved: [...p.resolved, st.id],
-              log: [...p.log, `עבר: ${st.title}`],
-            };
+            let np: Player = record(
+              p,
+              {
+                ...withEffects(p, { months: base }, opt.effects),
+                resolved: [...p.resolved, st.id],
+                log: [...p.log, `עבר: ${st.title}`],
+              },
+              'pass',
+              st.id,
+            );
             if (st.id === 'survey-tabu') np = { ...np, tabuAt: np.res.months };
             if (st.id === 'submission' || st.id === 'permit') {
               const t = checkTabu(np);
-              np = t.player;
+              if (t.notes.length) np = record(np, t.player, 'tabuRenewed', st.id);
               notes.push(...t.notes);
             }
             return np;
@@ -420,9 +439,9 @@ export function createReducer(c: Content) {
           s = updatePlayer(s, s.current, (p) => {
             if (p.res.shields > 0) {
               notes.push('כרטיס הידע ביטל את הקנס. נסו שוב בתור הבא.');
-              return { ...p, res: { ...p.res, shields: p.res.shields - 1 } };
+              return record(p, { ...p, res: { ...p.res, shields: p.res.shields - 1 } }, 'shielded', st.id);
             }
-            return { ...withEffects(p, opt.effects), log: [...p.log, `טעות: ${st.title}`] };
+            return record(p, { ...withEffects(p, opt.effects), log: [...p.log, `טעות: ${st.title}`] }, 'reject', st.id);
           });
         }
         return { ...s, phase: { name: 'stationResult', stationId: st.id, optionId: opt.id, passed, notes } };

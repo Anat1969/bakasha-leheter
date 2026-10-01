@@ -58,11 +58,9 @@ export function layoutRoute(count: number, mode: BoardMode): Layout {
   };
 }
 
-/** Catmull-Rom → Bezier. נותן מסלול מתפתל ולא שבור. */
-export function smoothPath(pts: Pt[]): string {
-  if (pts.length === 0) return '';
-  if (pts.length === 1) return `M ${r(pts[0].x)} ${r(pts[0].y)}`;
-  let d = `M ${r(pts[0].x)} ${r(pts[0].y)}`;
+/** Catmull-Rom → Bezier: מקטע אחד לכל זוג נקודות עוקבות */
+function segments(pts: Pt[]): string[] {
+  const out: string[] = [];
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i - 1] ?? pts[i];
     const p1 = pts[i];
@@ -70,9 +68,26 @@ export function smoothPath(pts: Pt[]): string {
     const p3 = pts[i + 2] ?? p2;
     const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
     const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
-    d += ` C ${r(c1.x)} ${r(c1.y)}, ${r(c2.x)} ${r(c2.y)}, ${r(p2.x)} ${r(p2.y)}`;
+    out.push(` C ${r(c1.x)} ${r(c1.y)}, ${r(c2.x)} ${r(c2.y)}, ${r(p2.x)} ${r(p2.y)}`);
   }
-  return d;
+  return out;
+}
+
+/** Catmull-Rom → Bezier. נותן מסלול מתפתל ולא שבור. */
+export function smoothPath(pts: Pt[]): string {
+  if (pts.length === 0) return '';
+  return `M ${r(pts[0].x)} ${r(pts[0].y)}` + segments(pts).join('');
+}
+
+/**
+ * הקטע של המסלול מנקודה from עד נקודה to, באותן עקומות בדיוק כמו המסלול המלא.
+ * כך הקו "המדויו" שמאחורי הכלי מונח בדיוק על קו העיפרון.
+ */
+export function pathBetween(pts: Pt[], from: number, to: number): string {
+  const a = Math.max(0, Math.min(from, pts.length - 1));
+  const b = Math.max(a, Math.min(to, pts.length - 1));
+  if (!pts.length) return '';
+  return `M ${r(pts[a].x)} ${r(pts[a].y)}` + segments(pts).slice(a, b).join('');
 }
 
 const r = (v: number) => Math.round(v * 10) / 10;

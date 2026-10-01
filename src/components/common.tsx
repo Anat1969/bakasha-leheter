@@ -72,7 +72,7 @@ export function EffectList({ effects }: { effects?: Effects }) {
   return (
     <div className="effects" aria-label="השפעות">
       {items.map((k) => (
-        <span key={k}>
+        <span key={k} className={(effects[k]! > 0) === (k !== 'months') ? 'good' : 'bad'}>
           {EFFECT_LABEL[k]} {effects[k]! > 0 ? '+' : '−'}
           {Math.abs(effects[k]!)}
         </span>

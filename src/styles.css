@@ -1,17 +1,19 @@
 /* ============================================================
    בקשה להיתר — מערכת עיצוב
-   עולם החומר: טופס עירוני, חותמת דיו, תיק בקשה.
+   עולם החומר: גיליון שרטוט של אדריכל, טופס עירוני, חותמת דיו.
+   בהיר = נייר שרטוט חם. כהה = שרטוט כחול (blueprint).
    ללא אייקונים. כל הצבעים דרך טוקנים, בהיר וכהה.
    ============================================================ */
 
 :root {
-  --paper: #f3f4ef;
-  --surface: #ffffff;
-  --surface-2: #e9ece5;
+  --paper: #f1eee6;
+  --surface: #fffdf8;
+  --surface-2: #ece9df;
   --ink: #1b2629;
-  --muted: #5a686c;
-  --line: #d3d8d0;
+  --muted: #56646a;
+  --line: #d6d1c3;
   --stamp: #1d5a8c; /* דיו חותמת — צבע המותג */
+  --stamp-deep: #123d61;
   --stamp-soft: #dde8f2;
   --approve: #2d7550; /* אושר */
   --approve-soft: #dcefe3;
@@ -29,8 +31,23 @@
   --tracing: #f6f3e7;
   --tracing-ink: #8a8468;
   --gold: #c99a2e;
-  --board-bg: #efe7d3;
+  --board-bg: #f4eedf;
   --track: #c2b48d;
+
+  /* גיליון השרטוט */
+  --grid: #e9e1cc;
+  --grid-major: #ddd1b2;
+  --plan-line: #6b624d; /* קווי השרטוט: חוף, גושים, חץ צפון */
+  --road: #fbf8f0;
+  --road-edge: #bcae8a;
+  --spot: #1b2629; /* הזרקור שמחשיך את הלוח סביב תחנה */
+  --btn-edge: #1b2629;
+  --sheet-under: #e6e1d3;
+
+  /* גרעין נייר: רעש עדין בשקיפות נמוכה */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* דיו לא אחיד של חותמת: מסכה מנוקבת */
+  --ink-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
 
   --font-display: 'Suez One', 'Frank Ruhl Libre', 'David', serif;
   --font-body: 'Assistant', 'Rubik', 'Arial Hebrew', Arial, sans-serif;
@@ -50,19 +67,20 @@
   --t-responsibility: 600ms;
   --t-permit: 900ms;
   --t-reduced: 150ms;
-  --shadow: 0 1px 0 rgba(27, 38, 41, 0.06), 0 6px 18px -10px rgba(27, 38, 41, 0.25);
+  --shadow: 0 1px 0 rgba(27, 38, 41, 0.06), 0 10px 24px -14px rgba(27, 38, 41, 0.35);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --paper: #101618;
-    --surface: #172023;
-    --surface-2: #1e292c;
+    --paper: #0b151c;
+    --surface: #122029;
+    --surface-2: #192a35;
     --ink: #e3e9e7;
     --muted: #97a6a9;
-    --line: #2a3639;
+    --line: #2a3d48;
     --stamp: #82b4e2;
+    --stamp-deep: #3f74a3;
     --stamp-soft: #1b3346;
     --approve: #6cc095;
     --approve-soft: #16362a;
@@ -72,26 +90,35 @@
     --danger-soft: #3d1f1b;
     --focus: #82b4e2;
     --sea: #3f92a5;
-    --sand: #3a3627;
+    --sand: #2c4a63;
     --brick: #c9674b;
     --leaf: #5f9f5a;
-    --tracing: #2a2f28;
-    --tracing-ink: #9a9478;
+    --tracing: #1d2b33;
+    --tracing-ink: #9fb2bf;
     --gold: #d7a93f;
-    --board-bg: #18211f;
-    --track: #3b4440;
-    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
+    --board-bg: #0f2a44;
+    --track: #3b5d80;
+    --grid: #16334f;
+    --grid-major: #1e4366;
+    --plan-line: #9cc3e6;
+    --road: #133352;
+    --road-edge: #5e8db8;
+    --spot: #02070c;
+    --btn-edge: #02070c;
+    --sheet-under: #0e1b23;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 24px -12px rgba(0, 0, 0, 0.8);
     color-scheme: dark;
   }
 }
 :root[data-theme='dark'] {
-  --paper: #101618;
-  --surface: #172023;
-  --surface-2: #1e292c;
+  --paper: #0b151c;
+  --surface: #122029;
+  --surface-2: #192a35;
   --ink: #e3e9e7;
   --muted: #97a6a9;
-  --line: #2a3639;
+  --line: #2a3d48;
   --stamp: #82b4e2;
+  --stamp-deep: #3f74a3;
   --stamp-soft: #1b3346;
   --approve: #6cc095;
   --approve-soft: #16362a;
@@ -101,22 +128,30 @@
   --danger-soft: #3d1f1b;
   --focus: #82b4e2;
   --sea: #3f92a5;
-  --sand: #3a3627;
+  --sand: #2c4a63;
   --brick: #c9674b;
   --leaf: #5f9f5a;
-  --tracing: #2a2f28;
-  --tracing-ink: #9a9478;
+  --tracing: #1d2b33;
+  --tracing-ink: #9fb2bf;
   --gold: #d7a93f;
-  --board-bg: #18211f;
-  --track: #3b4440;
-  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 20px -12px rgba(0, 0, 0, 0.7);
+  --board-bg: #0f2a44;
+  --track: #3b5d80;
+  --grid: #16334f;
+  --grid-major: #1e4366;
+  --plan-line: #9cc3e6;
+  --road: #133352;
+  --road-edge: #5e8db8;
+  --spot: #02070c;
+  --btn-edge: #02070c;
+  --sheet-under: #0e1b23;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 24px -12px rgba(0, 0, 0, 0.8);
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  background: var(--paper);
+  background: var(--grain), var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 17px;
@@ -128,12 +163,12 @@ button, input, select { font: inherit; color: inherit; }
 a { color: var(--stamp); }
 
 .app {
-  max-width: 1120px;
+  max-width: 1340px;
   margin: 0 auto;
   padding-inline: 16px;
-  padding-block: 20px 48px;
+  padding-block: 20px 56px;
   display: grid;
-  gap: 20px;
+  gap: 22px;
 }
 
 /* ---------- כותרת טופס ---------- */
@@ -143,55 +178,68 @@ a { color: var(--stamp); }
   align-items: baseline;
   justify-content: space-between;
   gap: 8px 20px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 3px double var(--ink);
   padding-bottom: 8px;
 }
 .masthead .brand {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1.1;
   background: none;
   border: 0;
   padding: 0;
   cursor: pointer;
   min-height: 44px;
+  letter-spacing: 0.01em;
 }
 .masthead nav { display: flex; gap: 6px; flex-wrap: wrap; }
-.file-no { font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--muted); letter-spacing: 0.04em; }
+.file-no { font-size: 0.82rem; font-variant-numeric: tabular-nums; color: var(--muted); letter-spacing: 0.06em; border: 1px solid var(--line); padding: 1px 8px; border-radius: 3px; }
 
 /* ---------- טיפוגרפיה ---------- */
 h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.2; margin: 0; text-wrap: balance; }
-h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); }
-h2 { font-size: 1.6rem; }
+h1 { font-size: clamp(2.6rem, 7.5vw, 4.8rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.65rem; }
 h3 { font-size: 1.2rem; }
 p { margin: 0; max-width: 65ch; }
-.lead { font-size: 1.15rem; color: var(--muted); }
-.eyebrow { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.lead { font-size: 1.12rem; color: var(--muted); }
+.eyebrow { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); }
 .mono, .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .stack { display: grid; gap: 12px; }
-.stack-lg { display: grid; gap: 20px; }
+.stack-lg { display: grid; gap: 22px; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
-/* ---------- כפתורים ---------- */
+/* ---------- כפתורים: מקש פיזי עם עובי, שנלחץ פנימה ---------- */
 .btn {
   border: 1.5px solid var(--ink);
   background: var(--surface);
-  border-radius: var(--r-sm);
+  border-radius: 5px;
   padding: 10px 18px;
   cursor: pointer;
-  font-weight: 600;
-  transition: transform 0.08s ease, background 0.15s ease;
+  font-weight: 700;
+  box-shadow: 0 3px 0 var(--btn-edge);
+  transition: transform 90ms ease, box-shadow 90ms ease, background 150ms ease;
   /* משטח מגע 44×44 — DESIGN.md סעיף 10 */
   min-height: 44px;
   min-width: 44px;
 }
 .btn:hover { background: var(--surface-2); }
-.btn:active { transform: translateY(1px); }
-.btn.primary { background: var(--stamp); border-color: var(--stamp); color: var(--surface); }
-.btn.primary:hover { filter: brightness(1.08); }
-.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 6px 10px; min-height: 44px; }
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--btn-edge); }
+.btn.primary { background: var(--stamp); border-color: var(--btn-edge); color: var(--surface); }
+.btn.primary:hover { background: var(--stamp-deep); color: var(--surface); }
+.btn.big {
+  width: 100%;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  padding: 14px 22px;
+  box-shadow: 0 4px 0 var(--btn-edge);
+}
+.btn.big:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-edge); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 6px 10px; min-height: 44px; box-shadow: none; font-weight: 600; }
 .btn.ghost:hover { color: var(--ink); background: var(--surface-2); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.ghost[aria-pressed='true'] { color: var(--stamp); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 /* ---------- משטחים ---------- */
 .sheet {
@@ -279,98 +327,6 @@ p { margin: 0; max-width: 65ch; }
 .mark.ok { color: var(--approve); border: 1px solid var(--approve); }
 .mark.no { color: var(--danger); border: 1px solid var(--danger); }
 
-/* ---------- לוח ---------- */
-.board { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; align-items: start; }
-@media (max-width: 860px) { .board { grid-template-columns: 1fr; } .board .panel { order: -1; } }
-
-.resources {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  border: 1.5px solid var(--ink);
-  border-radius: var(--r-sm);
-  background: var(--surface);
-}
-.resources > div { padding: 8px 10px; border-inline-start: 1px solid var(--line); display: grid; }
-.resources > div:first-child { border-inline-start: 0; }
-.resources .k { font-size: 0.75rem; color: var(--muted); font-weight: 700; }
-.resources .v { font-family: var(--font-mono); font-size: 1.25rem; font-variant-numeric: tabular-nums; line-height: 1.3; }
-@media (max-width: 480px) {
-  .resources { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .resources > div:nth-child(4) { border-inline-start: 0; }
-  .resources > div:nth-child(n + 4) { border-top: 1px solid var(--line); }
-}
-
-.players { display: flex; flex-wrap: wrap; gap: 6px; }
-.player-tag { font-size: 0.85rem; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
-.player-tag.active { border-color: var(--stamp); color: var(--stamp); font-weight: 700; }
-.player-tag.done { border-color: var(--approve); color: var(--approve); }
-
-/* מסלול: רשימת תחנות כמו גיליון דרישות */
-.route { list-style: none; margin: 0; padding: 0; display: grid; }
-.route li { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 10px; align-items: center; padding: 8px 4px; border-bottom: 1px solid var(--line); }
-.route li .idx { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; }
-.route li .t { font-weight: 600; }
-.route li .sub { font-size: 0.82rem; color: var(--muted); display: block; font-weight: 400; }
-.route li.here { background: var(--stamp-soft); border-radius: var(--r-sm); }
-.route li.passed .t { color: var(--muted); }
-.route .ticks { display: flex; gap: 3px; }
-.route .tick { width: 8px; height: 8px; border-radius: 2px; background: var(--line); }
-.route .tick.here { background: var(--stamp); }
-
-.stamp {
-  margin-inline-end: 6px;
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  color: var(--approve);
-  border: 2px solid var(--approve);
-  border-radius: 4px;
-  padding: 0 8px;
-  transform: rotate(-6deg);
-  display: inline-block;
-  line-height: 1.5;
-}
-.stamp.big { font-size: 1.6rem; padding: 2px 14px; border-width: 3px; }
-
-/* פאנל פעולה */
-.panel { display: grid; gap: 16px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
-@media (max-width: 860px) { .panel { position: static; } }
-.die {
-  font-family: var(--font-mono);
-  font-size: 2rem;
-  width: 3.2rem;
-  height: 3.2rem;
-  display: grid;
-  place-items: center;
-  border: 2px solid var(--ink);
-  border-radius: var(--r-sm);
-  background: var(--surface);
-}
-.options { display: grid; gap: 8px; }
-.option {
-  text-align: right;
-  padding: 12px 14px;
-  border: 1.5px solid var(--line);
-  border-radius: var(--r-sm);
-  background: var(--surface);
-  cursor: pointer;
-  line-height: 1.45;
-  text-align: start;
-  min-height: 44px;
-}
-.option:hover { border-color: var(--ink); }
-.why { border-inline-start: 4px solid var(--stamp); padding: 10px 14px; background: var(--surface-2); border-radius: var(--r-sm); display: grid; gap: 4px; }
-.why .eyebrow { color: var(--stamp); }
-.result-ok { color: var(--approve); font-weight: 700; }
-.result-no { color: var(--danger); font-weight: 700; }
-.note { font-size: 0.92rem; padding: 8px 12px; border-radius: var(--r-sm); background: var(--warn-soft); color: var(--ink); }
-.source { font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.effects { display: flex; flex-wrap: wrap; gap: 6px; }
-.effects span { font-family: var(--font-mono); font-size: 0.82rem; padding: 1px 8px; border-radius: 4px; background: var(--surface-2); }
-.card-face { border: 1.5px solid var(--ink); border-radius: var(--r-md); padding: 18px; display: grid; gap: 10px; background: var(--surface); }
-.deck-name { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
-
-.log { font-size: 0.85rem; color: var(--muted); max-height: 9rem; overflow-y: auto; margin: 0; padding-inline-start: 18px; }
-
 /* סוף */
 .ranking { display: grid; gap: 12px; }
 .score-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
@@ -391,21 +347,6 @@ p { margin: 0; max-width: 65ch; }
 
 .confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: var(--r-sm); background: var(--warn-soft); }
 
-/* prefers-reduced-motion: לא מבטלים הכול, אלא מקצרים ל-fade אחיד */
-@media (prefers-reduced-motion: reduce) {
-  * { transition-duration: var(--t-reduced) !important; }
-  .stamp.animate,
-  .stamp.reject,
-  .card-face.draw,
-  .card-face.gold,
-  .certificate,
-  .gate-open { animation: fade-in var(--t-reduced) ease-out both !important; }
-  .die.rolling { animation: none !important; }
-  .pawn { transition: none !important; }
-}
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes press { from { transform: scale(1.4) rotate(-14deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
-
 .disclaimer {
   color: var(--muted);
   font-size: 0.95rem;
@@ -415,142 +356,394 @@ p { margin: 0; max-width: 65ch; }
 }
 
 /* ============================================================
-   לוח המשחק (SVG) — DESIGN.md סעיף 4
+   מסך המשחק — גיליון שרטוט, דלפק, יומן וציר זמן
    ============================================================ */
-.boardmap {
+.game { display: grid; gap: 14px; }
+.game-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(320px, 1fr);
+  grid-template-areas: 'main panel' 'main journal';
+  grid-template-rows: auto 1fr;
+  gap: 20px 26px;
+  align-items: start;
+}
+.board-main { grid-area: main; display: grid; gap: 14px; min-width: 0; }
+.panel { grid-area: panel; display: grid; gap: 16px; min-width: 0; }
+.journal-wrap { grid-area: journal; min-width: 0; }
+@media (max-width: 860px) {
+  .board { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'panel' 'main' 'journal'; }
+}
+
+.board-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.view-switch { display: flex; gap: 0; }
+.view-switch .btn.tab { border-radius: 0; box-shadow: none; margin-inline-start: -1.5px; font-weight: 600; padding: 8px 14px; }
+.view-switch .btn.tab:first-child { border-start-start-radius: 5px; border-end-start-radius: 5px; margin-inline-start: 0; }
+.view-switch .btn.tab:last-child { border-start-end-radius: 5px; border-end-end-radius: 5px; }
+.view-switch .btn.tab[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+.progress-count { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.pc-bar { width: 110px; height: 6px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.pc-bar span { display: block; height: 100%; background: var(--approve); transition: width 600ms cubic-bezier(0.3, 0.9, 0.3, 1); }
+
+.players { display: flex; flex-wrap: wrap; gap: 6px; }
+.player-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; padding: 3px 12px 3px 10px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); }
+.player-tag .pt-disc { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 2px 0 var(--btn-edge); }
+.player-tag.active { border-color: var(--ink); font-weight: 700; }
+.player-tag.done { border-color: var(--approve); color: var(--approve); }
+
+/* ---------- הגיליון: ערימת דפים, ובתחתיתה טבלת השרטוט ---------- */
+.sheetframe {
+  position: relative;
   border: 1.5px solid var(--ink);
-  border-radius: var(--r-md);
+  border-radius: 4px;
   background: var(--board-bg);
-  overflow: auto;
+  overflow: hidden;
+  box-shadow:
+    5px 5px 0 -1px var(--sheet-under),
+    5px 5px 0 0 var(--line),
+    10px 10px 0 -1px var(--sheet-under),
+    10px 10px 0 0 var(--line),
+    var(--shadow);
+}
+.sheet-list { padding: 20px; background: var(--surface); max-height: 72vh; overflow: auto; }
+
+/* טבלת השרטוט */
+.titleblock {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr));
+  border-top: 1.5px solid var(--ink);
+  background: var(--surface);
+}
+.tb-id, .tb-cell { position: relative; padding: 8px 12px 9px; border-inline-start: 1px solid var(--line); display: grid; align-content: start; gap: 1px; }
+.tb-id { border-inline-start: 0; }
+.tb-k { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; color: var(--muted); }
+.tb-name { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.2; }
+.tb-meta { font-size: 0.78rem; color: var(--muted); }
+.tb-v { position: relative; font-family: var(--font-mono); font-size: 1.45rem; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.tb-meter { height: 3px; background: var(--surface-2); border-radius: 2px; overflow: hidden; margin-top: 3px; }
+.tb-meter span { display: block; height: 100%; background: var(--stamp); transition: width 600ms ease; }
+.tb-tabu { font-size: 0.72rem; font-weight: 700; color: var(--muted); }
+.tb-tabu.low { color: var(--danger); }
+.tb-cell.changed.good { animation: flash-good 1100ms ease-out; }
+.tb-cell.changed.bad { animation: flash-bad 1100ms ease-out; }
+@keyframes flash-good { 0% { background: var(--approve-soft); } 100% { background: transparent; } }
+@keyframes flash-bad { 0% { background: var(--danger-soft); } 100% { background: transparent; } }
+.tb-delta {
+  position: absolute;
+  inset-inline-start: calc(100% + 6px);
+  top: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  pointer-events: none;
+  animation: rise 1400ms ease-out both;
+}
+.tb-delta.good { color: var(--approve); }
+.tb-delta.bad { color: var(--danger); }
+@keyframes rise {
+  0% { opacity: 0; transform: translateY(8px); }
+  15% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
+@media (max-width: 620px) {
+  .titleblock { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tb-id { grid-column: 1 / -1; border-bottom: 1px solid var(--line); grid-template-columns: auto 1fr; align-items: baseline; column-gap: 10px; }
+  .tb-id .tb-meta { grid-column: 1 / -1; }
+  .tb-cell:nth-child(5) { border-inline-start: 0; }
+  .tb-cell:nth-child(n + 5) { border-top: 1px solid var(--line); }
+}
+
+/* מסלול: רשימת תחנות כמו גיליון דרישות */
+.route { list-style: none; margin: 0; padding: 0; display: grid; }
+.route li { display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 10px; align-items: center; padding: 9px 4px; border-bottom: 1px solid var(--line); }
+.route li .idx { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; }
+.route li .t { font-weight: 600; }
+.route li .sub { font-size: 0.82rem; color: var(--muted); display: block; font-weight: 400; }
+.route li.here { background: var(--stamp-soft); border-radius: var(--r-sm); }
+.route li.passed .t { color: var(--muted); }
+.route .ticks { display: flex; gap: 3px; margin-top: 3px; }
+.route .tick { width: 7px; height: 10px; border-radius: 1.5px; background: var(--deck, var(--line)); opacity: 0.75; }
+.route .tick.here { outline: 2px solid var(--ink); opacity: 1; }
+
+.stamp {
+  margin-inline-end: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--approve);
+  border: 2px solid var(--approve);
+  border-radius: 4px;
+  padding: 0 8px;
+  transform: rotate(-6deg);
+  display: inline-block;
+  line-height: 1.5;
+}
+.stamp.big {
+  font-size: 1.9rem;
+  padding: 2px 16px;
+  border-width: 3.5px;
+  border-style: double;
+  border-width: 5px;
+  letter-spacing: 0.04em;
+  -webkit-mask-image: var(--ink-mask);
+  mask-image: var(--ink-mask);
+  -webkit-mask-size: 120px 60px;
+  mask-size: 120px 60px;
+}
+
+.why { border-inline-start: 4px solid var(--stamp); padding: 10px 14px; background: var(--surface-2); border-radius: var(--r-sm); display: grid; gap: 4px; }
+.why .eyebrow { color: var(--stamp); }
+.result-ok { color: var(--approve); font-weight: 700; font-size: 1.1rem; display: grid; }
+.result-no { color: var(--danger); font-weight: 700; }
+.note { font-size: 0.92rem; padding: 8px 12px; border-radius: var(--r-sm); background: var(--warn-soft); color: var(--ink); border-inline-start: 3px solid var(--warn); }
+.source { font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.effects { display: flex; flex-wrap: wrap; gap: 6px; }
+.effects span { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 0.8rem; padding: 1px 8px; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--line); }
+.effects span.good { color: var(--approve); border-color: color-mix(in srgb, var(--approve) 40%, transparent); background: var(--approve-soft); }
+.effects span.bad { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); background: var(--danger-soft); }
+.deck-name { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; color: var(--muted); }
+.log { font-size: 0.85rem; color: var(--muted); max-height: 12rem; overflow-y: auto; margin: 0; padding-inline-start: 18px; }
+
+/* ---------- מגש הקובייה ---------- */
+.roll-tray {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
   box-shadow: var(--shadow);
 }
-.boardmap.tall { max-height: 68vh; }
-.boardmap.wide { max-height: 72vh; }
-.boardmap-svg { display: block; width: 100%; height: auto; }
-
-/* נוף: ים, חול, רבעים */
-.scenery .land { fill: var(--board-bg); }
-.scenery .sea { fill: var(--sea); opacity: 0.5; }
-.scenery .sand { fill: var(--sand); opacity: 0.75; }
-.scenery .wave { fill: none; stroke: var(--surface); stroke-width: 1.4; opacity: 0.45; }
-.scenery .district { fill: var(--ink); opacity: 0.06; }
-
-/* המסלול */
-.track-shadow { fill: none; stroke: var(--ink); stroke-width: 26; opacity: 0.07; stroke-linecap: round; }
-.track {
-  fill: none;
-  stroke: var(--track);
-  stroke-width: 18;
-  stroke-linecap: round;
-  stroke-dasharray: 1 26;
-  stroke-linejoin: round;
-}
-
-/* משבצות כרטיס */
-.sq-card { stroke: var(--surface); stroke-width: 2; }
-.sq-card.here { stroke: var(--ink); stroke-width: 2.5; }
-
-/* תחנות */
-.station-base { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
-.station.here .station-base { stroke-width: 3; fill: var(--stamp-soft); }
-.station.passed .station-base { fill: var(--approve-soft); }
-.station .glyph { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
-.station .glyph .dash { stroke-dasharray: 3 2; }
-.station.cat-must .glyph { stroke: var(--stamp); }
-.station.cat-need .glyph { stroke: var(--approve); }
-.station.cat-want .glyph { stroke: var(--warn); }
-.station .glyph.seal { stroke: var(--gold); stroke-width: 2.2; }
-.station.passed .glyph { opacity: 0.45; }
-.station-stamp circle { fill: var(--approve); }
-.station-stamp path { fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.station-label {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 600;
-  fill: var(--ink);
-  paint-order: stroke;
-  stroke: var(--board-bg);
-  stroke-width: 3.5;
-  stroke-linejoin: round;
-}
-.station.passed .station-label { fill: var(--muted); }
-
-/* עצים — מדד העיר על הלוח */
-.tree .trunk { fill: var(--ink); opacity: 0.55; }
-.tree .canopy { fill: var(--leaf); opacity: 0.8; }
-.boardmap.dry .scenery .district { opacity: 0.03; }
-.boardmap.dry .scenery .sea,
-.boardmap.dry .scenery .sand { opacity: 0.25; }
-.boardmap.dry .track { stroke: var(--line); }
-
-/* כלי המשחק */
-.pawn-shadow { fill: var(--ink); opacity: 0.2; }
-.pawn-disc { opacity: 0.55; }
-.pawn-top { stroke: var(--surface); stroke-width: 2; }
-.pawn-letter {
-  font-family: var(--font-display);
-  font-size: 14px;
-  fill: var(--surface);
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-.pawn { transition: transform 180ms linear; }
-.pawn.current .pawn-top { stroke: var(--ink); stroke-width: 2.5; }
-
-/* מתג תצוגה: לוח / גיליון */
-.view-switch { display: flex; gap: 6px; }
-.view-switch .btn[aria-pressed='true'] { background: var(--stamp); color: var(--paper); border-color: var(--stamp); }
-
-@media (prefers-reduced-motion: reduce) {
-  .pawn { transition: none; }
-}
-
-/* ============================================================
-   רגעי המשחק — DESIGN.md סעיף 5
-   ============================================================ */
-
-/* הטלת קובייה: תלת-ממד מזויף, מתגלגלת ונעצרת */
-.die-3d {
-  width: 3.4rem;
-  height: 3.4rem;
-  border: 2px solid var(--ink);
+.roll-die {
+  display: grid;
+  place-items: center;
+  min-height: 150px;
   border-radius: 8px;
-  background: var(--surface);
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 7px;
-  box-shadow: inset -3px -3px 0 rgba(27, 38, 41, 0.08);
+  background:
+    radial-gradient(ellipse at 50% 40%, var(--surface) 0%, transparent 70%),
+    var(--surface-2);
+  box-shadow: inset 0 2px 8px -2px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+}
+.roll-hint { font-size: 0.95rem; color: var(--muted); }
+.stage-out { display: grid; gap: 4px; animation: fade-up var(--t-gate) ease-out both; animation-delay: var(--t-die); }
+.stage-face { font-family: var(--font-display); font-size: 1.5rem; }
+.stage-path { color: var(--muted); }
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ---------- קובייה בתלת-ממד ---------- */
+.die-wrap { display: inline-flex; align-items: center; gap: 12px; }
+.die-name { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
+.die-stage { --s: 78px; position: relative; display: inline-block; width: var(--s); height: var(--s); perspective: 560px; flex: 0 0 auto; }
+.die-wrap.small .die-stage { --s: 38px; perspective: 300px; }
+.die-cube {
+  position: absolute;
+  inset: 0;
   transform-style: preserve-3d;
-  flex: 0 0 auto;
+  transform: rotateX(-20deg) rotateY(26deg) rotateX(var(--rx)) rotateY(var(--ry));
 }
-.die-3d .pip { width: 8px; height: 8px; border-radius: 50%; background: var(--face); }
-.die-3d.rolling { animation: die-roll var(--t-die) cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+.die-cube.idle { animation: die-idle 7000ms ease-in-out infinite; }
+.die-cube.rolling { animation: die-roll var(--t-die) cubic-bezier(0.22, 0.75, 0.3, 1) both; }
 @keyframes die-roll {
-  0% { transform: rotateX(0) rotateZ(0) scale(0.8); }
-  30% { transform: rotateX(140deg) rotateZ(90deg) scale(1.1); }
-  60% { transform: rotateX(300deg) rotateZ(200deg) scale(0.95); }
-  80% { transform: rotateX(350deg) rotateZ(350deg) scale(1.06); }
-  100% { transform: rotateX(360deg) rotateZ(360deg) scale(1); }
+  0% { transform: translateY(-46px) rotateX(-20deg) rotateY(26deg) rotateX(calc(var(--rx) + 720deg)) rotateY(calc(var(--ry) - 540deg)); }
+  55% { transform: translateY(4px) rotateX(-20deg) rotateY(26deg) rotateX(calc(var(--rx) + 60deg)) rotateY(calc(var(--ry) - 40deg)); }
+  78% { transform: translateY(-7px) rotateX(-20deg) rotateY(26deg) rotateX(calc(var(--rx) + 8deg)) rotateY(calc(var(--ry) - 6deg)); }
+  100% { transform: translateY(0) rotateX(-20deg) rotateY(26deg) rotateX(var(--rx)) rotateY(var(--ry)); }
+}
+@keyframes die-idle {
+  0%, 100% { transform: rotateX(-20deg) rotateY(26deg); }
+  50% { transform: rotateX(-26deg) rotateY(40deg); }
+}
+.die-face {
+  --face: var(--line);
+  position: absolute;
+  inset: 0;
+  transform: var(--place) translateZ(calc(var(--s) / 2));
+  backface-visibility: hidden;
+  border-radius: 16%;
+  border: 1.5px solid var(--face);
+  background: color-mix(in srgb, var(--face) 13%, var(--surface));
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 -6px 12px -6px color-mix(in srgb, var(--face) 50%, transparent);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+}
+.die-face .pips { display: flex; flex-wrap: wrap; justify-content: center; gap: calc(var(--s) * 0.05); width: 62%; }
+.die-face .pip { width: calc(var(--s) * 0.12); height: calc(var(--s) * 0.12); border-radius: 50%; background: var(--face); box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.3); }
+.die-face .face-word { font-size: calc(var(--s) * 0.15); font-weight: 700; color: var(--ink); line-height: 1; }
+.die-wrap.small .face-word { display: none; }
+.die-face.face-knowledge { --face: var(--sea); }
+.die-face.face-event { --face: var(--brick); }
+.die-face.face-neighborhood { --face: var(--leaf); }
+.die-face.face-cityArchitect { --face: var(--tracing-ink); background: var(--tracing); }
+.die-face.face-responsibility { --face: var(--gold); }
+.die-face.face-station { --face: var(--stamp); }
+.die-shadow {
+  position: absolute;
+  inset-inline: 10%;
+  bottom: calc(var(--s) * -0.24);
+  height: calc(var(--s) * 0.14);
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 0.18;
+  filter: blur(4px);
+}
+.die-shadow.rolling { animation: die-shadow var(--t-die) cubic-bezier(0.22, 0.75, 0.3, 1) both; }
+@keyframes die-shadow {
+  0% { transform: scale(0.45); opacity: 0.05; }
+  55% { transform: scale(1.05); opacity: 0.2; }
+  78% { transform: scale(0.85); opacity: 0.14; }
+  100% { transform: scale(1); opacity: 0.18; }
 }
 
-/* עצירה בשער: התחנה נפתחת כחלון, הלוח מתעמעם */
-.gate-open { animation: gate-open var(--t-gate) ease-out both; transform-origin: top center; }
-@keyframes gate-open {
-  from { opacity: 0; transform: perspective(700px) rotateX(-12deg) scaleY(0.88); }
-  to { opacity: 1; transform: perspective(700px) rotateX(0) scaleY(1); }
+/* ---------- כרטיס: גב, היפוך, פנים ---------- */
+.card-stage { gap: 12px; }
+.card-cause { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--muted); }
+.deck-event { --deck: var(--brick); }
+.deck-knowledge { --deck: var(--sea); }
+.deck-neighborhood { --deck: var(--leaf); }
+.deck-responsibility { --deck: var(--gold); }
+.deck-cityArchitect { --deck: var(--tracing-ink); }
+.card3d { perspective: 1200px; }
+.card3d-inner { display: grid; transform-style: preserve-3d; animation: card-flip var(--t-card) cubic-bezier(0.3, 0.7, 0.3, 1) both; }
+@keyframes card-flip {
+  0% { transform: translateY(-34px) rotateY(180deg) rotateZ(-5deg) scale(0.9); }
+  60% { transform: translateY(0) rotateY(-10deg) rotateZ(1deg) scale(1.02); }
+  100% { transform: none; }
 }
-.board.gated .boardmap { filter: saturate(0.45) brightness(0.96); opacity: 0.65; transition: opacity var(--t-gate) ease-out, filter var(--t-gate) ease-out; }
-.boardmap { transition: opacity var(--t-gate) ease-out, filter var(--t-gate) ease-out; }
+.card-back, .card-front { grid-area: 1 / 1; backface-visibility: hidden; border-radius: 12px; }
+.card-back {
+  transform: rotateY(180deg);
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border: 1.5px solid var(--ink);
+  background-color: var(--deck);
+  min-height: 200px;
+}
+.deck-event .card-back { background-image: repeating-linear-gradient(-45deg, transparent 0 8px, color-mix(in srgb, var(--ink) 18%, transparent) 8px 16px); }
+.deck-knowledge .card-back {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--surface) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--surface) 30%, transparent) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.deck-neighborhood .card-back {
+  background-image: radial-gradient(ellipse 6px 10px at 50% 50%, color-mix(in srgb, var(--surface) 35%, transparent) 98%, transparent);
+  background-size: 22px 22px;
+}
+.deck-cityArchitect .card-back {
+  background-color: var(--tracing);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 15px, color-mix(in srgb, var(--tracing-ink) 35%, transparent) 15px 16px),
+    linear-gradient(32deg, transparent 49.6%, var(--tracing-ink) 49.6% 50.2%, transparent 50.2%);
+}
+.deck-responsibility .card-back { background-image: repeating-radial-gradient(circle at 50% 50%, transparent 0 9px, color-mix(in srgb, var(--ink) 16%, transparent) 9px 10px); }
+.card-back-frame { border: 3px double var(--surface); border-radius: 8px; padding: 18px 22px; background: color-mix(in srgb, var(--deck) 85%, var(--ink)); }
+.deck-cityArchitect .card-back-frame { border-color: var(--tracing-ink); background: var(--tracing); }
+.card-back-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--surface); }
+.deck-cityArchitect .card-back-title { color: var(--ink); }
+.card-front {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 22px 22px 18px 34px;
+  padding-inline-start: 22px;
+  padding-inline-end: 34px;
+  background: var(--surface);
+  border: 1.5px solid var(--ink);
+  overflow: hidden;
+  min-height: 200px;
+}
+.card-front::before { content: ''; position: absolute; inset-inline: 0; top: 0; height: 7px; background: var(--deck); }
+/* קצה מחורר בצד אחד */
+.card-front .perf {
+  position: absolute;
+  inset-block: 10px;
+  inset-inline-end: 0;
+  width: 18px;
+  border-inline-start: 1.5px dashed var(--line);
+  background: radial-gradient(circle at 60% 50%, var(--paper) 3.2px, transparent 3.8px) 0 0 / 18px 16px repeat-y;
+}
+.card-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.card-head .deck-name { color: var(--deck); filter: brightness(0.85); }
+.card-no { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+.deck-cityArchitect .card-front {
+  background-color: var(--tracing);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--tracing-ink) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tracing-ink) 14%, transparent) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+.hand-title { font-family: var(--font-hand); font-size: 2.3rem; line-height: 1; color: var(--stamp); }
+.hand-note { font-family: var(--font-hand); font-size: 1.55rem; line-height: 1.2; color: var(--ink); }
+.deck-responsibility .card-front { border: 2.5px solid var(--gold); animation: gold-frame var(--t-responsibility) ease-out both; animation-delay: var(--t-card); }
+@keyframes gold-frame {
+  0% { box-shadow: 0 0 0 0 var(--gold); }
+  50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--gold) 35%, transparent); }
+  100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 55%, transparent); }
+}
 
-/* חותמת "אושר" — נוחתת עם כתם דיו */
-.stamp.animate { animation: press var(--t-approve) ease-out both; }
-.stamp-wrap { position: relative; display: inline-block; }
+/* ---------- תחנה = חלון דלפק ---------- */
+.counter { display: grid; gap: 0; }
+.counter-sign {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 6px 6px 0 0;
+}
+.counter-sign .chip { margin-inline-start: auto; }
+.sign-glyph { width: 46px; height: 46px; flex: 0 0 auto; background: var(--surface); border-radius: 6px; padding: 3px; }
+.counter-sign .sign-text { display: grid; font-family: var(--font-display); font-size: 1.05rem; letter-spacing: 0.02em; line-height: 1.25; }
+.sign-no { font-family: var(--font-body); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; opacity: 0.75; font-variant-numeric: tabular-nums; }
+.counter-window {
+  border: 1.5px solid var(--ink);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  background: var(--surface);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.counter-window .prompt { font-size: 1.05rem; }
+.options { display: grid; gap: 8px; }
+.option {
+  text-align: right;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  cursor: pointer;
+  line-height: 1.45;
+  text-align: start;
+  min-height: 44px;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+.option:hover { border-color: var(--ink); transform: translateY(-2px); box-shadow: 0 4px 0 var(--line); }
+.option:active { transform: translateY(0); box-shadow: none; }
+.option.slip { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; animation: slip-in var(--t-gate) ease-out both; }
+.option.slip .slip-no {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  width: 1.7rem; height: 1.7rem;
+  display: grid; place-items: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+}
+.option.slip:hover .slip-no { background: var(--ink); color: var(--paper); }
+@keyframes slip-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* תוצאה */
+.result { border: 1.5px solid var(--ink); border-radius: 6px; }
+.result-head { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-block: 6px; }
+.stamp.animate { animation: press var(--t-approve) cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.stamp-wrap { position: relative; display: inline-block; color: var(--approve); }
+.stamp-wrap.reject { color: var(--danger); }
 .stamp-wrap .ink {
   position: absolute;
-  inset: -8px -10px;
+  inset: -12px -14px;
   border-radius: 50%;
   background: radial-gradient(closest-side, currentColor 0%, transparent 72%);
   opacity: 0;
@@ -559,51 +752,32 @@ p { margin: 0; max-width: 65ch; }
 }
 @keyframes ink-blot {
   0% { opacity: 0; transform: scale(0.4); }
-  45% { opacity: 0.22; transform: scale(1.06); }
-  100% { opacity: 0.1; transform: scale(1); }
+  45% { opacity: 0.24; transform: scale(1.08); }
+  100% { opacity: 0.08; transform: scale(1); }
 }
-
-/* טעות: חותמת אדומה, והכרטיס רועד קלות */
 .stamp.reject {
   color: var(--danger);
   border-color: var(--danger);
   transform: rotate(5deg);
-  animation: press-reject var(--t-reject) ease-out both;
+  animation: press-reject var(--t-reject) cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
-@keyframes press-reject {
-  from { transform: scale(1.35) rotate(13deg); opacity: 0; }
-  to { transform: scale(1) rotate(5deg); opacity: 1; }
-}
-.shake { animation: shake var(--t-reject) ease-in-out both; }
+@keyframes press { from { transform: scale(1.8) rotate(-16deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
+@keyframes press-reject { from { transform: scale(1.7) rotate(14deg); opacity: 0; } to { transform: scale(1) rotate(5deg); opacity: 1; } }
+.shake { animation: shake var(--t-reject) ease-in-out both; animation-delay: var(--t-reject); }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-5px); }
-  45% { transform: translateX(4px); }
+  20% { transform: translateX(-6px); }
+  45% { transform: translateX(5px); }
   70% { transform: translateX(-2px); }
 }
-
-/* כרטיס: נשלף מהחפיסה ומתהפך */
-.card-face.draw { animation: card-draw var(--t-card) ease-out both; transform-origin: center; backface-visibility: hidden; }
-@keyframes card-draw {
-  0% { opacity: 0; transform: perspective(900px) translateY(-14px) rotateY(88deg) scale(0.94); }
-  55% { opacity: 1; transform: perspective(900px) translateY(0) rotateY(-10deg) scale(1.01); }
-  100% { opacity: 1; transform: perspective(900px) rotateY(0) scale(1); }
-}
-
-/* כרטיס אחריות: מסגרת זהב */
-.card-face.gold { border-color: var(--gold); border-width: 2.5px; animation: gold-frame var(--t-responsibility) ease-out both; }
-@keyframes gold-frame {
-  0% { box-shadow: 0 0 0 0 var(--gold); }
-  50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--gold) 35%, transparent); }
-  100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 55%, transparent); }
-}
-.card-face.gold .deck-name { color: var(--gold); }
 
 /* היתר: התעודה נפרשת, חותמת זהב גדולה */
 .certificate {
   border: 2.5px solid var(--gold);
+  outline: 1px solid var(--gold);
+  outline-offset: -8px;
   border-radius: var(--r-md);
-  padding: 18px;
+  padding: 22px;
   background: var(--surface);
   display: grid;
   gap: 8px;
@@ -623,23 +797,272 @@ p { margin: 0; max-width: 65ch; }
   font-family: var(--font-display);
   font-size: 1.9rem;
   color: var(--gold);
-  border: 3px double var(--gold);
+  border: 4px double var(--gold);
   border-radius: 50%;
-  width: 5.2rem;
-  height: 5.2rem;
+  width: 5.6rem;
+  height: 5.6rem;
   display: grid;
   place-items: center;
   transform: rotate(-7deg);
+  -webkit-mask-image: var(--ink-mask);
+  mask-image: var(--ink-mask);
   animation: press var(--t-approve) ease-out both;
   animation-delay: calc(var(--t-permit) - var(--t-approve));
 }
 .certificate .cert-line { font-size: 0.9rem; color: var(--muted); }
-.die-3d.small { width: 2.8rem; height: 2.8rem; padding: 5px; border-radius: 6px; }
-.die-3d.small .pip { width: 6px; height: 6px; }
 
-/* התאמה למסך: כל הלוח נכנס למסגרת, בלי גלילה פנימית */
+/* ---------- יומן העבודה ---------- */
+.journal {
+  display: grid;
+  gap: 8px;
+  padding: 14px 14px 8px;
+  background: var(--surface);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+}
+.journal-title { font-family: var(--font-display); font-size: 1.1rem; padding-bottom: 6px; border-bottom: 1.5px solid var(--ink); }
+.journal-empty { color: var(--muted); font-size: 0.92rem; padding-block: 6px; }
+.jr-list { list-style: none; margin: 0; padding: 0; position: relative; max-height: 420px; overflow-y: auto; }
+/* החוט שמחבר את האירועים */
+.jr-list::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(2.6rem + 10px + 5px);
+  width: 1.5px;
+  background: var(--line);
+}
+.jr {
+  --kc: var(--muted);
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem 12px 1fr;
+  gap: 10px;
+  padding: 9px 4px;
+  border-bottom: 1px dashed var(--line);
+  border-radius: 4px;
+  transition: background 150ms ease;
+}
+.jr:last-child { border-bottom: 0; }
+.jr.pass.cat-must { --kc: var(--stamp); }
+.jr.pass.cat-need { --kc: var(--approve); }
+.jr.pass.cat-want { --kc: var(--warn); }
+.jr.reject { --kc: var(--danger); }
+.jr.shielded { --kc: var(--sea); }
+.jr.tabuRenewed { --kc: var(--brick); }
+.jr.card { --kc: var(--deck); }
+.jr:hover, .jr.hot, .jr:focus-visible { background: var(--stamp-soft); }
+.jr.newest { animation: jr-in 520ms ease-out both; }
+@keyframes jr-in { from { opacity: 0; transform: translateY(-8px); background: var(--warn-soft); } to { opacity: 1; transform: none; } }
+.jr-month { display: grid; justify-items: center; align-content: start; line-height: 1.05; }
+.jr-m { font-family: var(--font-mono); font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.jr-u { font-size: 0.66rem; color: var(--muted); }
+.jr-dot {
+  position: relative;
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: var(--kc);
+  box-shadow: 0 0 0 3px var(--surface);
+}
+.jr.reject .jr-dot { border-radius: 2px; transform: rotate(45deg); }
+.jr.card .jr-dot { border-radius: 2px; width: 9px; height: 13px; margin-inline: 1.5px; }
+.jr-body { display: grid; gap: 3px; min-width: 0; }
+.jr-kind { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; color: var(--kc); filter: brightness(0.9); }
+.jr-title { font-weight: 600; line-height: 1.35; }
+.jr-dep {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  padding: 3px 8px;
+  border-inline-start: 2px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 10%, transparent);
+  border-radius: 0 3px 3px 0;
+}
+.jr .effects span { font-size: 0.72rem; padding: 0 6px; }
+
+/* ---------- ציר הזמן (גאנט) ---------- */
+.timeline { margin: 0; border: 1.5px solid var(--ink); border-radius: 6px; background: var(--surface); overflow: hidden; }
+.tl-head { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.tl-title { font-family: var(--font-display); font-size: 1.05rem; }
+.tl-now { margin-inline-start: auto; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 0.85rem; color: var(--stamp); font-weight: 500; }
+.tl-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 0.75rem; color: var(--muted); }
+.tl-legend .lg { display: inline-flex; align-items: center; gap: 5px; }
+.tl-legend .lg::before { content: ''; width: 14px; height: 8px; border-radius: 2px; background: var(--stamp); }
+.tl-legend .lg.reject::before { background: repeating-linear-gradient(45deg, var(--danger) 0 1.5px, var(--danger-soft) 1.5px 4px); border: 1px solid var(--danger); }
+.tl-legend .lg.window::before { background: color-mix(in srgb, var(--gold) 22%, transparent); border-top: 2px solid var(--gold); }
+.tl-legend .lg.card::before { width: 7px; height: 10px; background: var(--brick); }
+.tl-scroll { max-height: 280px; overflow: auto; }
+.tl-svg { display: block; width: 100%; height: auto; }
+.tl-empty { padding: 4px 12px 12px; font-size: 0.88rem; color: var(--muted); }
+.tl-grid { stroke: var(--line); stroke-width: 0.6; }
+.tl-grid.major { stroke-width: 1.2; }
+.tl-tick { font-family: var(--font-mono); font-size: 10px; fill: var(--muted); text-anchor: middle; }
+.tl-window rect { fill: var(--gold); opacity: 0.1; }
+.tl-bracket { fill: none; stroke: var(--gold); stroke-width: 1.6; }
+.tl-link { fill: none; stroke: var(--muted); stroke-width: 0.9; opacity: 0.8; }
+.tl-link.broken { stroke: var(--danger); stroke-dasharray: 3 2; }
+.tl-dep { fill: none; stroke-width: 1.5; stroke-dasharray: 4 3; }
+.tl-dep.ok { stroke: var(--approve); }
+.tl-dep.late { stroke: var(--danger); }
+.tl-arrowhead { fill: var(--muted); }
+.tl-row-bg { fill: transparent; transition: fill 150ms ease; }
+.tl-row:hover .tl-row-bg, .tl-row.hot .tl-row-bg { fill: var(--stamp-soft); }
+.tl-rowno { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 10px; fill: var(--muted); dominant-baseline: middle; }
+.tl-bar, .tl-mile { --bar: var(--muted); fill: var(--bar); transform-box: fill-box; transform-origin: right center; animation: bar-in 500ms cubic-bezier(0.3, 0.9, 0.3, 1) both; }
+.tl-row.cat-must { --bar: var(--stamp); }
+.tl-row.cat-need { --bar: var(--approve); }
+.tl-row.cat-want { --bar: var(--warn); }
+.tl-row .tl-bar.pass, .tl-row .tl-mile.pass { fill: var(--bar); }
+.tl-bar.reject { fill: url(#tl-hatch); stroke: var(--danger); stroke-width: 1; }
+.tl-hatch-bg { fill: var(--danger-soft); }
+.tl-hatch-line { stroke: var(--danger); stroke-width: 1.6; }
+.tl-bar.tabuRenewed, .tl-mile.tabuRenewed { fill: var(--brick); }
+.tl-mile.shielded { fill: var(--sea); }
+.tl-mile.reject { fill: var(--danger); }
+.tl-row.hot .tl-bar, .tl-row.hot .tl-mile { stroke: var(--ink); stroke-width: 1.2; }
+@keyframes bar-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.tl-cardline { stroke: var(--line); stroke-dasharray: 2 3; }
+.tl-card { --deck: var(--brick); }
+.tl-card-chip { fill: var(--deck); stroke: var(--surface); stroke-width: 1; }
+.tl-card-span { fill: var(--deck); opacity: 0.3; }
+.tl-card.hot .tl-card-chip { stroke: var(--ink); stroke-width: 1.5; }
+.tl-today line { stroke: var(--stamp); stroke-width: 1.6; }
+.tl-today circle { fill: var(--stamp); }
+
+/* ============================================================
+   לוח המשחק (SVG) — DESIGN.md סעיף 4: תוכנית מצב של עיר חוף
+   ============================================================ */
+.boardmap { background: var(--board-bg); overflow: auto; }
+.boardmap.tall { max-height: 70vh; }
+.boardmap.wide { max-height: 74vh; }
+.boardmap-svg { display: block; width: 100%; height: auto; }
 .boardmap.fit { max-height: none; overflow: visible; }
-.boardmap.fit .boardmap-svg { max-height: 78vh; width: 100%; height: auto; object-fit: contain; }
+.boardmap.fit .boardmap-svg { max-height: 78vh; width: 100%; height: auto; }
+
+/* נוף */
+.scenery .land { fill: var(--board-bg); }
+.grid-minor { fill: none; stroke: var(--grid); stroke-width: 0.6; }
+.grid-major { fill: none; stroke: var(--grid-major); stroke-width: 1; }
+.scenery .sea { fill: var(--sea); opacity: 0.22; }
+.sea-hatch { stroke: var(--sea); stroke-width: 1; opacity: 0.5; }
+.scenery .sand-fill { fill: var(--sand); opacity: 0.6; }
+.stipple { fill: var(--plan-line); opacity: 0.35; }
+.coastline { fill: none; stroke: var(--plan-line); stroke-width: 1.6; }
+.contour { fill: none; stroke: var(--plan-line); stroke-width: 0.8; opacity: 0.45; }
+.contour.faint { opacity: 0.25; }
+.promenade { fill: none; stroke: var(--plan-line); stroke-width: 1; stroke-dasharray: 6 4; opacity: 0.6; }
+.sea-label { font-family: var(--font-display); font-size: 17px; letter-spacing: 0.45em; fill: var(--sea); opacity: 0.85; text-anchor: middle; }
+.block-lot { fill: none; stroke: var(--plan-line); stroke-width: 0.8; stroke-dasharray: 3 3; opacity: 0.45; }
+.footprint { fill: url(#poche); stroke: var(--plan-line); stroke-width: 1.1; opacity: 0.75; }
+.poche { stroke: var(--plan-line); stroke-width: 0.7; opacity: 0.6; }
+.north circle { fill: var(--surface); stroke: var(--plan-line); stroke-width: 1; }
+.north path { fill: none; stroke: var(--plan-line); stroke-width: 1; stroke-linejoin: round; }
+.north .north-fill { fill: var(--plan-line); }
+.north-letter { font-family: var(--font-display); font-size: 12px; fill: var(--plan-line); text-anchor: middle; }
+.sb-dark { fill: var(--plan-line); }
+.sb-light { fill: var(--surface); stroke: var(--plan-line); stroke-width: 0.8; }
+.sb-text { font-size: 10px; font-weight: 700; fill: var(--plan-line); letter-spacing: 0.06em; }
+.sheet-frame { fill: none; stroke: var(--plan-line); stroke-width: 1; opacity: 0.45; }
+
+/* הדרך: רחוב בתוכנית */
+.road-edge { fill: none; stroke: var(--road-edge); stroke-width: 27; stroke-linecap: round; stroke-linejoin: round; }
+.road { fill: none; stroke: var(--road); stroke-width: 23; stroke-linecap: round; stroke-linejoin: round; }
+.road-center { fill: none; stroke: var(--road-edge); stroke-width: 1.2; stroke-dasharray: 6 7; opacity: 0.8; }
+/* הקו המדויו: מה שכבר עברתם */
+.ink-trail { fill: none; stroke: var(--stamp); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+.ink-trail.fresh { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw var(--t-step) linear forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.boardmap.dry .scenery { filter: saturate(0.25); }
+.boardmap.dry .road-edge { stroke: var(--line); }
+
+/* משבצות כרטיס: קלפים קטנים שמונחים על הדרך */
+.sq-card { transition: opacity 400ms ease; }
+.sq-card-shadow { fill: var(--ink); opacity: 0.2; }
+.sq-card-face { stroke: var(--surface); stroke-width: 1.2; }
+.sq-card-inset { fill: none; stroke: var(--surface); stroke-width: 0.8; opacity: 0.7; }
+.sq-card.past { opacity: 0.32; }
+.sq-card.here .sq-card-face { stroke: var(--ink); stroke-width: 2; }
+.hot-ring { fill: none; stroke: var(--focus); stroke-width: 2; stroke-dasharray: 3 3; }
+
+/* תחנות: בלוק בתוכנית עם צל אקסונומטרי */
+.station-extrude { fill: var(--ink); opacity: 0.16; }
+.station-base { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; transition: fill 300ms ease; }
+.station.here .station-base { stroke-width: 2.6; fill: var(--stamp-soft); }
+.station.passed .station-base { fill: var(--approve-soft); }
+.station .glyph { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.station .glyph .dash { stroke-dasharray: 3 2; }
+.station.cat-must .glyph { stroke: var(--stamp); }
+.station.cat-need .glyph { stroke: var(--approve); }
+.station.cat-want .glyph { stroke: var(--warn); }
+.station .glyph.seal { stroke: var(--gold); stroke-width: 2.2; }
+.station.passed .glyph { opacity: 0.5; }
+.station-no circle { fill: var(--ink); }
+.station-no text { font-family: var(--font-mono); font-size: 8.5px; fill: var(--paper); text-anchor: middle; dominant-baseline: central; }
+.station.passed .station-no circle { fill: var(--approve); }
+.station-stamp circle { fill: var(--approve); stroke: var(--surface); stroke-width: 1.5; }
+.station-stamp path { fill: none; stroke: var(--surface); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.stamp-in { transform-box: fill-box; transform-origin: center; animation: stamp-pop var(--t-approve) cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+@keyframes stamp-pop { from { transform: scale(2.4) rotate(-30deg); opacity: 0; } to { transform: scale(1) rotate(-8deg); opacity: 1; } }
+.gate-ring { fill: none; stroke: var(--stamp); stroke-width: 2; stroke-dasharray: 6 5; transform-box: fill-box; transform-origin: center; animation: spin 9000ms linear infinite, gate-pulse 1600ms ease-in-out infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes gate-pulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: 0.35; } }
+.station-label {
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  font-weight: 700;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--board-bg);
+  stroke-width: 4.5;
+  stroke-linejoin: round;
+}
+.station.passed .station-label { fill: var(--muted); }
+
+/* זרקור בתחנה */
+.spotlight { fill: var(--spot); opacity: 0; transition: opacity var(--t-gate) ease-out; }
+.spotlight.on { opacity: 0.4; }
+
+/* עצים — מדד העיר על הלוח, בשפת שרטוט נוף */
+.tree-shade { fill: var(--ink); opacity: 0.12; }
+.canopy { fill: var(--leaf); opacity: 0.82; stroke: color-mix(in srgb, var(--leaf) 60%, var(--ink)); stroke-width: 0.9; }
+.canopy-inner { fill: none; stroke: var(--surface); stroke-width: 0.8; opacity: 0.4; }
+.tree .trunk { fill: var(--ink); opacity: 0.55; }
+.tree-grow { transform-box: fill-box; transform-origin: center; animation: grow 800ms cubic-bezier(0.3, 1.5, 0.5, 1) both; }
+@keyframes grow { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* כלי המשחק: דיסקית עבה, קופצת משבצת-משבצת */
+.pawn { transition: transform var(--t-step) linear; }
+.pawn-shadow { fill: var(--ink); opacity: 0.25; }
+.pawn-base, .pawn-side { filter: brightness(0.72); }
+.pawn-top { stroke: var(--surface); stroke-width: 1.5; }
+.pawn-inlay { fill: var(--surface); opacity: 0.28; }
+.pawn.current .pawn-top { stroke: var(--ink); stroke-width: 2; }
+.pawn-letter {
+  font-family: var(--font-display);
+  font-size: 15px;
+  fill: var(--ink);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--board-bg);
+  stroke-width: 3.5;
+}
+.hop { animation: hop var(--t-step) ease-out; }
+@keyframes hop {
+  0% { transform: translateY(0); }
+  45% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+.land-ring { fill: none; stroke: var(--stamp); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: land 800ms ease-out forwards; }
+@keyframes land { from { transform: scale(0.6); opacity: 0.9; } to { transform: scale(2.4); opacity: 0; } }
+
+/* עצירה בשער: התחנה נפתחת כחלון */
+.gate-open { animation: gate-open var(--t-gate) ease-out both; transform-origin: top center; }
+@keyframes gate-open {
+  from { opacity: 0; transform: perspective(700px) rotateX(-14deg) scaleY(0.86); }
+  to { opacity: 1; transform: perspective(700px) rotateX(0) scaleY(1); }
+}
 
 /* ============================================================
    מסכים — DESIGN.md סעיף 8
@@ -746,7 +1169,7 @@ p { margin: 0; max-width: 65ch; }
 }
 .form-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 14px; border-bottom: 1.5px solid var(--ink); background: var(--surface-2); }
 .form-title { font-family: var(--font-display); font-size: 1.05rem; }
-.form-no { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.form-no { font-variant-numeric: tabular-nums; font-size: 0.78rem; color: var(--muted); }
 .form-label { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--muted); display: block; }
 .form-dream, .form-foot { margin: 0; padding: 10px 14px; border-bottom: 1px dashed var(--line); }
 .form-foot { border-bottom: none; border-top: 1px dashed var(--line); }
@@ -759,28 +1182,6 @@ p { margin: 0; max-width: 65ch; }
 /* שער המורשה = כרטיס זהב שמשנה צבע כשהוא נפתח */
 .goldcard { border: 2px solid var(--gold); background: color-mix(in srgb, var(--gold) 7%, var(--surface)); }
 .goldcard.open { border-color: var(--approve); background: var(--approve-soft); }
-
-/* 5. תחנה = חלון דלפק */
-.counter { display: grid; gap: 0; }
-.counter-sign {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 8px 14px;
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: var(--r-md) var(--r-md) 0 0;
-}
-.counter-sign .sign-text { font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.02em; }
-.counter-window {
-  border: 1.5px solid var(--ink);
-  border-top: none;
-  border-radius: 0 0 var(--r-md) var(--r-md);
-  background: var(--surface);
-  padding: 16px;
-  box-shadow: var(--shadow);
-}
-.option.slip { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; background: var(--surface); }
-.option.slip .slip-no { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; }
-.option.slip:hover { background: var(--surface-2); }
 
 /* 6. צריך היתר = שלושה מגשים */
 .workcard { position: relative; border: 1.5px dashed var(--ink); border-radius: var(--r-sm); padding: 16px; background: var(--surface-2); display: grid; gap: 6px; }
@@ -841,13 +1242,39 @@ p { margin: 0; max-width: 65ch; }
 .econ-item p { margin: 0; font-size: 0.93rem; line-height: 1.55; }
 .econ-foot { margin: 0; font-size: 0.82rem; color: var(--muted); }
 
-/* פאות הקובייה: צבע מהטוקנים, והשם נכתב לידה */
-.die-wrap { display: inline-flex; align-items: center; gap: 8px; }
-.die-name { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
-.die-3d.face-knowledge { --face: var(--sea); background: color-mix(in srgb, var(--sea) 12%, var(--surface)); border-color: var(--sea); }
-.die-3d.face-event { --face: var(--brick); background: color-mix(in srgb, var(--brick) 12%, var(--surface)); border-color: var(--brick); }
-.die-3d.face-neighborhood { --face: var(--leaf); background: color-mix(in srgb, var(--leaf) 12%, var(--surface)); border-color: var(--leaf); }
-.die-3d.face-cityArchitect { --face: var(--tracing-ink); background: var(--tracing); border-color: var(--tracing-ink); }
-.die-3d.face-responsibility,
-.die-3d.face-station { --face: var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); border-color: var(--gold); }
-.die-3d.face-none { --face: var(--line); }
+/* ============================================================
+   prefers-reduced-motion: לא מבטלים הכול, אלא מקצרים ל-fade אחיד.
+   הקובייה מציגה את התוצאה מיד, הכלי עובר בלי קפיצות.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: var(--t-reduced) !important; }
+  .stamp.animate,
+  .stamp.reject,
+  .card3d-inner,
+  .card-front,
+  .certificate,
+  .certificate .seal-big,
+  .gate-open,
+  .option.slip,
+  .stage-out,
+  .jr.newest { animation: fade-in var(--t-reduced) ease-out both !important; animation-delay: 0ms !important; }
+  .die-cube.rolling { animation: none !important; }
+  .die-cube.idle,
+  .die-shadow.rolling,
+  .hop,
+  .land-ring,
+  .gate-ring,
+  .tree-grow,
+  .stamp-in,
+  .tl-bar,
+  .tl-mile,
+  .shake,
+  .tb-delta,
+  .tb-cell.changed,
+  .ink-trail.fresh { animation: none !important; }
+  .ink-trail.fresh { stroke-dashoffset: 0; }
+  .land-ring { display: none; }
+  .pawn { transition: none !important; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+

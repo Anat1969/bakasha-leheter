@@ -1,5 +1,5 @@
 import { content } from '../content';
-import { DIE_FACES, buildRoute, createReducer, mursheChecks, pathAvailability, scorePlayer, stationSequence } from './game';
+import { DIE_FACES, buildRoute, createReducer, mursheChecks, pathAvailability, scorePlayer, stationSequence, TABU_VALID_MONTHS } from './game';
 import type { DieFace, GameState, Square } from './types';
 
 const reducer = createReducer(content);
@@ -425,6 +425,87 @@ describe('סימוני מדד העיר על הלוח', () => {
     const after = reducer(forced, { type: 'ANSWER', optionId: bad.id })!;
     expect(after.players[0].res.city).toBeLessThan(0);
     expect(after.players[0].cityMarks.length).toBe(before);
+  });
+});
+
+describe('יומן מובנה — הבסיס לציר הזמן', () => {
+  /** משחק מלא שבו כל תשובה שלישית שגויה, כדי שיהיו גם החזרות לתיקון */
+  function play(track: 'extension' | 'house' | 'building' | 'mamad', seed: number): GameState {
+    let s = start(track, ['א'], seed);
+    const p0 = content.plots.find((p) => p.id === s.players[0].plotId)!;
+    s = reducer(s, { type: 'CHOOSE_PATH', path: pathAvailability(p0).find((a) => a.allowed)!.path })!;
+    let n = 0;
+    while (s.phase.name !== 'ended' && n++ < 3000) {
+      const ph = s.phase;
+      if (ph.name === 'turn') s = reducer(s, { type: 'ROLL' })!;
+      else if (ph.name === 'station') {
+        const st = content.stations.find((x) => x.id === ph.stationId)!;
+        const wrong = st.options.find((o) => !o.correct);
+        const pick = n % 3 === 0 && wrong ? wrong : (st.options.find((o) => o.correct) ?? st.options[0]);
+        s = reducer(s, { type: 'ANSWER', optionId: pick.id })!;
+      } else s = reducer(s, { type: 'CONTINUE' })!;
+    }
+    return s;
+  }
+
+  it('משחק חדש מתחיל ביומן ריק', () => {
+    expect(start('house', ['א'], 3).players[0].journal).toEqual([]);
+  });
+
+  it.each(['extension', 'house', 'building', 'mamad'] as const)('%s: הזמן ביומן רציף ותואם למשאבים', (track) => {
+    for (const seed of [2, 19, 77]) {
+      const p = play(track, seed).players[0];
+      const j = p.journal!;
+      expect(j.length).toBeGreaterThan(0);
+      for (let i = 0; i < j.length; i++) {
+        expect(j[i].to, `${track}/${seed} #${i}`).toBeGreaterThanOrEqual(j[i].from);
+        if (i > 0) expect(j[i].from, `${track}/${seed} #${i} רצף`).toBe(j[i - 1].to);
+        expect(j[i].at).toBeGreaterThanOrEqual(0);
+        expect(j[i].at).toBeLessThan(p.route.length);
+        expect((j[i].delta.months ?? 0)).toBe(j[i].to - j[i].from);
+      }
+      expect(j[j.length - 1].to).toBe(p.res.months);
+      // כל תחנה שעברה רשומה פעם אחת בדיוק כ"אושר"
+      const passed = j.filter((e) => e.kind === 'pass').map((e) => e.ref);
+      expect([...passed].sort()).toEqual([...p.resolved].sort());
+      // סכום השינויים בתקציב שווה לתקציב הסופי
+      const budget = j.reduce((sum, e) => sum + (e.delta.budget ?? 0), 100);
+      expect(budget, `${track}/${seed}`).toBe(p.res.budget);
+    }
+  });
+
+  it('טעות בלי כרטיס ידע נרשמת כהחזרה לתיקון, ועם כרטיס ידע — כקנס שבוטל', () => {
+    let s = start('building', ['א'], 5);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    const st = content.stations.find((x) => x.kind === 'question' && x.options.some((o) => !o.correct))!;
+    const wrong = st.options.find((o) => !o.correct)!;
+    const forced: GameState = { ...s, phase: { name: 'station', stationId: st.id } };
+    const a = reducer(forced, { type: 'ANSWER', optionId: wrong.id })!;
+    expect(a.players[0].journal!.slice(-1)[0].kind).toBe('reject');
+    const shielded: GameState = {
+      ...forced,
+      players: forced.players.map((p) => ({ ...p, res: { ...p.res, shields: 1 } })),
+    };
+    const b = reducer(shielded, { type: 'ANSWER', optionId: wrong.id })!;
+    const e = b.players[0].journal!.slice(-1)[0];
+    expect(e.kind).toBe('shielded');
+    expect(e.delta).toEqual({ shields: -1 });
+  });
+
+  it('נסח טאבו שפג נרשם כאירוע נפרד, אחרי אישור התחנה', () => {
+    let s = start('extension', ['א'], 8);
+    s = reducer(s, { type: 'CHOOSE_PATH', path: 'conforming' })!;
+    const late: GameState = {
+      ...s,
+      players: s.players.map((p) => ({ ...p, tabuAt: 0, res: { ...p.res, months: TABU_VALID_MONTHS + 3 } })),
+      phase: { name: 'station', stationId: 'submission' },
+    };
+    const st = content.stations.find((x) => x.id === 'submission')!;
+    const ok = st.options.find((o) => o.correct) ?? st.options[0];
+    const j = reducer(late, { type: 'ANSWER', optionId: ok.id })!.players[0].journal!;
+    expect(j.map((e) => e.kind)).toEqual(['pass', 'tabuRenewed']);
+    expect(j[1].from).toBe(j[0].to);
+    expect(j[1].delta).toEqual({ months: 1, budget: -2 });
   });
 });
 

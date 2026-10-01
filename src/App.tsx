@@ -33,6 +33,13 @@ function save(state: GameState | null) {
   }
 }
 
+function fileNumber(g: GameState): string {
+  const key = g.track + g.players.map((p) => `${p.name}:${p.plotId}`).join('|');
+  let h = 2166136261;
+  for (let i = 0; i < key.length; i++) h = Math.imul(h ^ key.charCodeAt(i), 16777619) >>> 0;
+  return String(h % 100000).padStart(5, '0');
+}
+
 type Screen = 'home' | 'setup' | 'game' | 'glossary' | 'about' | 'exempt';
 
 export default function App() {
@@ -57,7 +64,8 @@ export default function App() {
     setScreen(s);
   };
 
-  const fileNo = game ? `בקשה מס' ${String(game.rng % 100000).padStart(5, '0')}` : 'טופס פתוח';
+  // מספר הבקשה קבוע לכל המשחק: נגזר מהשחקנים ומהמגרשים, לא ממחולל האקראיות שמשתנה בכל הטלה
+  const fileNo = game ? `בקשה מס' ${fileNumber(game)}` : 'טופס פתוח';
 
   return (
     <div className="app">
