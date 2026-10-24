@@ -12,6 +12,15 @@ import Glossary from './screens/Glossary';
 import About from './screens/About';
 import ExemptQuiz from './screens/ExemptQuiz';
 
+declare module 'react' {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      'ai-menu': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { chat?: string; research?: string };
+    }
+  }
+}
+
 const SAVE_KEY = 'bakasha-leheter:v1';
 
 function loadSaved(): GameState | null {
@@ -98,6 +107,7 @@ export default function App() {
           >
             צליל: {sound ? 'פועל' : 'כבוי'}
           </button>
+          <ai-menu />
         </nav>
       </header>
 
